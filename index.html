@@ -433,7 +433,7 @@ function getProgramSpecs(progName, lang) {
    UNIVERSITY TYPES & LINKS
 ============================================ */
 const universityTypes = {
-  "UM": "Public", "USM": "Public", "UKM": "Public", "UPM": "Public", "UTM": "Public", "UiTM": "Public", "UUM": "Public", "IIUM": "Public", "UNIMAS": "Public", "UMS": "Public", "UPSI": "Public", "USIM": "Public", "UTeM": "Public", "UTHM": "Public", "UMPSA": "Public", "UCSI": "Private", "UNITEN": "Private", "UniKL": "Private", "OUM": "Private", "MMU": "Private", "MSU": "Private", "MAHSA": "Private", "LUC": "Private", "Nilai": "Private", "IMU": "Private", "IUKL": "Private", "APU": "Private", "UniRazak": "Private", "MEDIU": "Private"
+  "UM": "Public", "USM": "Public", "UKM": "Public", "UPM": "Public", "UTM": "Public", "UiTM": "Public", "UUM": "Public", "IIUM": "Public", "UNIMAS": "Public", "UMS": "Public", "UPSI": "Public", "USIM": "Public", "UTeM": "Public", "UTHM": "Public", "UMPSA": "Public", "": "Private", "UNITEN": "Private", "UniKL": "Private", "OUM": "Private", "MMU": "Private", "MSU": "Private", "MAHSA": "Private", "LUC": "Private", "Nilai": "Private", "IMU": "Private", "IUKL": "Private", "APU": "Private", "UniRazak": "Private", "MEDIU": "Private"
 };
 
 /* ============================================
@@ -449,7 +449,7 @@ const ACCREDITATION_RULES = {
   },
   "UAE": {
     // Only specific listed unis
-    allowedUnis: ["MSU", "UKM", "UPM", "USM", "UTM", "UTP", "UM", "UCSI", "Taylor's"],
+    allowedUnis: ["MSU", "UKM", "UPM", "USM", "UTM", "UTP", "UM", "", "Taylor's"],
     notice: {
       en: "UAE Rules: Accreditation may differ between main and branch campuses. Full-time, face-to-face study is required for equivalency.",
       ar: "شروط الإمارات: قد يختلف الاعتماد بين الحرم الجامعي الرئيسي والفرعي. يشترط الدراسة بنظام الانتظام الكامل (وجاهياً) لمعادلة الشهادة."
@@ -457,7 +457,7 @@ const ACCREDITATION_RULES = {
   },
   "Saudi Arabia": {
     // Universities on the Safeer list
-    allowedUnis: ["APU", "IMU", "LUC", "MSU", "MEDIU", "MMU", "UNITEN", "UiTM", "UKM", "UPM", "USM", "UTM", "UTP", "UM", "UCSI", "UniSZA", "IIUM", "USIM", "Taylor's", "Monash", "UGM"],
+    allowedUnis: ["APU", "IMU", "LUC", "MSU", "MEDIU", "MMU", "UNITEN", "UiTM", "UKM", "UPM", "USM", "UTM", "UTP", "UM", "", "UniSZA", "IIUM", "USIM", "Taylor's", "Monash", "UGM"],
     notice: {
       en: "Saudi Arabia Rules: Strict full-time, regular attendance is required. Distance Learning (ODL) programs are not accepted.",
       ar: "شروط السعودية: يُشترط الحضور المنتظم بنظام الدوام الكامل. برامج التعلم عن بُعد (ODL) غير مقبولة."
@@ -1747,72 +1747,72 @@ let rawData = [
       "Doctor of Business Administration": "40,500"
     }
   },
-  {
-    university: "UCSI University", shortName: "UCSI", type: "Private", currency: "MYR", website: "https://www.ucsiuniversity.edu.my",
-    programmes: {
-      "Doctor of Medicine": "341,340",
-      "Bachelor of Pharmacy (Hons)": "160,698",
-      "Bachelor of Optometry (Hons)": "102,750",
-      "BSc (Hons) Nutrition with Wellness": "99,600",
-      "Bachelor of Computer Engineering (Artificial Intelligence) with Honours": "97,345",
-      "BSc (Hons) Biotechnology": "92,570",
-      "Bachelor of Quantity Surveying (Hons)": "91,144",
-      "Bachelor of Environmental Engineering with Honours": "90,470",
-      "BMus (Hons) Classical Music / Contemporary Music": "89,180",
-      "Bachelor of Energy Engineering with Honours": "88,990",
-      "Bachelor of Petroleum Engineering with Honours": "88,820",
-      "Bachelor of Civil Engineering with Honours": "142,439",
-      "Bachelor of Chemical Engineering with Honours": "87,170",
-      "Bachelor of Architecture (BSc Hons)": "83,110",
-      "BSc (Hons) Food Science with Nutrition": "83,060",
-      "Bachelor of Mechatronic Engineering with Honours": "82,715",
-      "Bachelor of Mechanical Engineering with Honours": "82,480",
-      "Bachelor of Electrical and Electronic Engineering with Honours": "82,205",
-      "BSc (Hons) Forensic Science": "82,110",
-      "BSc (Hons) Aquatic Science": "81,720",
-      "Bachelor of Formulation Science (Honours)": "81,330",
-      "BSc (Hons) Applied Microbiology": "80,365",
-      "BSc (Hons) Actuarial Science with Data Analytics": "79,350",
-      "Bachelor of Nursing (Hons)": "74,010",
-      "BA (Hons) Culinary Management (KL Campus)": "73,100",
-      "BA (Hons) Interior Architecture": "73,000",
-      "Bachelor of Hospitality Administration": "72,050",
-      "BA (Hons) Fashion Design with Marketing": "71,850",
-      "BA (Hons) Hospitality Management (Springhill Campus)": "71,941",
-      "BCA (Hons) 3D Animation Design": "70,850",
-      "BSc (Hons) Actuarial Science / Actuarial Science & Finance": "68,900",
-      "BA (Hons) Psychology": "68,730",
-      "BA (Hons) Game Design": "68,415",
-      "BA (Hons) Mass Communication": "68,330",
-      "BA (Hons) Multimedia Design": "68,070",
-      "Bachelor of Arts (Honours) Entrepreneurship": "67,950",
-      "Bachelor of International and Sustainable Business (Honours)": "67,440",
-      "BA (Hons) Accounting / Accounting & Finance": "67,380",
-      "Bachelor of Financial Technology (Honours)": "66,490",
-      "Bachelor of Computer Science (Honours) / Mobile Computing / Business Information System": "65,820",
-      "BA (Hons) Branding & Advertising": "65,550",
-      "BSc (Hons) Finance & Investment / BA (Hons) Marketing / Logistics Management": "65,400 - 65,490",
-      "Bachelor of Computer Science in Data Science with Honours": "69,040",
-      "BA (Hons) English Language and Communication": "61,300",
-      "Diploma in Nursing": "54,140",
-      "Diploma in Pharmacy / Cosmetic Science / Packaging Science": "51,510 - 51,650",
-      "Diploma in Music Performance": "51,240",
-      "Diploma in Fashion Design": "48,420",
-      "Diploma in Architectural Studies": "49,995",
-      "Diploma in Interior Architecture": "46,395",
-      "Diploma of Engineering Technology (Industrial Design)": "45,530",
-      "Foundation in Science / Music": "20,700 - 24,200",
-      "Foundation in Arts": "20,000",
-      "Doctor of Philosophy (Medical Sciences)": "68,900",
-      "Doctor of Philosophy (Business and Management)": "45,468 (53,343 with bridging)",
-      "Doctor of Business Administration (DBA)": "71,600 (82,100 with bridging)",
-      "Doctor of Philosophy in Hospitality and Tourism": "60,000",
-      "Master of Clinical Psychology": "56,350 (61,550 with bridging)",
-      "Master of Business Administration (MBA)": "43,760 (47,240 with bridging)"
-    }
-  }
-];
-
+  {university: "UCSI University",
+shortName: "UCSI",
+type: "Private",
+currency: "MYR",
+website: "https://www.ucsiuniversity.edu.my",
+programmes: {
+    "Doctor of Medicine": "532,434",
+    "Bachelor of Pharmacy (Hons)": "232,467",
+    "Bachelor of Optometry (Hons)": "160,713",
+    "BMus (Hons) Classical Music / Contemporary Music": "155,318",
+    "BSc (Hons) Forensic Science": "145,311",
+    "Bachelor of Petroleum Engineering with Honours": "139,524",
+    "Bachelor of Chemical Engineering with Honours": "139,047",
+    "Bachelor of Energy Engineering with Honours": "138,835",
+    "Bachelor of Computer Engineering (Artificial Intelligence) with Honours": "137,584",
+    "Bachelor of Civil Engineering with Honours": "137,139",
+    "Bachelor of Mechatronic Engineering with Honours": "136,556",
+    "Bachelor of Mechanical Engineering with Honours": "136,503",
+    "Bachelor of Electrical and Electronic Engineering with Honours": "136,291",
+    "Bachelor of Architecture (BSc Hons)": "129,252",
+    "BSc (Hons) Nutrition with Wellness": "126,587",
+    "BSc (Hons) Biotechnology": "120,711",
+    "BSc (Hons) Food Science with Nutrition": "119,617",
+    "Bachelor of Formulation Science (Honours)": "119,416",
+    "BSc (Hons) Aquatic Science": "117,500",
+    "BA (Hons) Fashion Design with Marketing": "115,674",
+    "Bachelor of Nursing (Hons)": "114,785",
+    "BSc (Hons) Applied Microbiology": "114,773",
+    "Bachelor of Arts (Honours) Entrepreneurship": "113,914",
+    "BA (Hons) Multimedia Design": "113,311",
+    "BA (Hons) Culinary Management (KL Campus)": "112,282",
+    "Bachelor of Quantity Surveying (Hons)": "108,911",
+    "BA (Hons) Interior Architecture": "108,731",
+    "Bachelor of Hospitality Administration": "108,196",
+    "BSc (Hons) Actuarial Science with Data Analytics": "107,925",
+    "BA (Hons) Game Design": "107,355",
+    "BA (Hons) Hospitality Management (Springhill Campus)": "101,195",
+    "Bachelor of Computer Science in Data Science with Honours": "100,579",
+    "BSc (Hons) Actuarial Science / Actuarial Science & Finance": "100,314 - 101,088",
+    "BCA (Hons) 3D Animation Design": "99,736",
+    "BA (Hons) English Language and Communication": "99,435",
+    "BA (Hons) Accounting / Accounting & Finance": "98,046",
+    "Bachelor of International and Sustainable Business (Honours)": "97,982",
+    "Bachelor of Computer Science (Honours) / Mobile Computing / Business Information System": "97,315 - 114,561",
+    "BA (Hons) Psychology": "97,272",
+    "BA (Hons) Mass Communication": "96,816",
+    "Bachelor of Financial Technology (Honours)": "96,562",
+    "BSc (Hons) Finance & Investment / BA (Hons) Marketing / Logistics Management": "95,915 / 95,375 / 95,407",
+    "BA (Hons) Branding & Advertising": "95,502",
+    "Bachelor of Environmental Engineering with Honours": "N/A",
+    "Diploma in Music Performance": "87,202",
+    "Diploma in Nursing": "84,853",
+    "Diploma in Pharmacy / Cosmetic Science / Packaging Science": "80,832 / 80,461 / 79,899",
+    "Diploma in Fashion Design": "79,761",
+    "Diploma in Architectural Studies": "79,051",
+    "Diploma of Engineering Technology (Industrial Design)": "75,049",
+    "Diploma in Interior Architecture": "74,641",
+    "Foundation in Science / Music": "39,227 - 44,940",
+    "Foundation in Arts": "38,326",
+    "Doctor of Business Administration (DBA)": "103,570 (114,700 with bridging)",
+    "Doctor of Philosophy (Medical Sciences)": "96,076",
+    "Doctor of Philosophy in Hospitality and Tourism": "87,395",
+    "Doctor of Philosophy (Business and Management)": "80,330 (88,677 with bridging)",
+    "Master of Clinical Psychology": "74,431",
+    "Master of Business Administration (MBA)": "72,534"
+}
 const allProgrammes = Array.from(new Set(rawData.flatMap(u => Object.keys(u.programmes)))).sort();
 
 // ==========================================================
