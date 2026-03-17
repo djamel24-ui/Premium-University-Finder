@@ -433,7 +433,7 @@ function getProgramSpecs(progName, lang) {
    UNIVERSITY TYPES & LINKS
 ============================================ */
 const universityTypes = {
-  "UM": "Public", "USM": "Public", "UKM": "Public", "UPM": "Public", "UTM": "Public", "UiTM": "Public", "UUM": "Public", "IIUM": "Public", "UNIMAS": "Public", "UMS": "Public", "UPSI": "Public", "USIM": "Public", "UTeM": "Public", "UTHM": "Public", "UMPSA": "Public", "": "Private", "UNITEN": "Private", "UniKL": "Private", "OUM": "Private", "MMU": "Private", "MSU": "Private", "MAHSA": "Private", "LUC": "Private", "Nilai": "Private", "IMU": "Private", "IUKL": "Private", "APU": "Private", "UniRazak": "Private", "MEDIU": "Private"
+  "UM": "Public", "USM": "Public", "UKM": "Public", "UPM": "Public", "UTM": "Public", "UiTM": "Public", "UUM": "Public", "IIUM": "Public", "UNIMAS": "Public", "UMS": "Public", "UPSI": "Public", "USIM": "Public", "UTeM": "Public", "UTHM": "Public", "UMPSA": "Public", "UCSI": "Private", "UNITEN": "Private", "UniKL": "Private", "OUM": "Private", "MMU": "Private", "MSU": "Private", "MAHSA": "Private", "LUC": "Private", "Nilai": "Private", "IMU": "Private", "IUKL": "Private", "APU": "Private", "UniRazak": "Private", "MEDIU": "Private"
 };
 
 /* ============================================
@@ -449,7 +449,7 @@ const ACCREDITATION_RULES = {
   },
   "UAE": {
     // Only specific listed unis
-    allowedUnis: ["MSU", "UKM", "UPM", "USM", "UTM", "UTP", "UM", "", "Taylor's"],
+    allowedUnis: ["MSU", "UKM", "UPM", "USM", "UTM", "UTP", "UM", "UCSI", "Taylor's"],
     notice: {
       en: "UAE Rules: Accreditation may differ between main and branch campuses. Full-time, face-to-face study is required for equivalency.",
       ar: "شروط الإمارات: قد يختلف الاعتماد بين الحرم الجامعي الرئيسي والفرعي. يشترط الدراسة بنظام الانتظام الكامل (وجاهياً) لمعادلة الشهادة."
@@ -457,7 +457,7 @@ const ACCREDITATION_RULES = {
   },
   "Saudi Arabia": {
     // Universities on the Safeer list
-    allowedUnis: ["APU", "IMU", "LUC", "MSU", "MEDIU", "MMU", "UNITEN", "UiTM", "UKM", "UPM", "USM", "UTM", "UTP", "UM", "", "UniSZA", "IIUM", "USIM", "Taylor's", "Monash", "UGM"],
+    allowedUnis: ["APU", "IMU", "LUC", "MSU", "MEDIU", "MMU", "UNITEN", "UiTM", "UKM", "UPM", "USM", "UTM", "UTP", "UM", "UCSI", "UniSZA", "IIUM", "USIM", "Taylor's", "Monash", "UGM"],
     notice: {
       en: "Saudi Arabia Rules: Strict full-time, regular attendance is required. Distance Learning (ODL) programs are not accepted.",
       ar: "شروط السعودية: يُشترط الحضور المنتظم بنظام الدوام الكامل. برامج التعلم عن بُعد (ODL) غير مقبولة."
@@ -1747,7 +1747,8 @@ let rawData = [
       "Doctor of Business Administration": "40,500"
     }
   },
-  {university: "UCSI University",
+  {
+    university: "UCSI University",
 shortName: "UCSI",
 type: "Private",
 currency: "MYR",
@@ -1812,7 +1813,10 @@ programmes: {
     "Doctor of Philosophy (Business and Management)": "80,330 (88,677 with bridging)",
     "Master of Clinical Psychology": "74,431",
     "Master of Business Administration (MBA)": "72,534"
-}
+   }
+  }
+];
+
 const allProgrammes = Array.from(new Set(rawData.flatMap(u => Object.keys(u.programmes)))).sort();
 
 // ==========================================================
