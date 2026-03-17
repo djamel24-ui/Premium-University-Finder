@@ -1,0 +1,2187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>Malaysia University Programme Finder</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<!-- React + ReactDOM -->
+<script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+<script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+
+<!-- Babel compiler -->
+<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+<style>
+/* ==========================================================
+   GLOBAL RESET & VARIABLES
+   ========================================================== */
+:root {
+  --bg: #f6f8fa;
+  --text: #1a1a1a;
+  --card-bg: #ffffff;
+  --card-border: #dcdcdc;
+  --primary: #0066ff;
+  --primary-hover: #004ecc;
+  --shadow: rgba(0,0,0,0.08);
+  --secondary-text: #666666;
+}
+
+.dark {
+  --bg: #0f172a;
+  --text: #e2e8f0;
+  --card-bg: #1e293b;
+  --card-border: #334155;
+  --primary: #38bdf8;
+  --primary-hover: #0ea5e9;
+  --shadow: rgba(255,255,255,0.05);
+  --secondary-text: #94a3b8;
+}
+
+body, html {
+  margin: 0;
+  padding: 0;
+  font-family: "Poppins", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  transition: background 0.3s ease-in-out, color 0.3s ease-in-out;
+}
+
+/* ==========================================================
+   CONTAINER
+   ========================================================== */
+.app-container {
+  max-width: 1100px;
+  margin: auto;
+  padding: 40px 20px;
+}
+
+/* ==========================================================
+   HEADER + LOGO
+   ========================================================== */
+.header-box {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  margin-bottom: 20px;
+}
+
+.header-logo {
+  width: 60px;
+  height: 60px;
+  object-fit: contain;
+}
+
+.header-title {
+  font-size: 28px;
+  font-weight: 700;
+  margin: 0;
+}
+
+.subtitle {
+  font-size: 16px;
+  opacity: 0.8;
+  margin-bottom: 25px;
+}
+
+/* ==========================================================
+   LANGUAGE + DARK MODE BUTTONS
+   ========================================================== */
+.controls-row {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 25px;
+}
+
+.lang-btn, .mode-btn {
+  background: var(--primary);
+  border: none;
+  padding: 10px 18px;
+  color: white;
+  font-size: 14px;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: 0.2s;
+  font-weight: 500;
+}
+
+.lang-btn:hover, .mode-btn:hover {
+  background: var(--primary-hover);
+  transform: translateY(-1px);
+}
+
+/* ==========================================================
+   SEARCH + SELECT INPUTS
+   ========================================================== */
+.input-card {
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  padding: 20px;
+  border-radius: 14px;
+  box-shadow: 0 4px 12px var(--shadow);
+  margin-bottom: 20px;
+}
+
+.filter-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 15px;
+}
+
+.input-label {
+  font-size: 14px;
+  font-weight: 600;
+  margin-bottom: 8px;
+  display: block;
+  color: var(--text);
+}
+
+.input-box, .select-box {
+  width: 100%;
+  padding: 12px;
+  border-radius: 10px;
+  border: 1px solid var(--card-border);
+  background: var(--card-bg);
+  color: var(--text);
+  font-size: 14px;
+  box-sizing: border-box;
+}
+
+.input-box:focus, .select-box:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(0, 102, 255, 0.1);
+}
+
+/* ==========================================================
+   FILTER / SORT BAR & NOTICES
+   ========================================================== */
+.accreditation-notice {
+  background: rgba(0, 102, 255, 0.1);
+  border-left: 4px solid var(--primary);
+  padding: 15px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  font-size: 14px;
+  color: var(--text);
+}
+
+.filter-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 25px;
+  margin-bottom: 15px;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.sort-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.sort-select {
+  padding: 8px 12px;
+  border-radius: 8px;
+  border: 1px solid var(--card-border);
+  background: var(--card-bg);
+  color: var(--text);
+  font-size: 14px;
+}
+
+/* ==========================================================
+   RESULT TITLE
+   ========================================================== */
+.result-title {
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--text);
+  margin: 0;
+}
+
+.result-highlight {
+  color: var(--primary);
+}
+
+/* ==========================================================
+   UNIVERSITY CARDS GRID
+   ========================================================== */
+.uni-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 20px;
+  margin-top: 20px;
+}
+
+.uni-card {
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  padding: 20px;
+  border-radius: 14px;
+  box-shadow: 0 4px 10px var(--shadow);
+  transition: all 0.2s ease;
+  display: flex;
+  flex-direction: column;
+}
+
+.uni-card:hover {
+  transform: translateY(-3px);
+  border-color: var(--primary);
+  box-shadow: 0 6px 16px var(--shadow);
+}
+
+.uni-name {
+  font-size: 18px;
+  font-weight: 700;
+  margin-bottom: 10px;
+  color: var(--primary);
+}
+
+.uni-small {
+  font-size: 13px;
+  color: var(--secondary-text);
+  margin-bottom: 5px;
+}
+
+/* ==========================================================
+   PROGRAMME LIST INSIDE CARD
+   ========================================================== */
+.prog-list {
+  margin-top: 15px;
+  margin-bottom: 20px;
+  border-top: 1px solid var(--card-border);
+  padding-top: 15px;
+  max-height: 250px;
+  overflow-y: auto;
+  padding-right: 5px;
+}
+
+/* Custom Scrollbar for program list */
+.prog-list::-webkit-scrollbar { width: 5px; }
+.prog-list::-webkit-scrollbar-track { background: transparent; }
+.prog-list::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+
+.prog-item {
+  background: var(--bg);
+  padding: 10px;
+  border-radius: 8px;
+  margin-bottom: 10px;
+  border: 1px solid var(--card-border);
+}
+
+.prog-item-title {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 4px;
+  line-height: 1.3;
+}
+
+.prog-item-specs {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 8px;
+}
+
+.spec-badge {
+  font-size: 11px;
+  background: var(--bg);
+  padding: 3px 8px;
+  border-radius: 6px;
+  color: var(--secondary-text);
+  border: 1px solid var(--card-border);
+  display: inline-flex;
+  align-items: center;
+}
+
+.prog-item-price {
+  font-size: 12px;
+  color: var(--primary);
+  font-weight: 700;
+}
+
+/* ==========================================================
+   WEBSITE LINK BUTTON
+   ========================================================== */
+.website-link {
+  display: block;
+  margin-top: auto; 
+  padding: 10px 14px;
+  background: var(--primary);
+  color: white;
+  text-decoration: none;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  transition: 0.2s;
+  text-align: center;
+}
+
+.website-link:hover {
+  background: var(--primary-hover);
+  transform: translateY(-1px);
+}
+
+/* ==========================================================
+   EMPTY RESULT MESSAGE
+   ========================================================== */
+.no-result {
+  color: #ef4444;
+  font-size: 14px;
+  margin-top: 20px;
+  text-align: center;
+  padding: 20px;
+  background: rgba(239, 68, 68, 0.1);
+  border-radius: 10px;
+}
+
+.info-message {
+  color: var(--text);
+  opacity: 0.6;
+  font-size: 14px;
+  margin-top: 20px;
+  text-align: center;
+  padding: 20px;
+}
+
+/* ==========================================================
+   RTL SUPPORT FOR ARABIC
+   ========================================================== */
+.rtl {
+  direction: rtl;
+  text-align: right;
+}
+
+.ltr {
+  direction: ltr;
+  text-align: left;
+}
+
+/* ==========================================================
+   RESPONSIVE
+   ========================================================== */
+@media (max-width: 768px) {
+  .header-title { font-size: 22px; }
+  .uni-grid { grid-template-columns: 1fr; }
+  .controls-row { flex-direction: column; }
+  .filter-grid { grid-template-columns: 1fr; }
+  .filter-bar { flex-direction: column; align-items: flex-start; }
+  .sort-wrapper { width: 100%; justify-content: space-between; }
+  .sort-select { flex: 1; }
+}
+</style>
+</head>
+
+<body>
+<div id="root"></div>
+
+<script type="text/babel">
+
+/* ============================================
+   PROGRAMME SPECS ESTIMATOR (Duration & IELTS)
+============================================ */
+function getProgramSpecs(progName, lang) {
+  const lower = progName.toLowerCase();
+  let durEn = "Check Website", ielts = "Check Website";
+
+  if (lower.includes("foundation") || lower.includes("certificate") || lower.includes("a-level") || lower.includes("ausmat")) {
+    durEn = "1 Year";
+    ielts = "5.0 - 5.5";
+  } else if (lower.includes("diploma")) {
+    durEn = (lower.includes("nursing") || lower.includes("medical") || lower.includes("health")) ? "3 Years" : "2 - 2.5 Years";
+    ielts = "5.0 - 5.5";
+  } else if (lower.includes("doctor of medicine") || lower.includes("mbbs") || lower.includes("dental") || lower.includes("dentistry")) {
+    if (lower.includes("master") || lower.includes("phd") || lower.includes("doctor in") || lower.includes("doctorate")) {
+        durEn = "3 - 4 Years";
+        ielts = "6.0 - 7.0";
+    } else {
+        durEn = "5 Years";
+        ielts = "6.0 - 7.0";
+    }
+  } else if (lower.includes("bachelor") || lower.includes("bsc") || lower.includes("ba ") || lower.includes("bba") || lower.match(/\b(beng|bmus|bca)\b/)) {
+    if (lower.includes("engineering") || lower.includes("pharmacy") || lower.includes("law ")) {
+      durEn = "4 Years";
+      ielts = "6.0";
+    } else if (lower.includes("architecture")) {
+      durEn = "3 - 4 Years";
+      ielts = "6.0";
+    } else {
+      durEn = "3 - 3.5 Years";
+      ielts = "5.5 - 6.0";
+    }
+  } else if (lower.includes("master") || lower.includes("msc") || lower.includes("mba") || lower.match(/\b(mmed|mphil|ma)\b/)) {
+    durEn = "1 - 2 Years";
+    ielts = "6.0 - 6.5";
+  } else if (lower.includes("phd") || lower.includes("doctor of philosophy") || lower.includes("dba") || lower.includes("doctor of business") || lower.includes("doctor of education") || lower.includes("doctor of technology")) {
+    durEn = "3 - 4 Years";
+    ielts = "6.0 - 6.5";
+  }
+
+  let durAr = durEn.replace("Years", "سنوات").replace("Year", "سنة").replace("Check Website", "راجع الموقع");
+  let ieltsAr = ielts === "Check Website" ? "راجع الموقع" : ielts;
+
+  return {
+    duration: lang === "ar" ? durAr : durEn,
+    ielts: lang === "ar" ? ieltsAr : ielts
+  };
+}
+
+/* ============================================
+   UNIVERSITY TYPES & LINKS
+============================================ */
+const universityTypes = {
+  "UM": "Public", "USM": "Public", "UKM": "Public", "UPM": "Public", "UTM": "Public", "UiTM": "Public", "UUM": "Public", "IIUM": "Public", "UNIMAS": "Public", "UMS": "Public", "UPSI": "Public", "USIM": "Public", "UTeM": "Public", "UTHM": "Public", "UMPSA": "Public", "UCSI": "Private", "UNITEN": "Private", "UniKL": "Private", "OUM": "Private", "MMU": "Private", "MSU": "Private", "MAHSA": "Private", "LUC": "Private", "Nilai": "Private", "IMU": "Private", "IUKL": "Private", "APU": "Private", "UniRazak": "Private", "MEDIU": "Private"
+};
+
+/* ============================================
+   ACCREDITATION RULES
+============================================ */
+const ACCREDITATION_RULES = {
+  "Oman": {
+    allowedUnis: null, // all theoretically allowed, restricted via logic
+    notice: {
+      en: "Oman Rules: Mandatory pre-approval from MOHE is required. Dual degrees must be fully MQA accredited. MBBS/MD is generally restricted unless it's a PhD program.",
+      ar: "شروط عُمان: مطلوب موافقة مسبقة من وزارة التعليم العالي. يجب أن تكون الدرجات المزدوجة معتمدة بالكامل من MQA. يقتصر التسجيل في برامج الطب (MBBS/MD) إلا إذا كانت في مستوى الدكتوراه."
+    }
+  },
+  "UAE": {
+    // Only specific listed unis
+    allowedUnis: ["MSU", "UKM", "UPM", "USM", "UTM", "UTP", "UM", "UCSI", "Taylor's"],
+    notice: {
+      en: "UAE Rules: Accreditation may differ between main and branch campuses. Full-time, face-to-face study is required for equivalency.",
+      ar: "شروط الإمارات: قد يختلف الاعتماد بين الحرم الجامعي الرئيسي والفرعي. يشترط الدراسة بنظام الانتظام الكامل (وجاهياً) لمعادلة الشهادة."
+    }
+  },
+  "Saudi Arabia": {
+    // Universities on the Safeer list
+    allowedUnis: ["APU", "IMU", "LUC", "MSU", "MEDIU", "MMU", "UNITEN", "UiTM", "UKM", "UPM", "USM", "UTM", "UTP", "UM", "UCSI", "UniSZA", "IIUM", "USIM", "Taylor's", "Monash", "UGM"],
+    notice: {
+      en: "Saudi Arabia Rules: Strict full-time, regular attendance is required. Distance Learning (ODL) programs are not accepted.",
+      ar: "شروط السعودية: يُشترط الحضور المنتظم بنظام الدوام الكامل. برامج التعلم عن بُعد (ODL) غير مقبولة."
+    }
+  },
+  "Iraq": {
+    allowedUnis: ["UKM", "UPM", "USM", "UTM", "UTP", "UUM", "UM"],
+    notice: {
+      en: "Iraq Rules: Showing universities recognized under MOHESR Group A. Students must verify specific degree recognition before enrolling.",
+      ar: "شروط العراق: عرض الجامعات المعترف بها ضمن المجموعة (أ). يجب على الطلاب التحقق من اعتماد التخصص المحدد قبل التسجيل."
+    }
+  }
+};
+
+/* ============================================
+   MASSIVE SPECIFIC SPECIALTIES DICTIONARY (80+ Majors)
+============================================ */
+const SPECIALTIES = {
+  "Accounting & Taxation": { ar: "المحاسبة والضرائب", keywords: ["accounting", "accountancy", "taxation", "audit"] },
+  "Actuarial Science": { ar: "العلوم الاكتوارية", keywords: ["actuarial"] },
+  "Aerospace & Aviation": { ar: "هندسة الطيران والطيران", keywords: ["aerospace", "aeronautic", "aviation", "aircraft", "aeroplane", "helicopter"] },
+  "Agriculture & Forestry": { ar: "الزراعة والغابات", keywords: ["agriculture", "forestry", "plantation", "wood", "timber", "aquaculture"] },
+  "Animation & Visual Effects": { ar: "الرسوم المتحركة والمؤثرات البصرية", keywords: ["animation", "visual effects", "vfx", "3d modelling"] },
+  "Architecture & Built Environment": { ar: "العمارة والبيئة المبنية", keywords: ["architecture", "built environment", "building surveying"] },
+  "Artificial Intelligence (AI)": { ar: "الذكاء الاصطناعي", keywords: ["artificial intelligence", "ai ", "intelligent system", "robotics"] },
+  "Automotive Engineering": { ar: "هندسة السيارات", keywords: ["automotive"] },
+  "Banking & Islamic Finance": { ar: "الخدمات المصرفية والتمويل الإسلامي", keywords: ["banking", "islamic finance", "muamalat"] },
+  "Biochemistry & Microbiology": { ar: "الكيمياء الحيوية وعلم الأحياء الدقيقة", keywords: ["biochemistry", "microbiology"] },
+  "Biology & Biological Sciences": { ar: "الأحياء والعلوم البيولوجية", keywords: ["biology", "botany", "zoology"] },
+  "Biomedical Science & Engineering": { ar: "العلوم والهندسة الطبية الحيوية", keywords: ["biomedical"] },
+  "Biotechnology": { ar: "التكنولوجيا الحيوية", keywords: ["biotechnology"] },
+  "Broadcasting & Journalism": { ar: "البث والصحافة", keywords: ["broadcasting", "journalism"] },
+  "Business Administration & Management": { ar: "إدارة الأعمال والإدارة", keywords: ["business administration", "bba", "management", "business management", "mba ", "dba "] },
+  "Chemical Engineering": { ar: "الهندسة الكيميائية", keywords: ["chemical engineering", "chemical"] },
+  "Chemistry": { ar: "الكيمياء", keywords: ["chemistry"] },
+  "Civil Engineering": { ar: "الهندسة المدنية", keywords: ["civil engineering", "civil"] },
+  "Clinical Psychology": { ar: "علم النفس السريري", keywords: ["clinical psychology"] },
+  "Communication & Media": { ar: "الاتصال والإعلام", keywords: ["communication", "media", "corporate communication", "mass communication"] },
+  "Computer Science (General)": { ar: "علوم الحاسب (عام)", keywords: ["computer science", "computing"] },
+  "Construction Management": { ar: "إدارة التشييد", keywords: ["construction"] },
+  "Counselling & Guidance": { ar: "الإرشاد والتوجيه", keywords: ["counselling", "guidance"] },
+  "Culinary Arts": { ar: "فنون الطهي", keywords: ["culinary", "patisserie", "food preparation"] },
+  "Cyber Security & Info Security": { ar: "الأمن السيبراني وأمن المعلومات", keywords: ["cyber security", "information security", "network security"] },
+  "Data Science & Analytics": { ar: "علوم البيانات والتحليلات", keywords: ["data science", "analytics", "business intelligence", "data analytics"] },
+  "Dentistry & Dental Surgery": { ar: "طب وجراحة الأسنان", keywords: ["dental", "dentistry", "dds", "bds", "orthodontic", "periodontology", "orofacial", "maxillofacial"] },
+  "Dietetics & Nutrition": { ar: "علم التغذية والحمية", keywords: ["dietetic", "nutrition"] },
+  "Early Childhood Education": { ar: "تعليم الطفولة المبكرة", keywords: ["early childhood"] },
+  "Economics": { ar: "الاقتصاد", keywords: ["economic"] },
+  "Education & Teaching (General)": { ar: "التربية والتعليم (عام)", keywords: ["education", "teaching", "pedagogy"] },
+  "Electrical & Electronic Engineering": { ar: "الهندسة الكهربائية والإلكترونية", keywords: ["electrical", "electronic", "electromechanical", "microelectronic", "telecommunication"] },
+  "English, TESL & TESOL": { ar: "اللغة الإنجليزية وتعليمها", keywords: ["tesl", "tesol", "english", "linguistics"] },
+  "Entrepreneurship": { ar: "ريادة الأعمال", keywords: ["entrepreneurship", "technopreneurship"] },
+  "Environmental Science & Management": { ar: "علوم وإدارة البيئة", keywords: ["environment", "ecology"] },
+  "Event Management": { ar: "إدارة الفعاليات", keywords: ["event management"] },
+  "Fashion Design": { ar: "تصميم الأزياء", keywords: ["fashion"] },
+  "Finance & Investment": { ar: "المالية والاستثمار", keywords: ["finance", "investment"] },
+  "Fine Arts & Performing Arts": { ar: "الفنون الجميلة والأدائية", keywords: ["fine arts", "performing arts", "dance", "drama", "theater", "cinematic", "acting"] },
+  "Food Science & Technology": { ar: "علوم وتكنولوجيا الأغذية", keywords: ["food science", "food technology", "food manufacturing", "food service"] },
+  "Forensic Science": { ar: "العلوم الجنائية", keywords: ["forensic"] },
+  "Game Design & Development": { ar: "تصميم وتطوير الألعاب", keywords: ["game design", "games development", "computer games"] },
+  "Geography": { ar: "الجغرافيا", keywords: ["geography"] },
+  "Graphic Design & Visual Comm.": { ar: "التصميم الجرافيكي والاتصال المرئي", keywords: ["graphic design", "visual communication", "advertising"] },
+  "Halal Industry": { ar: "صناعة الحلال", keywords: ["halal"] },
+  "History": { ar: "التاريخ", keywords: ["history"] },
+  "Hospitality & Hotel Management": { ar: "الضيافة وإدارة الفنادق", keywords: ["hospitality", "hotel"] },
+  "Human Resource Management (HR)": { ar: "إدارة الموارد البشرية", keywords: ["human resource", "hr ", "hrd"] },
+  "Industrial Design": { ar: "التصميم الصناعي", keywords: ["industrial design", "product design"] },
+  "Information Systems": { ar: "نظم المعلومات", keywords: ["information system", " mis "] },
+  "Information Technology (IT)": { ar: "تقنية المعلومات", keywords: ["information technology", "it ", " ict ", "internet of things", "iot"] },
+  "Interior Architecture / Design": { ar: "العمارة الداخلية / التصميم الداخلي", keywords: ["interior architecture", "interior design"] },
+  "International Business": { ar: "الأعمال الدولية", keywords: ["international business"] },
+  "International Relations & Affairs": { ar: "العلاقات والشؤون الدولية", keywords: ["international relations", "international affairs"] },
+  "Islamic Studies & Syariah": { ar: "الدراسات الإسلامية والشريعة", keywords: ["islamic", "syariah", "shariah", "usuluddin", "quran", "hadith", "fiqh", "aqidah"] },
+  "Languages & Linguistics (Other)": { ar: "اللغات واللغويات (أخرى)", keywords: ["arabic", "mandarin", "chinese", "japanese", "french", "german", "translation", "language"] },
+  "Law & Jurisprudence": { ar: "القانون والفقه", keywords: ["law", "llb", "llm", "jurisprudence"] },
+  "Logistics & Supply Chain": { ar: "اللوجستيات وسلاسل الإمداد", keywords: ["logistics", "supply chain"] },
+  "Manufacturing Engineering": { ar: "هندسة التصنيع", keywords: ["manufacturing"] },
+  "Marine & Naval Engineering": { ar: "الهندسة البحرية", keywords: ["marine", "naval", "offshore", "ship"] },
+  "Marketing": { ar: "التسويق", keywords: ["marketing"] },
+  "Mathematics & Statistics": { ar: "الرياضيات والإحصاء", keywords: ["mathematics", "math", "statistic"] },
+  "Mechanical Engineering": { ar: "الهندسة الميكانيكية", keywords: ["mechanical"] },
+  "Mechatronics & Robotics": { ar: "الميكاترونكس والروبوتات", keywords: ["mechatronic", "robotics", "automation"] },
+  "Medical Imaging & Radiography": { ar: "التصوير الطبي والأشعة", keywords: ["medical imaging", "radiography", "radiology", "diagnostic imaging"] },
+  "Medicine & Surgery (MBBS/MD)": { ar: "الطب والجراحة", keywords: ["medicine", "mbbs", " md ", "surgery", "medical", "clinical medicine", "paediatric", "internal med"] },
+  "Multimedia & Creative Technology": { ar: "الوسائط المتعددة والتقنية الإبداعية", keywords: ["multimedia", "creative multimedia", "interactive"] },
+  "Music": { ar: "الموسيقى", keywords: ["music"] },
+  "Nursing": { ar: "التمريض", keywords: ["nursing", "midwifery", "gerontology", "perioperative"] },
+  "Occupational Safety & Health": { ar: "السلامة والصحة المهنية", keywords: ["occupational safety", "occupational health", "osh"] },
+  "Optometry & Ophthalmic": { ar: "البصريات وطب العيون", keywords: ["optometry", "ophthalmic"] },
+  "Petroleum & Oil Gas Engineering": { ar: "هندسة البترول والنفط والغاز", keywords: ["petroleum", "oil and gas", "oil & gas"] },
+  "Pharmacy & Pharmacology": { ar: "الصيدلة وعلم الأدوية", keywords: ["pharmacy", "pharmaceutical", "pharmacology"] },
+  "Physics": { ar: "الفيزياء", keywords: ["physics", "geophysics"] },
+  "Physiotherapy & Rehabilitation": { ar: "العلاج الطبيعي والتأهيل", keywords: ["physiotherapy", "rehabilitation", "chiropractic"] },
+  "Political Science & Public Policy": { ar: "العلوم السياسية والسياسة العامة", keywords: ["political science", "public policy", "governance"] },
+  "Psychology": { ar: "علم النفس", keywords: ["psychology"] },
+  "Public Administration & Management": { ar: "الإدارة العامة", keywords: ["public administration", "public management"] },
+  "Public Health": { ar: "الصحة العامة", keywords: ["public health"] },
+  "Quantity Surveying": { ar: "حساب الكميات", keywords: ["quantity surveying"] },
+  "Real Estate & Property Management": { ar: "العقارات وإدارة الأملاك", keywords: ["real estate", "property management"] },
+  "Retail Management": { ar: "إدارة التجزئة", keywords: ["retail"] },
+  "Risk Management & Insurance": { ar: "إدارة المخاطر والتأمين", keywords: ["risk management", "insurance"] },
+  "Social Science & Sociology": { ar: "العلوم الاجتماعية وعلم الاجتماع", keywords: ["social science", "sociology", "anthropology", "social work"] },
+  "Software Engineering": { ar: "هندسة البرمجيات", keywords: ["software engineering"] },
+  "Sports Science & Management": { ar: "علوم وإدارة الرياضة", keywords: ["sports science", "sports management"] },
+  "Tourism Management": { ar: "إدارة السياحة", keywords: ["tourism"] },
+  "Traditional Chinese Medicine": { ar: "الطب الصيني التقليدي", keywords: ["traditional chinese medicine", "tcm"] },
+  "Urban & Regional Planning": { ar: "التخطيط الحضري والإقليمي", keywords: ["urban planning", "regional planning", "urban design"] },
+  "Veterinary Medicine": { ar: "الطب البيطري", keywords: ["veterinary", "bioveterinary"] }
+};
+
+/* ============================================
+   TRANSLATOR HELPERS
+============================================ */
+function expandKeywords(text) {
+  const expansionMap = {
+    "master": "postgraduate", "ماجستير": "دراسات عليا", "bachelor": "degree", "degree": "bachelor",
+    "بكالوريوس": "درجة جامعية", "engineering": "engineer", "engineer": "engineering", "هندسة": "مهندس",
+    "dentist": "dental dentistry", "طبيب": "طب", "medicine": "medical mbbs"
+  };
+  let words = text.split(" ");
+  words.forEach(w => { if (expansionMap[w]) words.push(expansionMap[w]); });
+  return words.join(" ");
+}
+
+function translateProgramName(name, lang) {
+  if (lang === "en") return name;
+  const dict = {
+    "Bachelor of": "بكالوريوس", "Bachelor in": "بكالوريوس في", "Bachelor": "بكالوريوس",
+    "Master of": "ماجستير", "Master in": "ماجستير في", "Master": "ماجستير",
+    "Doctor of Philosophy": "دكتوراه الفلسفة", "PhD": "دكتوراه", "Doctor of": "دكتوراه",
+    "Diploma in": "دبلوم في", "Diploma": "دبلوم",
+    "Foundation in": "سنة تأسيسية في", "Foundation": "سنة تأسيسية",
+    "Engineering": "الهندسة", "Science": "العلوم", "Sciences": "العلوم",
+    "Computer": "الحاسب", "Information Technology": "تقنية المعلومات", "IT": "تقنية المعلومات",
+    "Business Administration": "إدارة الأعمال", "Business": "الأعمال",
+    "Accounting": "المحاسبة", "Finance": "المالية", "Economics": "الاقتصاد",
+    "Medicine": "الطب", "Surgery": "الجراحة", "Pharmacy": "الصيدلة", "Medical": "طبي",
+    "Nursing": "التمريض", "Education": "التربية", "Management": "الإدارة",
+    "Law": "القانون", "Architecture": "العمارة", "Design": "التصميم",
+    "Mechanical": "الميكانيكية", "Civil": "المدنية", "Electrical": "الكهربائية",
+    "Chemical": "الكيميائية", "Mechatronics": "الميكاترونكس",
+    "Honours": "مع مرتبة الشرف", "Hons": "مرتبة الشرف",
+    "Artificial Intelligence": "الذكاء الاصطناعي", "Data Science": "علوم البيانات",
+    "Cyber Security": "الأمن السيبراني", "Psychology": "علم النفس",
+    "Public Health": "الصحة العامة", "Dentistry": "طب الأسنان", "Dental": "أسنان"
+  };
+  let translated = name;
+  for (const [en, ar] of Object.entries(dict)) {
+    const regex = new RegExp(`\\b${en}\\b`, "g"); 
+    translated = translated.replace(regex, ar);
+  }
+  return translated;
+}
+
+/* ============================================
+   EXHAUSTIVE DATABASE (1000+ COURSES)
+============================================ */
+let rawData = [
+  {
+    university: "Universiti Malaya (UM)", shortName: "UM", type: "Public", currency: "MYR", website: "https://www.um.edu.my",
+    programmes: {
+      "Foundation in Life Sciences": "35,000",
+      "Foundation in Physical Sciences": "35,000",
+      "Foundation in Social Sciences": "35,000",
+      "Foundation of Islamic Studies": "15,100",
+      "Bachelor of Medicine & Bachelor of Surgery": "673,200",
+      "Bachelor of Dentistry": "655,000",
+      "Bachelor of Pharmacy": "280,100",
+      "Bachelor of Nursing Science": "149,200",
+      "Bachelor of Biomedical Science": "149,200",
+      "Bachelor of Engineering (Civil, Biomedical, Electrical, Mechanical, Chemical)": "132,100",
+      "Bachelor of Science in Architecture": "103,900",
+      "Bachelor of Accounting": "99,100",
+      "Bachelor of Urban and Regional Planning": "96,100",
+      "Bachelor of Quantity Surveying": "92,900",
+      "Bachelor of Real Estate": "90,100",
+      "Bachelor of Computer Science (AI, SE, Sys & Network, Info Sys, Multimedia)": "89,200",
+      "Bachelor of Building Surveying": "85,000",
+      "Bachelor of Sports Science (Exercise Science)": "84,700",
+      "Bachelor of Finance": "84,100",
+      "Bachelor of Shariah and Law": "82,500",
+      "Bachelor of Science in Chemistry": "78,500",
+      "Bachelor of Science in Mathematics / Physics": "78,400",
+      "Bachelor of Actuarial Science": "78,400",
+      "Bachelor of Economics / Business Administration": "77,100",
+      "Bachelor of Malay Studies (Malay, Linguistics, Literature, Professional)": "76,300",
+      "Bachelor of Arts (International & Strategic Studies)": "75,900",
+      "Bachelor of Sports Management / TESL": "75,100",
+      "Bachelor of Science (Ecology, Biotech, Env Mgt, Biochem, Stats, Microbio, Geology)": "70,600",
+      "Bachelor of English Language and Linguistics": "70,100",
+      "Bachelor of Japanese Language and Linguistics": "70,000",
+      "Bachelor of Counselling / Early Childhood Education / Muamalat Management": "69,600",
+      "Bachelor of Geography / Arts English / Media Studies": "68,100",
+      "Bachelor of Arts Southeast Asian Studies": "68,000",
+      "Bachelor of Arabic / Chinese / Tamil Language and Linguistics": "65,100",
+      "Bachelor of Arts Chinese Studies": "65,100",
+      "Bachelor of French / German / Spanish / Italian Language and Linguistics": "65,000",
+      "Bachelor of Music": "64,500",
+      "Bachelor of Dance / Performing Arts": "62,500",
+      "Bachelor of Drama": "62,100",
+      "Bachelor of Arts (History)": "61,000",
+      "Bachelor of Arts (Syariah, Usuluddin, Al-Quran, Anthropology, Env Studies, Social Admin, East Asian, Indian Studies)": "60,900",
+      "Doctor in Periodontology / Restorative Dentistry / Prosthodontics / Orthodontics": "536,100 - 553,400",
+      "Doctor in Paediatric / Special Care Dentistry / Oral Maxillofacial Pathology": "520,800 - 546,200",
+      "Doctor in Dental Public Health": "425,100",
+      "Postgraduate Clinical Programmes (e.g., Surgery, Anaesthesiology, Radiology)": "291,700",
+      "Master of Community Oral Health": "141,700",
+      "Master of Public Policy": "98,600",
+      "Master of Oral Science": "96,800",
+      "Doctor of Philosophy (Business, Medicine, Computer Science)": "86,600 - 93,300",
+      "Master of Business Administration (MBA)": "79,100",
+      "Master of Clinical Psychology": "71,550",
+      "Master of Accounting / Marketing / Management": "60,100 - 62,100",
+      "Master of Systems / Mechanical / Biomedical Engineering": "55,100",
+      "Master of Laws / Commercial Law / Criminal Justice": "34,100",
+      "Diploma in Management / Business / HR / Accounting (International)": "33,240",
+      "Executive Diploma (Management, ECE, Counselling, IT, Shariah, Law Enf.)": "27,350 - 29,780"
+    }
+  },
+  {
+    university: "Universiti Sains Malaysia (USM)", shortName: "USM", type: "Public", currency: "USD", website: "https://www.usm.my",
+    programmes: {
+      "Bachelor of Science in Education with Honours": "1,718.75 (Per Semester)",
+      "Bachelor of Education (TESOL) with Honours": "1,718.75 (Per Semester)",
+      "Bachelor of Music / Fine Arts (Acting / Graphics / Product Design)": "1,562.50 (Per Semester)",
+      "Bachelor of Interior Architecture with Honours": "2,250.00 (Per Semester)",
+      "Bachelor of Science in Quantity Surveying / Architecture": "3,125.00 (Per Semester)",
+      "Bachelor of Urban and Regional Planning / Construction Project Management": "2,250.00 (Per Semester)",
+      "Bachelor in Building Surveying with Honours": "1,928.50 (Per Semester)",
+      "Bachelor of Arts (Translation / Malay Linguistics / English Literature)": "1,562.50 (Per Semester)",
+      "Bachelor of Arts in English for Professionals with Honours": "2,125.00 (Per Semester)",
+      "Bachelor of Social Sciences with Honours": "1,562.50 (Per Semester)",
+      "Bachelor of Economics with Honours": "1,875.00 (Per Semester)",
+      "Bachelor of Communication with Honours": "2,500.00 (Per Semester)",
+      "Bachelor of Accounting with Honours": "2,250.00 (Per Semester)",
+      "Bachelor of Management with Honours": "2,285.71 (Per Semester)",
+      "Bachelor of Science / Applied Science (Biology, Physics, Chemistry, Math)": "1,718.75 (Per Semester)",
+      "Bachelor of Industrial Tech (Environmental, Food, Bioresource, Bioprocess)": "1,875.00 (Per Semester)",
+      "Bachelor of Computer Science / Software Engineering": "1,875.00 (Per Semester)",
+      "Bachelor of Engineering (Mechanical, Manufacturing, Electrical, etc.)": "2,250.00 (Per Semester)",
+      "Bachelor of Chemical Engineering with Honours": "2,812.50 (Per Semester)",
+      "Bachelor of Aerospace Engineering with Honours": "2,750.00 (Per Semester)",
+      "Bachelor of Health Science (Biomedical, Nutrition, Forensic, etc.)": "2,125.00 (Per Semester)",
+      "Doctor of Medicine (MD)": "13,750.00 (Per Semester)",
+      "Doctor of Dental Surgery (DDS)": "11,250.00 (Per Semester)",
+      "Doctorate in Dental Public Health": "16,877.50 (Total)",
+      "Doctor of Business Administration": "15,997.50 (Total)",
+      "Doctor of Public Health (DrPH) (Various Specialisations)": "17,662.50 (Total)",
+      "Master of Arts (Communication, Education, Linguistics, Literature)": "3,900.00 (Total)",
+      "Master of Social Science (Islamic Development Management)": "3,900.00 (Total)",
+      "Master of Social Work / MA (Hadith)": "4,235.00 (Total)",
+      "Master of Neuroscience (Integrated)": "5,100.00 (Total)",
+      "MSc (Applied Geophysics, Biomedicine, CS, Math, Stats, Structural)": "4,000.00 (Total)",
+      "MSc (Electronic Systems / Embedded System / Microelectronic Engineering)": "6,500.00 (Total)",
+      "MSc (Molecular Medicine)": "11,625.00 (Total)",
+      "Doctor of Education (Various Specialisations)": "17,662.50 (Total)",
+      "Doctor of Psychology (Clinical / Neuropsychology)": "63,000.00 (Total)",
+      "Master of Architecture": "5,280.00 (Total)",
+      "Master of Business Administration (MBA)": "6,352.50 (Total)",
+      "Master of Business Administration (Online)": "10,945.00 (Total)",
+      "Master of Psychology (Clinical Psychology)": "38,500.00 (Total)",
+      "Master of Public Health": "4,000.00 (Total)",
+      "Master of Sustainable Development Practice": "9,625.00 (Total)",
+      "MMed (Obstetrics, Paediatrics, Internal Med, Radiology, Surgery, etc.)": "20,400.00 (Total)",
+      "Master of Surgery (Neurosurgery / Plastic Surgery)": "20,400.00 (Total)",
+      "Master of Restorative Dentistry / Oral & Maxillofacial Surgery": "60,000.00 (Total)",
+      "Master or PhD by Research (Medical / Dental / Med Sciences)": "1,575.00 (Per Semester)",
+      "Master or PhD by Research (Engineering Schools)": "1,388.00 (Per Semester)",
+      "Master or PhD by Research (Social Sciences / Humanities / Languages)": "1,088.00 (Per Semester)"
+    }
+  },
+  {
+    university: "Universiti Kebangsaan Malaysia (UKM)", shortName: "UKM", type: "Public", currency: "MYR", website: "https://www.ukm.my",
+    programmes: {
+      "Bachelor of Audiology with Honours": "74,250",
+      "Bachelor of Biomedical Science with Honours": "74,250",
+      "Bachelor of Optometry with Honours": "74,250",
+      "Bachelor of Speech Science with Honours": "74,250",
+      "Bachelor of Diagnostic Imaging and Radiotherapy with Honours": "74,250",
+      "Bachelor of Physiotherapy with Honours": "74,250",
+      "Bachelor of Occupational Health with Honours": "74,250",
+      "Bachelor of Dietetics with Honours": "74,250",
+      "Bachelor of Science Nutrition with Honours": "74,250",
+      "Bachelor of Environmental Health with Honours": "74,250",
+      "Bachelor of Forensic Science with Honours": "74,250",
+      "Master - Economics and Management": "18,550.00 (Research) / 14,545.00 (Mixed)",
+      "Master of Clinical Pharmacy": "37,750.00 (Research) / 14,945.00 (Mixed)",
+      "Master of Science (Pharmaceutical Analysis)": "27,750.00 (Research) / 14,945.00 (Mixed)",
+      "Master of Science (Pharmacy)": "19,750.00 (Research) / 14,945.00 (Mixed)",
+      "Master - Engineering and Built Environment": "23,030.00 (Research) / 17,985.00 (Mixed)",
+      "Master - Education": "17,750.00 (Research) / 14,145.00 (Mixed)",
+      "Master - Islamic Studies": "17,750.00 (Research) / 14,145.00 (Mixed)",
+      "Master of Clinical Dentistry": "281,175.00 (Research)",
+      "Master of Non-Clinical Dentistry": "30,910.00 (Research)",
+      "Master - Science and Technology": "21,150.00 (Research) / 14,945.00 (Mixed)",
+      "Master - Health Sciences": "19,750.00 (Research) / 14,945.00 (Mixed)",
+      "Master - Social Sciences and Humanities": "19,550.00 (Research) / 14,145.00 (Mixed)",
+      "Master - Information Science and Technology": "19,750.00 (Research) / 14,945.00 (Mixed)",
+      "Master - Law": "18,550.00 (Research) / 14,545.00 (Mixed)",
+      "Master of Clinical Medicine": "68,730.00 (Research)",
+      "Master of Non-Clinical Medicine": "30,910.00 (Research)",
+      "Master - ATMA (Malay World and Civilization)": "17,750.00 (Research) / 14,145.00 (Mixed)",
+      "Master - LESTARI (Environment and Development)": "18,550.00 (Research) / 14,545.00 (Mixed)",
+      "Master - INBIOSIS (System Biology)": "19,750.00 (Research) / 14,945.00 (Mixed)",
+      "Master - Islam Hadhari": "17,750.00 (Research) / 14,145.00 (Mixed)",
+      "Master - Ethnic Studies (KITA)": "17,750.00 (Research) / 14,145.00 (Mixed)",
+      "Master - IKMAS (Malaysia and International Studies)": "18,550.00 (Research) / 14,145.00 (Mixed)",
+      "Master - IMEN (Microengineering and Nanoelectronics)": "20,150.00 (Research) / 15,745.00 (Mixed)",
+      "Master - SERI (Solar Energy Research Institute)": "19,750.00 (Research) / 14,945.00 (Mixed)",
+      "Master - UMBI (Medical Molecular Biology Institute)": "29,750.00 (Research) / 24,545.00 (Mixed)",
+      "Master - Visual Informatics (IVI)": "19,750.00 (Research) / 14,945.00 (Mixed)",
+      "Master - Climate Change (IPI)": "20,150.00 (Research) / 15,745.00 (Mixed)",
+      "Master - Fuel Cell / Hydrogen Energy": "20,150.00 (Research) / 15,745.00 (Mixed)",
+      "Master - Energy Management and Policy": "18,550.00 (Research) / 14,545.00 (Mixed)"
+    }
+  },
+  {
+    university: "Universiti Putra Malaysia (UPM)", shortName: "UPM", type: "Public", currency: "MYR", website: "https://www.upm.edu.my",
+    programmes: {
+      "Foundation Studies for Agricultural Science": "21,500.00 (Per Year)",
+      "Bachelor of Agricultural Science with Honours": "20,000.00 (Per Year)",
+      "Bachelor of Horticultural Science with Honours": "20,000.00 (Per Year)",
+      "Bachelor of Science in Aquaculture with Honours": "20,000.00 (Per Year)",
+      "Bachelor of Agriculture in Animal Science with Honours": "20,000.00 (Per Year)",
+      "Bachelor of Science in Agribusiness with Honours": "20,000.00 (Per Year)",
+      "Bachelor of Science in Biotechnology with Honours": "20,000.00 (Per Year)",
+      "Bachelor of Science in Biochemistry with Honours": "20,000.00 (Per Year)",
+      "Bachelor of Science in Microbiology with Honours": "20,000.00 (Per Year)",
+      "Bachelor of Science in Cell Biology with Honours": "20,000.00 (Per Year)",
+      "Bachelor of Economics with Honours": "16,000.00 (Per Year)",
+      "Bachelor of Accounting (Honours)": "20,000.00 (Per Year)",
+      "Bachelor of Business Administration with Honours": "18,000.00 (Per Year)",
+      "Bachelor of Computer Science with Honours": "20,000.00 (Per Year)",
+      "Bachelor of Computer Science (Multimedia) with Honours": "20,000.00 (Per Year)",
+      "Bachelor of Software Engineering with Honours": "20,000.00 (Per Year)",
+      "Bachelor of Computer Science (Computer Network) with Honours": "20,000.00 (Per Year)",
+      "Bachelor of Landscape Architecture with Honours": "20,000.00 (Per Year)",
+      "Bachelor of Science in Architecture with Honours": "20,000.00 (Per Year)",
+      "Bachelor of Industrial Design with Honours": "20,000.00 (Per Year)",
+      "Bachelor of Counselling with Honours": "14,000.00 (Per Year)",
+      "Bachelor of Education in Guidance and Counselling with Honours": "14,000.00 (Per Year)",
+      "Bachelor of Education in Malay Language with Honours": "14,000.00 (Per Year)",
+      "Bachelor of Education in Teaching of English as a Second Language with Honours": "14,000.00 (Per Year)",
+      "Bachelor of Education in Home Science with Honours": "14,000.00 (Per Year)",
+      "Bachelor of Education in Agricultural Science": "16,250.00 (Per Year)",
+      "Bachelor of Education (Physical Education / Moral Education)": "12,500.00 (Per Year)",
+      "Bachelor of Civil Engineering with Honours": "22,000.00 (Per Year)",
+      "Bachelor of Electrical and Electronics Engineering with Honours": "22,000.00 (Per Year)",
+      "Bachelor of Chemical Engineering with Honours": "22,000.00 (Per Year)",
+      "Bachelor of Agricultural and Biosystem Engineering with Honours": "22,000.00 (Per Year)",
+      "Bachelor of Mechanical Engineering with Honours": "22,000.00 (Per Year)",
+      "Bachelor of Aerospace Engineering with Honours": "22,000.00 (Per Year)",
+      "Bachelor of Process and Food Engineering with Honours": "22,000.00 (Per Year)",
+      "Bachelor of Computer and Communication System Engineering with Honours": "22,000.00 (Per Year)",
+      "Bachelor of Food Science and Technology with Honours": "20,000.00 (Per Year)",
+      "Bachelor of Science in Food Service Management with Honours": "20,000.00 (Per Year)",
+      "Bachelor of Science in Food Manufacturing Operations with Honours": "20,000.00 (Per Year)",
+      "Bachelor of Forestry Science with Honours": "20,000.00 (Per Year)",
+      "Bachelor of Science in Timber Industry with Honours": "20,000.00 (Per Year)",
+      "Bachelor of Wood Science Technology": "16,250.00 (Per Year)",
+      "Bachelor of Parks and Recreation Science with Honours": "20,000.00 (Per Year)",
+      "Bachelor of Environmental Science and Technology with Honours": "20,000.00 (Per Year)",
+      "Bachelor of Environmental Management with Honours": "20,000.00 (Per Year)",
+      "Bachelor of Music with Honours": "18,000.00 (Per Year)",
+      "Bachelor of Human Development Science with Honours": "20,000.00 (Per Year)",
+      "Bachelor of Consumer Studies with Honours": "20,000.00 (Per Year)",
+      "Bachelor of Human Development Science with Management (Honours)": "20,000.00 (Per Year)",
+      "Bachelor of Human Development Science with Information Technology (Honours)": "20,000.00 (Per Year)",
+      "Bachelor of Science (Human Resource Development)": "16,250.00 (Per Year)",
+      "Bachelor of Communication with Honours": "12,000.00 (Per Year)",
+      "Bachelor of Arts (Malay, English, Arabic, French, German) with Honours": "12,000.00 (Per Year)",
+      "Bachelor of Arts in Mandarin": "10,000.00 (Per Year)",
+      "Doctor of Medicine": "100,000.00 (Per Year)",
+      "Bachelor of Biomedical Science with Honours": "20,000.00 (Per Year)",
+      "Bachelor of Science in Dietetic with Honours": "20,000.00 (Per Year)",
+      "Bachelor of Science in Nutrition and Community Health with Honours": "20,000.00 (Per Year)",
+      "Bachelor of Nursing with Honours": "24,000.00 (Per Year)",
+      "Bachelor of Science (Biology, Math, Statistics, Physics, Chemistry, etc.)": "20,000.00 (Per Year)",
+      "Doctor of Veterinary Medicine": "65,000.00 (Per Year)",
+      "Bintulu Campus: Bioindustrial Science / Forestry / Aquaculture / Human Development": "65,800.00 (Total Program Fee)",
+      "Master of Land Resource Management / Plantation Management": "37,150.00 (2 Years)",
+      "Master in Tropical Soil Science": "38,550.00 (2 Years)",
+      "Master of Computer Science / Information Security / Software Engineering": "25,150.00 (2 Years)",
+      "Master of Computer Network": "27,150.00 (2 Years)",
+      "Master of Architecture": "31,950.00 (2 Years)",
+      "Master in Industrial Design Innovation / Sustainable Landscape Management": "35,150.00 (2 Years)",
+      "Master of Tropical Urban Design": "23,850.00 (2 Years)",
+      "Master of Landscape Architecture": "30,850.00 (2 Years)",
+      "Master in Construction Technology Management": "38,700.00 (1 Year)",
+      "Master of Education (Curriculum, Admin, Psychology, HRD, Instructional Tech, etc.)": "29,150.00 (2 Years)",
+      "Master of Education in Guidance and Counselling": "34,650.00 (2 Years)",
+      "Master in Aerospace System Design / Electrical Power / Food Process Engineering": "27,150.00 (2 Years)",
+      "Master of Engineering (Comm, Emergency, Management, Highway, Innovation, etc.)": "25,150.00 (2 Years)",
+      "Master of Environmental Engineering": "25,550.00 (2 Years)",
+      "Master in Microelectronic System Engineering": "27,150.00 (2 Years)",
+      "Master in Process Safety and Loss Prevention": "28,050.00 (2 Years)",
+      "Master of Remote Sensing and GIS / Structural / Water / Env Tech Mgt": "25,150.00 (2 Years)",
+      "Master of Food Safety and Quality Assurance / Functional Food Design": "30,150.00 (2 Years)",
+      "Master of Food Technology": "29,650.00 (2 Years)",
+      "Master of Environment": "25,600.00 (2 Years)",
+      "Master in Community Development / Politics and Government": "32,250.00 (2 Years)",
+      "Master in Personal Financial Planning / Environmental Health": "32,800.00 (2 Years)",
+      "Master in Nutritional Sciences / Applied Linguistics / Corp Comm / Malay / Lit": "31,150.00 (2 Years)",
+      "Master of Clinical Psychology": "71,550.00 (2 Years)",
+      "Master of Public Health": "29,550.00 (1 Year)",
+      "Master of Applied Statistics / Tropical Biology": "25,150.00 (2 Years)",
+      "Master in Analytical Chemistry": "29,310.00 (2 Years)",
+      "Master in Materials Physics / Mathematical Sciences": "29,150.00 (2 Years)",
+      "Master by Research (Medical Cluster)": "19,900.00 (2 Years Max)",
+      "Master by Research (Science & Tech Cluster)": "19,850.00 (2 Years Max)",
+      "Master by Research (Social Science Cluster)": "17,900.00 (2 Years Max)",
+      "PhD by Research (Medical Cluster)": "48,650.00 (4 Years Max)",
+      "PhD by Research (Science & Tech Cluster)": "44,200.00 (4 Years Max)",
+      "PhD by Research (Social Science Cluster)": "34,500.00 (4 Years Max)",
+      "Master Industry (Medical / Science & Tech / Social Science)": "25,900.00 - 27,900.00 (2 Years)",
+      "PhD Industry (Medical / Science & Tech / Social Science)": "50,500.00 - 64,650.00 (4 Years)"
+    }
+  },
+  {
+    university: "Universiti Teknologi Malaysia (UTM)", shortName: "UTM", type: "Public", currency: "MYR", website: "https://www.utm.my",
+    programmes: {
+      "Bachelor of Engineering (Civil, Chemical, Mechanical, Electrical, etc.)": "75,000.00",
+      "Bachelor of Computer Science (SE, Network, Graphics, AI)": "71,000.00",
+      "Bachelor of Accounting": "63,000.00",
+      "Bachelor of Management (Marketing / Technology)": "63,000.00",
+      "Bachelor of Science (Chemistry, Mathematics, Physics, Biology)": "63,000.00",
+      "Bachelor of Quantity Surveying / Landscape Architecture": "59,000.00",
+      "Bachelor of Science (Industrial Design)": "59,000.00",
+      "Bachelor of Geoinformation / Property Management": "51,620.00",
+      "Bachelor of Science in Architecture": "87,350.00",
+      "Bachelor of Psychology with Human Resource Development": "63,000.00",
+      "Bachelor of Science (Human Resource Development)": "63,000.00",
+      "Bachelor of Engineering (MJIIT Programs - KL Campus)": "75,000.00",
+      "Master of Architecture (Coursework / Mixed-Mode)": "25,400.00 - 29,500.00",
+      "Master of Engineering (Coursework / Mixed-Mode)": "28,400.00 - 31,000.00",
+      "Master of Business & Management / Computing / IT": "25,400.00 - 26,500.00",
+      "Master of Science (Professional Science / Sustainable Urban Design)": "26,769.00 - 29,554.00",
+      "Master of Science (Systems / Sustainable Infrastructure / Design)": "31,554.00 - 33,554.00",
+      "Master of Software Engineering / Informatics / Business Intelligence": "26,204.00",
+      "Master of Business Administration (MBA)": "32,154.00",
+      "Master of Sustainable System / Innovation Management": "28,500.00",
+      "Master of Disaster Risk Management": "36,004.00",
+      "PhD in Engineering (Mixed-Mode / Research)": "51,600.00 - 57,600.00",
+      "PhD in Architecture / Business / Science (Mixed-Mode / Research)": "48,600.00 - 55,800.00",
+      "PhD in Education / Computing / IT / Quantity Surveying": "48,600.00 - 51,600.00",
+      "Doctor of Engineering (Engineering Business Management)": "56,204.00",
+      "Doctor of Software Engineering": "46,014.00",
+      "Doctor of Business Administration (DBA)": "60,154.00"
+    }
+  },
+  {
+    university: "Universiti Utara Malaysia (UUM)", shortName: "UUM", type: "Public", currency: "MYR", website: "https://www.uum.edu.my",
+    programmes: {
+      "Bachelor of Communication with Honours": "37,600.00",
+      "Bachelor of Computer Science with Honours": "37,600.00",
+      "Bachelor of Accounting with Honours": "40,000.00",
+      "Bachelor of Accounting (Information System) with Honours": "40,000.00",
+      "Bachelor of Media Technology with Honours": "32,900.00",
+      "Bachelor of Science with Honours (Multimedia)": "32,900.00",
+      "Bachelor of Science with Honours (Information Technology)": "32,900.00",
+      "Bachelor of Science with Honours (Business Mathematics)": "33,600.00",
+      "Bachelor of Science with Honours (Industrial Statistics)": "33,600.00",
+      "Bachelor of Science with Honours (Decision Science)": "33,600.00",
+      "Bachelor of Science Economics with Honours": "33,600.00",
+      "Bachelor of Finance with Honours": "33,600.00",
+      "Bachelor of Sciences Agribusiness Management with Honours": "33,600",
+      "Bachelor of Banking with Honours": "33,600",
+      "Bachelor of Risk Management and Insurance with Honours": "33,600",
+      "Bachelor of Islamic Finance and Banking with Honours": "33,600",
+      "Bachelor of Business Administration with Honours": "33,600",
+      "Bachelor of Human Resource Management with Honours": "33,600.00",
+      "Bachelor of Marketing with Honours": "33,600.00",
+      "Bachelor of Entrepreneurship with Honours": "33,600.00",
+      "Bachelor of Technology Management with Honours": "33,600.00",
+      "Bachelor of Business Administration (Logistics & Transportation) with Honours": "33,600",
+      "Bachelor of Operations Management with Honours": "33,600",
+      "Bachelor of Public Management with Honours": "29,400",
+      "Bachelor of Development Management with Honours": "29,400.00",
+      "Bachelor of International Business Management with Honours": "33,600.00",
+      "Bachelor of International Affairs Management with Honours": "29,400.00",
+      "Bachelor of Hospitality Management with Honours": "33,600",
+      "Bachelor of Tourism Management with Honours": "33,600",
+      "Bachelor of Event Management with Honours": "33,600",
+      "Bachelor of Counselling with Honours": "33,600",
+      "Bachelor of Social Work Management with Honours": "33,600",
+      "Bachelor of Applied Linguistics and Business Administration with Honours": "33,600",
+      "Master by Research (Full-Time, 2-3 Years)": "27,274.00 - 35,836.00",
+      "MSc. by Coursework (Full-Time, 1.5 Years)": "26,666.00",
+      "PhD Programme (Full-Time, 3-5 Years)": "41,196.00 - 61,200.00"
+    }
+  },
+  {
+    university: "International Islamic University Malaysia (IIUM)", shortName: "IIUM", type: "Public", currency: "MYR", website: "https://www.iium.edu.my",
+    programmes: {
+      "Bachelor Degree in Engineering": "90,615.00",
+      "Bachelor Degree in Sciences (KENMS)": "71,415.00",
+      "Bachelor Degree in Communication Technology (KICT)": "81,015.00",
+      "Bachelor Degree in Islamic Revealed Knowledge and Human Sciences (AHAS KIRKHS)": "71,415.00",
+      "Bachelor Degree in Architecture": "77,815.00",
+      "Bachelor Degree in Contemporary Languages (Tourism Management)": "77,815.00",
+      "Bachelor Degree in Contemporary Languages (Other Programmes)": "73,815.00",
+      "Bachelor Degree in Environmental Design (KAED)": "97,715.00",
+      "Bachelor Degree in Nursing": "89,815.00",
+      "Bachelor Degree (General / Other Programmes)": "91,315.00",
+      "Bachelor Degree in Law": "92,115.00",
+      "Bachelor Degree in Pharmacy": "169,535.00",
+      "Bachelor Degree in Dentistry": "383,690.00",
+      "Bachelor Degree in Medicine": "487,290.00",
+      "Bachelor Degree in Allied Health Sciences": "107,315.00",
+      "Bachelor Degree (2-Year Duration Programme)": "25,565.00",
+      "Master Degree (Coursework Mode)": "25,870.00",
+      "Master Degree (Research Mode)": "31,190.00",
+      "Master Degree (Mixed Mode)": "32,135.00",
+      "Master Degree - KENMS (Coursework / Research / Mixed Mode)": "26,425.00 - 28,760.00",
+      "Master of Protective Security Management (MPSM)": "26,580.00",
+      "Master of Business Intelligence and Analytic (MBIA)": "30,580.00",
+      "Master Degree - KICT (Coursework / Research / Mixed Mode)": "25,480.00 - 31,730.00",
+      "Master Degree - AHAS KIRKHS (Coursework / Research / Mixed Mode)": "22,780.00 - 27,005.00",
+      "Master of Development Psychology (MDP)": "20,020.00",
+      "Master of Industrial & Organisational Psychology (MIOP)": "35,380.00",
+      "Master of Human Science Psychology (Clinical)": "46,580.00",
+      "Master Degree - Psychology (Coursework / Research / Mixed Mode)": "26,425.00 - 31,595.00",
+      "Master of Architecture (MAAR)": "42,301.00",
+      "Master Degree - KAED (Coursework / Research / Mixed Mode)": "29,030.00 - 35,915.00",
+      "Master of Science (Industrial Pharmacy)": "67,480.00",
+      "Master of Cosmetic Science (Mixed Mode)": "47,780.00",
+      "Master Degree - Science (Research Mode - Group A)": "39,980.00",
+      "Master Degree - Science (Research Mode - Group B)": "32,780.00",
+      "Master of Advance Nursing (Critical, Renal & Emergency Care)": "53,315.00",
+      "Master Degree - Nursing (Research Mode)": "33,980.00",
+      "Master Degree - Pharmacy (Research Mode)": "32,780.00",
+      "Master of Dentistry (MDENT)": "105,160.00",
+      "Master Degree - Dentistry (Research Mode)": "38,780.00",
+      "Master Degree (Clinical Specialist Training)": "213,620.00",
+      "Master Degree - Finance IIiBF (Coursework)": "32,830.00",
+      "Master Degree - ISTAC (Research / Mixed Mode)": "26,780.00 - 27,230.00",
+      "Master in Halal Industry Science (MSHIS)": "35,580.00",
+      "Master of Halal Industry Management (MAHIM)": "26,780.00 - 27,230.00",
+      "Master in Sustainability Science (Research / Mixed Mode)": "22,460.00 - 30,020.00",
+      "Master Degree - SCASH (General)": "19,530.00",
+      "PhD Programme (Full Time - General)": "51,287.50",
+      "PhD Programme (KENMS)": "43,048.00",
+      "PhD Programme (Communication Technology - KICT)": "47,704.00",
+      "PhD Programme (AHAS KIRKHS)": "46,360.00",
+      "PhD Programme (Allied Health Science - Group A)": "41,284.00",
+      "PhD Programme (Contemporary Languages)": "51,400.00",
+      "PhD Programme (KAED - Environmental Design Group A)": "59,677.00",
+      "PhD Programme (KAED - Environmental Design Group B)": "53,677.00",
+      "PhD Programme (Finance - IIiBF)": "52,300.00",
+      "PhD Programme (Pharmacy)": "59,200.00",
+      "PhD Programme (INHART - Training)": "56,209.00",
+      "PhD Programme (ISTAC)": "56,800.00",
+      "PhD Programme (Environmental Design Group C)": "53,800.00",
+      "PhD Programme (Allied Health Science - Group B)": "63,220.00",
+      "Doctor in Paediatric": "407,280.00",
+      "Doctor in Orthodontics / Prosthodontics": "422,721.00",
+      "PhD Programme (INHART - Halal Industry)": "60,445.00",
+      "PhD Programme (Civilisation ISTAC)": "53,200.00",
+      "PhD Programme (2-Year Duration Shortened)": "18,530.00"
+    }
+  },
+  {
+    university: "Universiti Pendidikan Sultan Idris (UPSI)", shortName: "UPSI", type: "Public", currency: "MYR", website: "https://www.upsi.edu.my",
+    programmes: {
+      "Bachelor of Education (Malay Literature, TESL, Biology, Math, Science, Art, etc.)": "44,000.00 (Total for 8 Sems)",
+      "Bachelor of Performing Arts (Theater / Dance)": "44,000.00 (Total for 6 Sems)",
+      "Bachelor of Communication (Social Communication)": "44,000.00 (Total for 6 Sems)",
+      "Bachelor of Accountancy / Economics / Business Administration": "44,000.00 (Total for 7-8 Sems)",
+      "Bachelor of Psychology": "44,000.00 (Total for 7 Sems)",
+      "Bachelor of Software Engineering (Education Software)": "44,000.00 (Total for 8 Sems)",
+      "Bachelor of Design (Digital Games / Advertising / Animation)": "44,000.00 (Total for 7-8 Sems)",
+      "Bachelor of Sports Science (Sport Rehabilitation / Coaching Science)": "44,000.00 (Total for 6 Sems)",
+      "Diploma (Science, IT, Early Childhood, Entrepreneurship, Game Design, etc.)": "33,000.00 (Total for 6 Sems)",
+      "Diploma in Music": "38,500.00 (Total for 7 Sems)",
+      "Master Degree (Science & Technical)": "23,160.00 (Total for 3 Sems)",
+      "Master Degree (Non Science & Technical)": "22,180.00 (Total for 3 Sems)",
+      "Master Degree (Science Stream - Faculty of Science & Mathematic)": "26,160.00 (Total for 3 Sems)",
+      "Doctor of Philosophy (PhD) (Science & Technical)": "40,630.00 (Total for 4 Sems)",
+      "Doctor of Philosophy (PhD) (Non Science & Technical)": "39,190.00 (Total for 4 Sems)",
+      "Doctor of Philosophy (PhD) (Science Stream - Faculty of Science & Mathematic)": "47,030.00 (Total for 4 Sems)",
+      "Doctor of Education (EdD)": "59,590.00 (Total for 6 Sems)"
+    }
+  },
+  {
+    university: "Universiti Sains Islam Malaysia (USIM)", shortName: "USIM", type: "Public", currency: "MYR", website: "https://www.usim.edu.my",
+    programmes: {
+      "Faculty of Quranic and Sunnah Studies (Undergraduate)": "2,750.00 (Per Semester)",
+      "Faculty of Leadership and Management (Undergraduate)": "2,750.00 (Per Semester)",
+      "Bachelor of Management with Tourism (Honours)": "2,750.00 (Per Semester)",
+      "Faculty of Syariah and Law (Undergraduate)": "2,750.00 (Per Semester)",
+      "Bachelor of Shariah (Halal Industry) with Honours": "6,875.00 (Per Semester)",
+      "Bachelor of Laws and Shariah with Honours (LLB and Shariah)": "2,750.00 (Per Semester)",
+      "Faculty of Economics and Muamalat (Undergraduate)": "5,625.00 (Per Semester)",
+      "Faculty of Major Language Studies (Undergraduate)": "5,625.00 (Per Semester)",
+      "Faculty of Science and Technology (Undergraduate)": "3,250.00 (Per Semester)",
+      "Faculty of Engineering and Built Environment (Undergraduate)": "3,750.00 (Per Semester)",
+      "Bachelor of Science in Architecture with Honours": "3,750.00 (Per Semester)",
+      "Faculty of Dentistry (Undergraduate)": "25,000.00 (Per Semester)",
+      "Faculty of Medicine and Health Sciences (Undergraduate)": "40,000.00 (Per Semester)",
+      "Master of Quranic and Sunnah Studies (Research)": "11,640.00 (Total 2 Years)",
+      "Master of Communication / Da'wah and Islamic Leadership (Coursework)": "18,640.00 (Total 2 Years)",
+      "Master of Counselling (Family Counselling) (Coursework)": "19,840.00 (Total 2 Years)",
+      "Master of Counselling (Substance Abuse) (Coursework)": "25,440.00 (Total 2 Years)",
+      "Master of Akidah and Religion Studies (Mixed Mode)": "15,515.00 (Total 1.5 Years)",
+      "Master of Arabic Communication (Coursework)": "14,165.00 (Total 1.5 Years)",
+      "Master of Arabic Language (Islamic Literature / Translation) (Mixed Mode)": "14,165.00 (Total 1.5 Years)",
+      "Master of Medical Sciences (Mixed Mode)": "22,840.00 (Total 2 Years)",
+      "Master of Applied Oral Science (Coursework)": "64,314.00 (Total 1 Year)",
+      "Master of Science (Research)": "15,640.00 (Total 2 Years)",
+      "Master of Science (Foodomics and Food Technology) (Mixed Mode)": "13,290.00 (Total 1 Year)",
+      "Master Computer Sci / Actuarial Sci / Financial Math / Risk Mgt (Mixed Mode)": "14,465.00 (Total 1.5 Years)",
+      "Master of Law (International Law) (Coursework)": "18,640.00 (Total 2 Years)",
+      "Master of Syariah / Comparative Law / Laws (Research)": "11,640.00 (Total 2 Years)",
+      "Master of Economics and Muamalat Administration (Research)": "12,440.00 (Total 2 Years)",
+      "Master Accounting / Banking / Finance / Muamalat Admin (Coursework)": "15,730.00 (Total 2 Years)",
+      "Master of Social Science (Research)": "11,640.00 (Total 2 Years)",
+      "Master of Islamic Science (Research)": "12,140.00 (Total 2 Years)",
+      "PhD (Research: Da'wah / HRM / Comm / Counselling / Quranic / Syariah)": "22,390.00 (Total 3 Years)",
+      "PhD (Research: Arabic Studies / Education / English Studies / Social Sci)": "22,390.00 (Total 3 Years)",
+      "PhD (Medical Science) (Research)": "38,390.00 (Total 3 Years)",
+      "PhD (Science and Technology / Engineering / Built Environment) (Research)": "29,590.00 (Total 3 Years)",
+      "PhD (Economics and Muamalat Administration) (Research)": "23,590.00 (Total 3 Years)",
+      "PhD (Islamic Science) (Research)": "23,390.00 (Total 3 Years)"
+    }
+  },
+  {
+    university: "Universiti Teknikal Malaysia Melaka (UTeM)", shortName: "UTeM", type: "Public", currency: "MYR", website: "https://www.utem.edu.my",
+    programmes: {
+      "Bachelor of Engineering / Engineering Technology (All Specialisations)": "49,000.00 (Total)",
+      "Bachelor of Technology Management / Technopreneurship (All Specialisations)": "49,000.00 (Total)",
+      "Bachelor of Computer Science / ICT (All Specialisations)": "44,615.00 (Total)",
+      "Doctor of Technology Management (DTM)": "71,480.00 (Total)",
+      "Doctor of Philosophy (PhD)": "36,568.00 (Total)",
+      "Doctor of Engineering (DEng)": "9,008.00 (Per Year)",
+      "Master of Business Administration (MBA)": "27,770.00 (Total)",
+      "Master of Technovation (MTV)": "24,210.00 (Total)",
+      "Master of Computer Science (Internetworking / Database / Software / Security / Multimedia)": "10,500.00 (Per Year)",
+      "Master of Electronic Engineering (Telecommunication / Electronic Systems / Computer)": "10,500.00 (Per Year)",
+      "Master of Manufacturing Engineering (Manufacturing System / Quality System / Industrial / Advanced Materials)": "10,500.00 (Per Year)",
+      "Master of Electrical / Mechatronics / Mechanical Engineering": "10,500.00 (Per Year)",
+      "Master of Technology (Data Science and Analytics)": "16,100.00 (Per Year)",
+      "Master of Software Engineering (Mobile Development)": "16,100.00 (Per Year)",
+      "Master of Engineering Business Management (MIEM)": "22,000.00 (Per Year)",
+      "Master of Business Information Management (MIIM)": "22,000.00 (Per Year)",
+      "Master of Science (By Research)": "5,928.00 (Per Year)",
+      "Master of Mechanical Engineering (Energy / Automotive / Product Design)": "8,500.00 (Per Year)",
+      "Master of Engineering (Various specialisations by Mixed Mode)": "5,513.00 (Per Year)"
+    }
+  },
+  {
+    university: "Universiti Malaysia Pahang (UMP / UMPSA)", shortName: "UMPSA", type: "Public", currency: "MYR", website: "https://www.umpsa.edu.my",
+    programmes: {
+      "Foundation in Science and Technology": "20,895.00",
+      "Diploma in Computer Science": "35,005.00",
+      "Diploma in Occupational Safety and Health": "35,005.00",
+      "Diploma in Industrial Sciences": "35,170.00",
+      "Diploma in Engineering (Civil, Electrical and Electronics, Manufacturing, Mechanical, Chemical)": "37,805.00",
+      "Bachelor of Applied Science in Data Analytics with Honours": "77,465.00",
+      "Bachelor of Computer Science (Software Engineering, Computer Systems & Networking, Graphics & Multimedia, Cyber Security, Multimedia Software) with Honours": "77,795.00",
+      "Bachelor of Applied Science (Industrial Chemistry, Industrial Biotechnology, Material Technology) with Honours": "77,795.00",
+      "Bachelor of Management (Occupational Safety & Health, Project Management, Industrial Technology, Business Analytics, Financial Technology) with Honours": "77,795.00",
+      "Bachelor of Engineering (Civil, Chemical, Electrical, Manufacturing, Mechatronics, Mechanical) with Honours": "83,795.00",
+      "Bachelor of Engineering Technology (All Specialisations) with Honours": "83,795.00",
+      "Bachelor of Technology (Building Construction, Oil and Gas Facilities, Industrial Electronic/Machining, Electrical System, Welding, Automotive) with Honours": "83,465",
+      "Master of Science Technology-Integrated Language Studies (Coursework)": "20,625",
+      "Master of Mechanical Engineering (Coursework)": "25,425",
+      "Master of Industrial Engineering (Coursework)": "25,425",
+      "Master of Electrical Engineering (Sustainable Energy) (Coursework)": "25,425",
+      "Master of Chemical Engineering with Entrepreneurship (Coursework)": "26,850.00",
+      "Master of Science (Industrial Mathematics) (Mixed Mode)": "26,375.00",
+      "Master of Mechatronic Engineering (Coursework)": "31,425.00",
+      "Master of Petroleum Engineering (Coursework)": "31,425.00",
+      "Master of Science in Digital Transformation (Coursework)": "31,425",
+      "Master of Science in Artificial Intelligence (Coursework)": "31,425",
+      "Master of Science in Cyber Security (Coursework)": "31,425",
+      "Master of Science Occupational Safety and Health (Coursework)": "32,425.00",
+      "Master of Science Business Administration (Coursework)": "32,675.00",
+      "Master of Science (Chemical Analytics) (Mixed Mode)": "32,675.00",
+      "Master of Project Management (Coursework)": "34,550",
+      "Master of Science in Mining with Mineral Technology (Coursework)": "35,825",
+      "Master of Science (Process Plant Operation) (Coursework)": "43,825",
+      "Master of Science (Conventional) (Research Mode)": "22,360",
+      "Master of Science (Remote Supervision) (Research Mode)": "24,070",
+      "Doctor of Philosophy (Conventional) (Research Mode)": "33,575",
+      "Doctor of Philosophy (Remote Supervision) (Research Mode)": "36,140.00",
+      "Doctor of Philosophy (Fast track) (Research Mode)": "36,140.00"
+    }
+  },
+  {
+    university: "Asia Pacific University (APU)", shortName: "APU", type: "Private", currency: "MYR", website: "https://www.apu.edu.my",
+    programmes: {
+      "Foundation in Computing, Business, Finance, Psychology, and Design": "27,900.00",
+      "Foundation in Engineering": "28,500.00",
+      "Foundation in Computing (100% Online)": "19,800.00",
+      "Diploma in ICT / Business / Accounting / Design / Mechatronic Engineering / International Studies": "52,600.00",
+      "Certificate in Administrative Skills / ICT": "21,200.00",
+      "Intensive Language Program (per 4-week level)": "2,650.00",
+      "BSc in IT / Computer Science / Software Engineering / Intelligent Systems (All Specialisations)": "104,600.00",
+      "BSc in Multimedia Technology / Computer Games Development": "104,600.00",
+      "Bachelor of Industrial Design / Visual Effects / Animation / Digital Advertising": "104,600.00",
+      "BSc (Hons) in Architecture": "103,000.00",
+      "BA in Business Management / HR / Marketing / International Business (All Specialisations)": "104,600.00",
+      "BA in Tourism Management": "104,600",
+      "BA in Accounting and Finance / Banking and Finance (All Specialisations)": "104,600",
+      "BSc in Actuarial Studies (All Specialisations)": "104,600",
+      "B.Eng in Electrical & Electronic / Mechatronic / Mechanical / Computer / Petroleum Engineering": "133,200",
+      "Master of Business Administration (MBA) / Global Marketing / Project Management / Technology Management": "30,300",
+      "Master of Accounting / Finance / International Business Communications": "30,300.00",
+      "MSc in IT Management / Software Engineering": "30,300.00",
+      "MSc in Data Science and Business Analytics": "41,600.00",
+      "Master of Philosophy (MPhil) in Management / Engineering": "26,000.00",
+      "MSc in Computing (By Research)": "26,000",
+      "PhD in Management / Finance / Computing / Engineering": "45,800"
+    }
+  },
+  {
+    university: "Al-Madinah International University (MEDIU)", shortName: "MEDIU", type: "Private", currency: "MYR", website: "https://www.mediu.edu.my",
+    programmes: {
+      "Bachelor of Computer Science (General / Computer Networking)": "54,175.00",
+      "Bachelor of Information Technology (General / MIS / System Development)": "52,420.00",
+      "Bachelor of Business Administration in Management": "47,220.00",
+      "Bachelor of Business Administration (General / E-Commerce)": "44,490.00",
+      "Bachelor of Islamic Sciences (Al-Quran)": "38,705.00",
+      "Bachelor of Arabic Language & Literature": "38,185.00",
+      "Bachelor of Islamic Sciences (Dawah & Usuluddin / Fiqh & Usul Fiqh)": "38,055.00",
+      "Bachelor of Islamic Sciences (Al-Hadith)": "37,730.00",
+      "Bachelor of Education in Teaching Arabic Language (On-line only)": "33,431.00",
+      "PhD of Education (Educational Foundations) - Structure A": "32,730.00",
+      "PhD in Accounting / Business Management / Economics / Islamic Banking": "30,660.00",
+      "PhD in Islamic Sciences (Aqidah / Arabic / Dawah / Fiqh / Usul Al Fiqh)": "30,660",
+      "PhD in Science in ICT / Tafsir / Ulum Al Hadith": "30,660",
+      "Master in Accounting - Structure A": "24,026",
+      "Master in Aqidah / Arabic Language / Dawah / Ulum Al Hadith - Structure C": "24,480",
+      "Master in Business Management / Economics - Structure A": "23,376",
+      "Master in Islamic Banking and Finance - Structure A": "23,376.00",
+      "Master in Fiqh / Qada' & Siyasah Syariyyah - Structure C": "24,300.00",
+      "Master in Qira'aat - Structure C": "24,220.00",
+      "Master Tafsir & Ulum Al Quran - Structure C": "23,830.00",
+      "Master in Usul Al Fiqh - Structure C": "23,440",
+      "Master of Education (Educational Foundation / Psychology)": "22,010",
+      "Master in ICT E-Enterprise / MSc in ICT - Structure B": "21,580.00 - 21,800.00",
+      "Master in Fiqh / Usul Al Fiqh - Structure A": "18,632.00"
+    }
+  },
+  {
+    university: "Infrastructure University Kuala Lumpur (IUKL)", shortName: "IUKL", type: "Private", currency: "MYR", website: "https://iukl.edu.my",
+    programmes: {
+      "Diploma in Architecture": "47,000.00",
+      "Diploma in Landscape Architecture": "34,780.00",
+      "Diploma in Quantity Surveying": "33,725.00",
+      "Diploma in Automotive Engineering": "31,200.00",
+      "Diploma Agricultural Science (Plantation Management)": "29,900.00",
+      "Diploma in Civil Engineering": "31,850.00",
+      "Diploma in Electrical & Electronics Engineering": "29,925.00",
+      "Diploma in Mechanical Engineering": "30,550.00",
+      "Diploma in Accounting": "30,875.00",
+      "Diploma in Business Administration": "29,250.00",
+      "Diploma in Corporate Communication": "31,200.00",
+      "Diploma in English for Professional Communication": "30,225",
+      "Diploma in Information Technology": "29,900",
+      "Diploma in Sports Management": "23,850",
+      "Bachelor of Technology (Hons) in Automotive": "64,800",
+      "Bachelor of Electronics Engineering with Honours": "77,625",
+      "Bachelor of Civil Engineering with Honours": "88,200.00",
+      "Bachelor of Mechanical Engineering with Honours": "77,625.00",
+      "Bachelor of Agricultural Science (Plantation Management) (Hons)": "62,115.00",
+      "Bachelor of Computer Science (Hons)": "62,400.00",
+      "Bachelor of Software Engineering": "62,400",
+      "Bachelor of Technology (Hons) in Electro-Mechanical": "69,660",
+      "Bachelor of Science (Architectural Studies)": "84,180",
+      "Bachelor of Landscape Architecture": "71,875.00",
+      "Bachelor of Quantity Surveying (Hons)": "65,190.00",
+      "Bachelor of Technology (Hons) in Construction Management": "64,800.00",
+      "BA (Hons) TESOL": "51,000",
+      "Bachelor of Accountancy (Hons)": "63,940",
+      "Bachelor of Business Administration (Hons)": "55,200",
+      "Bachelor of Business Administration (Hons) in E-Commerce": "55,200",
+      "Bachelor of Communication (Hons) in Corporate Communication": "54,900",
+      "Bachelor of Communication (Hons) in Integrated Marketing Communication": "51,850",
+      "Bachelor of Science (Hons) in Logistics and Supply Chain Management": "62,220.00",
+      "BA (Hons) English for Professional Communication": "54,000.00",
+      "Bachelor of Science (Hons) in Economics and Finance": "62,220.00",
+      "Master of Science in Built Environment (By Research)": "33,960.00",
+      "Master in Electronics Engineering (By Research)": "36,800.00",
+      "Master of Civil Engineering (By Research)": "36,800.00",
+      "Master of Architecture": "39,000.00",
+      "Master of Business Administration": "34,230.00",
+      "Master in Communication": "31,280.00",
+      "Master in Information Technology": "31,800",
+      "Master of Arts in Teaching English to Speakers of Other Languages (MA TESOL)": "28,560.00",
+      "Master of Science in Water Resources": "31,200",
+      "Doctor of Philosophy in Business Administration": "37,800",
+      "Doctor of Philosophy in Civil Engineering": "53,490.00",
+      "Doctor of Philosophy in Communication": "36,240.00",
+      "Doctor of Philosophy in Education": "28,800.00",
+      "Doctor of Philosophy in Information Technology": "36,240.00"
+    }
+  },
+  {
+    university: "International Medical University (IMU)", shortName: "IMU", type: "Private", currency: "MYR", website: "https://www.imu.edu.my",
+    programmes: {
+      "Bachelor of Dental Surgery (BDS) (IMU)": "717,000.00",
+      "Bachelor of Medicine & Bachelor of Surgery (MBBS) (IMU)": "672,500.00",
+      "Bachelor of Science (Hons) in Chiropractic": "353,000.00",
+      "Bachelor of Pharmacy (Hons) (IMU)": "233,000.00",
+      "Bachelor of Science (Hons) in Bioveterinary Science": "222,750.00",
+      "Bachelor of Science (Hons) in Dietetics with Nutrition": "216,000.00",
+      "Bachelor of Science (Hons) Chinese Medicine": "160,000.00",
+      "Bachelor of Science (Hons) in Pharmaceutical Chemistry": "141,000.00",
+      "Bachelor of Science (Hons) in Biomedical Science": "141,000.00",
+      "Bachelor of Applied Science (Hons) in Medical Biotechnology": "141,000.00",
+      "Bachelor of Science (Hons) in Nutrition": "141,000.00",
+      "Bachelor in Digital Health (Hons)": "126,000.00",
+      "Bachelor of Communication with Health (Honours)": "126,000",
+      "Bachelor of Business Administration with Healthcare Management (Honours)": "126,000",
+      "Bachelor of Science (Hons) in Psychology": "114,000",
+      "Bachelor of Nursing (Hons)": "99,000",
+      "Master of Science Clinical Psychology": "81,000",
+      "Master of Counselling": "64,800.00",
+      "Master in Business Administration in Healthcare Management": "64,400.00",
+      "Master of Science Analytical & Pharmaceutical Chemistry (Conventional)": "53,750.00",
+      "Master in Health Informatics & Analytics": "50,000.00",
+      "Master of Science Molecular Medicine (Conventional)": "50,000",
+      "Master of Pharmacy Practice": "50,000",
+      "Master of Science Public Health (Conventional)": "50,000",
+      "Master in Health Professions Education (Conventional)": "47,250.00",
+      "Master of Science Analytical & Pharmaceutical Chemistry (ODL)": "43,100.00",
+      "Master of Science Molecular Medicine (ODL)": "40,000.00",
+      "Master of Science Public Health (ODL)": "37,800",
+      "Doctor in Philosophy (PhD) (Healthcare Mgt / Medical & Health Sci / Health Professions Ed)": "28,100 (Per Year)",
+      "Foundation in Arts / Foundation in Science": "30,900",
+      "Master of Science (Medical & Health Sciences) (Research)": "21,500 (Per Year)"
+    }
+  },
+  {
+    university: "Lincoln University College", shortName: "LUC", type: "Private", currency: "MYR", website: "https://lincoln.edu.my",
+    programmes: {
+      "Doctor of Medicine (MD)": "357,700.00",
+      "Doctor of Dental Surgery (DDS)": "357,700.00",
+      "Bachelor of Pharmacy": "127,700.00",
+      "Bachelor of Science (HONS) in Nursing": "87,700.00",
+      "Bachelor of Nursing (Public Health) (Hons)": "87,700.00",
+      "Bachelor of Biomedical Science (Honours)": "87,700.00",
+      "Bachelor of Science (HONS) Physiotherapy": "87,700.00",
+      "Bachelor of Homeopathic Medical Science": "87,700.00",
+      "Bachelor of Medical Imaging (Hons)": "87,700.00",
+      "Bachelor of Civil Engineering Technology with Honours": "67,700.00",
+      "Bachelor of Mechanical Engineering Technology (Aeronautics) (HONS)": "67,700.00",
+      "Bachelor of Computer Science (HONS)": "52,700.00",
+      "Bachelor of Arts (HONS) in Creative Multimedia Technology": "52,700",
+      "Bachelor (HONS) in Business Administration": "52,700",
+      "Bachelor of Early Childhood Education": "52,700",
+      "Bachelor of Accountancy": "52,700",
+      "Bachelor of Islamic Studies (HONS)": "52,700",
+      "Bachelor in Tourism Management": "52,700.00",
+      "Master of Medical Science": "42,700.00",
+      "Master in Nursing": "42,700.00",
+      "Master of Science in Biotechnology": "42,700.00",
+      "Master of Business Administration (MBA)": "42,700",
+      "Master in Tourism Management": "42,700",
+      "Doctor of Philosophy (PhD) in Medical Physiology": "67,700",
+      "Doctor of Philosophy (PhD) in Nursing": "67,700.00",
+      "Doctor of Philosophy (PhD) in Psychology": "52,700.00",
+      "Doctor of Business Administration (DBA)": "52,700.00",
+      "Doctor of Philosophy (PhD) in Management": "52,700",
+      "Foundation in Science": "19,700",
+      "Foundation in Arts": "19,700",
+      "Diploma in Pharmacy": "37,700",
+      "Diploma in Nursing": "37,700",
+      "Diploma in Mechanical Engineering": "32,700",
+      "Diploma in Computer Science": "27,700.00"
+    }
+  },
+  {
+    university: "MAHSA University", shortName: "MAHSA", type: "Private", currency: "MYR", website: "https://mahsa.edu.my",
+    programmes: {
+      "Foundation in Science": "20,800.00",
+      "Foundation in Business / Arts": "17,700.00",
+      "Bachelor of Medicine and Bachelor of Surgery (MBBS)": "441,450.00",
+      "Doctor of Dental Surgery (DDS)": "423,750.00",
+      "Doctor in Restorative Dentistry / Periodontology": "337,000.00",
+      "Master of Orofacial Sciences": "105,800.00",
+      "Bachelor of Pharmacy (Hons)": "143,500.00",
+      "Bachelor of Physiotherapy (Hons)": "112,500.00",
+      "Bachelor in Biomedical Sciences (Honours)": "112,500.00",
+      "Bachelor of Sport Science (Honours)": "101,300.00",
+      "Bachelor of Electrical & Electronic / Mechanical Engineering with Honours": "96,500.00",
+      "Bachelor of Civil Engineering with Honours": "96,500.00",
+      "Bachelor of Science (Hons) Nursing": "80,500",
+      "Bachelor of Science (Honours) in Architectural Technology": "77,300",
+      "Bachelor of Quantity Surveying (Honours)": "74,200",
+      "Master of Medical Science in Aesthetic Medicine": "73,200",
+      "Bachelor of Environment Health and Safety (Hons)": "70,500",
+      "Bachelor of Medical Imaging (Honours)": "70,500.00",
+      "Bachelor of Science (Honours) in Pharmaceuticals Technology": "70,200.00",
+      "Bachelor of Science Biotechnology (Honours)": "70,200.00",
+      "Doctor of Business Administration": "70,250.00",
+      "Bachelor of Arts (Honours) in Creative Multimedia Design": "68,000",
+      "Bachelor of Hospitality Management (Honours)": "68,000",
+      "Bachelor of Information Technology (Hons)": "66,000",
+      "Bachelor of Hospital Management (Hons)": "66,000.00",
+      "Bachelor of Accounting (Honours)": "66,000.00",
+      "Bachelor of Science (Honours) in Islamic Finance": "66,300.00",
+      "Bachelor of Business Administration": "64,220",
+      "PhD in Pharmacy / Engineering / Nursing / Management / Research": "60,250 - 63,250",
+      "Bachelor of Nursing (Hons) Public Health": "54,400",
+      "Diploma in Dental Technology / Dental Surgery Assistant": "48,700 - 49,700",
+      "Diploma in Physiotherapy / Environmental Health / Occupational and Safety": "48,700",
+      "Diploma in Medical Imaging / Paramedical Science / Nursing / Pharmacy": "48,700",
+      "Diploma in Medical Laboratory Technology": "48,700.00",
+      "Master of Science / Engineering / IT / Nursing / Pharmacy / Research": "45,600.00",
+      "Master of Medical Science / Science in Public Health": "45,600.00",
+      "Diploma in Electrical & Electronic / Mechanical / Civil Engineering": "42,700.00",
+      "Diploma in Quantity Surveying / Architectural Technology": "42,700.00",
+      "Diploma in Hotel / Restaurant Management": "42,700.00",
+      "Diploma in Early Childhood Education / Education (TESL) / IT": "41,700.00",
+      "Diploma in Business / HRM / Marketing / Accounting": "41,700.00",
+      "Master of Business Administration (Various Specialisations)": "34,400.00",
+      "Postgraduate Certificate in Aesthetic Medicine": "34,600",
+      "Advanced Diploma in Midwifery / Paediatric Nursing": "33,800.00",
+      "Postgraduate Diploma in Management": "21,400",
+      "Postgraduate Certificate in Leadership / Teaching and Learning": "16,400",
+      "Post Basic in Nursing (Renal, Critical Care, Gerontology, Perioperative)": "15,800.00"
+    }
+  },
+  {
+    university: "Management & Science University (MSU)", shortName: "MSU", type: "Private", currency: "MYR", website: "https://www.msu.edu.my",
+    programmes: {
+      "Foundation in Science": "29,915",
+      "Foundation (Business / Law / IT / TESL / Visual Arts)": "28,205 - 28,245",
+      "Foundation in Engineering and Technology": "29,705",
+      "Foundation in Liberal Arts": "28,825",
+      "Bachelor of Medicine and Bachelor of Surgery (MBBS)": "570,475",
+      "Bachelor of Dental Surgery": "608,110",
+      "Doctor of Veterinary Medicine": "654,475",
+      "Bachelor in Pharmacy (Honours)": "204,750",
+      "Bachelor in Biomedical Science (Honours)": "187,990",
+      "Bachelor in Cardiovascular Technology (Honours)": "187,760",
+      "Bachelor in Traditional Chinese Medicine (Honours)": "181,240",
+      "Bachelor in Optometry (Honours)": "178,060",
+      "Bachelor in Forensic Science (Honours)": "177,900",
+      "Bachelor in Nursing (Honours)": "177,970",
+      "Bachelor in Medical Science (Honours)": "174,350",
+      "Bachelor of Science in Aviation Management and Piloting (Honours)": "195,100",
+      "Bachelor of Science in Pharmaceuticals Technology (Honours)": "138,635",
+      "Bachelor in Health Science Management (Honours)": "137,900",
+      "Bachelor in Nutrition (Honours)": "131,460",
+      "Bachelor in Product Design (Honours)": "125,120",
+      "Bachelor of Science in Mechanical Engineering (Honours)": "109,000",
+      "Bachelor in Music Technology (Honours)": "113,930",
+      "Bachelor in Accounting and Finance (Honours)": "106,790",
+      "Bachelor in Psychology (Honours)": "101,750",
+      "Bachelor in Education (Electrical and Electronic) (Honours)": "101,390",
+      "Bachelor in Accounting (Honours)": "98,740",
+      "Bachelor in Entrepreneurship (Honours)": "98,490",
+      "Bachelor in Broadcasting (Honours)": "98,350",
+      "Bachelor in Computer Engineering (Honours)": "98,380",
+      "Bachelor in Engineering Technology - Electrical and Electronic Engineering (Honours)": "97,520",
+      "Bachelor in Food Service Technology (Honours)": "97,540",
+      "Bachelor in International Business (Honours)": "86,285",
+      "Bachelor in Law and Commerce (Honours)": "86,225",
+      "Bachelor in Computer Science (Honours)": "85,400",
+      "Bachelor in Graphic Design (Honours)": "82,820",
+      "Bachelor in Information and Communication Technology (Honours)": "81,005",
+      "Bachelor in Marketing with Psychology (Honours)": "79,910",
+      "Bachelor in Visual Communication and Marketing (Honours)": "79,880",
+      "Bachelor in Liberal Arts (Honours)": "79,580",
+      "Bachelor in Industrial Management (Honours)": "78,995",
+      "Bachelor in Retail Management (Honours)": "76,190",
+      "Bachelor in Airlines Services Management (Honours)": "74,460",
+      "Diploma in Nursing": "116,395",
+      "Diploma in Mechanical Engineering": "104,395",
+      "Diploma in Radiotherapy": "103,775",
+      "Diploma in Physiotherapy": "102,035",
+      "Diploma in Aircraft Maintenance Technology": "99,375",
+      "Diploma in Traditional Chinese Medicine": "94,535",
+      "Diploma in Ophthalmic Dispensing": "90,955",
+      "Diploma in Occupational Safety and Health": "86,025",
+      "Diploma in Medical Laboratory Technology": "80,485",
+      "Diploma in Medical and Health Science / Medical Science": "80,445 - 80,475",
+      "Diploma in Pharmacy": "74,535",
+      "Diploma in Creative Visual / Interior Design": "74,275 - 74,335",
+      "Diploma in Music Technology / Patisserie Arts": "69,345 - 70,315",
+      "Diploma in Education - TESL": "58,705",
+      "Diploma (Business / IT / Graphic Design / Management / Accounting)": "53,255 - 57,705",
+      "Advanced Diploma in Midwifery": "38,395",
+      "PhD in Engineering (By Research)": "USD 29,988",
+      "PhD (Applied Science) (By Research)": "USD 25,478",
+      "PhD (Health Science) (By Research)": "USD 23,988",
+      "PhD in Education / Social Science (By Research)": "USD 16,148",
+      "PhD (Food Service Technology / Biomedicine) (By Research)": "USD 15,508",
+      "PhD (Computer Science / ICT) (By Research)": "USD 14,128",
+      "PhD in Management / Accounting (By Research)": "USD 12,748",
+      "Master in Biomedical Sciences / Medical Physiology (Coursework)": "USD 20,558 - 20,818",
+      "Master of Design (By Research)": "USD 20,813",
+      "Master of Pharmacy (By Research)": "USD 20,393",
+      "Master in Clinical Psychology (Coursework)": "USD 20,238",
+      "Master in International Event / Hospitality & Tourism Management": "USD 19,818",
+      "Master of Science in Public Health (Coursework)": "USD 17,958",
+      "Master in Clinical Pharmacy / Anatomy (Coursework)": "USD 16,503 - 16,578",
+      "Master in International Business / MBA Fashion Business (Coursework)": "USD 16,158 - 16,458",
+      "Master in Counseling and Guidance (Coursework)": "USD 15,422",
+      "Master of Science (Applied Science) (By Research)": "USD 15,038",
+      "Master in Education (TESL) (Coursework)": "USD 14,958",
+      "Master in Early Childhood Education (Coursework)": "USD 14,588",
+      "Master in Educational Management and Leadership (Coursework)": "USD 14,408",
+      "Master of Science in Engineering (By Research)": "USD 10,768",
+      "Master in Business Administration (MBA) (Coursework)": "USD 10,180",
+      "Master of Science (Biomedicine / Food Service Tech) (By Research)": "USD 10,033",
+      "Master in Computer Science / IT (By Research)": "USD 9,168",
+      "Master of Management / Science (Accounting or Finance) (By Research)": "USD 8,308"
+    }
+  },
+  {
+    university: "Multimedia University (MMU)", shortName: "MMU", type: "Private", currency: "MYR", website: "https://www.mmu.edu.my",
+    programmes: {
+      "Bachelor of Engineering (Electrical / Electronics / Computer / Telecommunications / Mechanical / Robotics and Automation) with Honours": "94,500.00",
+      "Bachelor of Accounting (Hons.)": "90,500.00",
+      "Bachelor of Cinematic Arts (Hons.)": "90,750.00",
+      "Bachelor of Computer Science (Hons.) (All Specialisations including Artificial Intelligence)": "77,250.00",
+      "Bachelor of Information Technology (Hons.) (All Specialisations)": "77,250.00",
+      "Bachelor of Multimedia (Hons.) (All Specialisations)": "77,250.00",
+      "Bachelor of Immersive Media Design (Hons.)": "77,250.00",
+      "Bachelor of Science (Hons) Intelligent Robotics": "77,250.00",
+      "Bachelor of Business Management / Marketing / Finance / Analytical Economics (Hons.)": "67,250.00",
+      "Bachelor of Business Administration (Hons.) (All Specialisations)": "67,250.00",
+      "Bachelor of Communication (Strategic Communication) (Hons.)": "64,750.00",
+      "Bachelor of Management (Hons.) - ODL": "37,750.00",
+      "Diploma in Digital Business": "31,500",
+      "Diploma in Electronic / Mechanical Engineering": "30,850",
+      "Diploma in 3D Modelling and Animation": "30,550",
+      "Diploma in Creative Multimedia / Audio / Producing / Cinematography": "30,250",
+      "Diploma in Business Administration": "31,500",
+      "Diploma in Information Technology": "28,000.00",
+      "Diploma in Management / Finance / Accounting / Applied Communication": "26,500.00",
+      "Foundation in Engineering": "22,750.00",
+      "Foundation in Computing / Science and Technology": "21,750.00",
+      "Foundation in Management / Business": "20,750",
+      "Foundation in Creative Multimedia": "19,500",
+      "Foundation in Communication": "18,750",
+      "Doctor of Business Administration (Mixed Mode)": "55,200.00",
+      "Master of Engineering (Telecommunications) (Coursework)": "37,750.00",
+      "Master of Science in Engineering Business Management (Coursework)": "35,250.00",
+      "Master of Computer Science in Software Engineering (ODL)": "29,000",
+      "Master of Creative Multimedia (Coursework)": "27,750",
+      "Executive Master of Business Administration (ODL)": "27,750",
+      "Master of Business Administration (M.B.A.) (Coursework)": "25,250 - 25,875",
+      "Doctor of Philosophy in Computing (Research)": "22,500 (Min - 3 Years)",
+      "Doctor of Philosophy (Engineering / Laws) (Research)": "19,200 (Min - 3 Years)",
+      "Doctor of Philosophy (Management) (Research)": "17,100 (Min - 3 Years)",
+      "Doctor of Philosophy (Creative Multimedia / Communication) (Research)": "15,300 (Min - 3 Years)",
+      "Master of Science (Computing / Information Technology) (Research) ": "14,700 (Min - 2 Years)",
+      "Master of Philosophy (Management) / Master of Engineering Science / Master of Laws (Research)": "12,600 (Min - 2 Years)",
+      "Master of Science (Creative Multimedia) (Research)": "10,500 (Min - 2 Years)",
+      "Master of Philosophy (Communication) (Research)": "6,000 (Min - 1 Year)",
+      "English Proficiency Programme (EPP) (per Level)": "12,000.00"
+    }
+  },
+  {
+    university: "Nilai University", shortName: "Nilai", type: "Private", currency: "MYR", website: "https://www.nilai.edu.my",
+    programmes: {
+      "Foundation (Business, Arts, Science, Information Technology)": "19,448.00",
+      "Diploma in Business (Online Learning)": "19,448.00",
+      "Diploma in Business / Accounting": "38,264.00",
+      "Diploma in Mass Communication": "38,398.00",
+      "Diploma in Mechanical Engineering": "42,622.00",
+      "Diploma in Civil Engineering": "43,831.00",
+      "Diploma in Quantity Surveying": "43,062.00",
+      "Diploma in Information Technology (Online Learning)": "19,464.00",
+      "Diploma in Information Technology": "39,855.00",
+      "Diploma in Computer Science": "42,640.00",
+      "Bachelor of Business (Hons) - Accounting, Marketing, HRM, Finance, Psychology, Logistics, Entrepreneurship, Digital Enterprise, Management, etc.": "72,227.00",
+      "Bachelor of Business (Hons) - Online Learning (Marketing, International Business, HRM, Business Administration)": "32,292.00",
+      "Bachelor of Accountancy (Hons)": "89,190",
+      "Bachelor of Accounting & Finance (Hons)": "79,586",
+      "Bachelor of Banking and Finance (Hons)": "79,602",
+      "Australian Degree Transfer Programme - Commerce": "48,417",
+      "Bachelor of Mass Communication (Hons)": "72,223",
+      "Bachelor of Arts (Honours) Digital Media": "78,047.00",
+      "Bachelor of Mechanical Engineering with Honours": "90,764.00",
+      "Bachelor of Civil Engineering with Honours": "90,783.00",
+      "Bachelor of Science (Hons) Quantity Surveying": "79,966.00",
+      "Bachelor of Technology (Intelligent Process, Intelligent Manufacturing, Digital Construction Management)": "78,030",
+      "Bachelor of Computer Science (Hons)": "78,036",
+      "Bachelor of Information Technology (Hons)": "76,328",
+      "Bachelor of Technology (Honours) Data Science": "78,036.00",
+      "Bachelor of Computer Science (Hons) (Online Learning)": "32,284.00",
+      "Bachelor of Biotechnology (Hons)": "84,932.00",
+      "Australian Degree Transfer Programme - Science": "57,182",
+      "Bachelor of Traditional Chinese Medicines (Hons)": "137,824",
+      "BSc (Hons) in Physiotherapy": "95,479",
+      "Master in Business Administration (Business Analytics)": "40,208",
+      "Master of Business Administration (Dual Award)": "45,734",
+      "Master of Business Administration": "40,196",
+      "Master of Business Administration (Online Learning)": "32,256.00",
+      "Master in Information Technology (Online Learning)": "32,260.00",
+      "Master in Education Management (Online Learning)": "32,252.00",
+      "Master of Science in Construction Management (Online Learning)": "32,256.00",
+      "Master in Information Technology / Information Systems / Entrepreneurship (E-Commerce) / Construction Management": "40,208.00",
+      "Master in Education Management / Social Entrepreneurship / Health Administration": "40,200.00",
+      "Master of Science (Data Science, Innovation and Technology, Education in Learning, Biotechnological Innovations, Health Sciences) (By Research)": "32,310.00",
+      "Doctor of Philosophy - Applied Physics, Information Systems, or Management (By Research)": "38,178.00",
+      "Doctor of Philosophy - Innovation, Data Science, Education, or Financial Technology (By Research)": "39,600.00",
+      "Doctor of Education": "40,205",
+      "Doctor of Business Administration": "59,796.00",
+      "Doctor of Business Administration (Online Learning)": "50,400",
+      "Intensive English Program (per level)": "5,000"
+    }
+  },
+  {
+    university: "Open University Malaysia (OUM)", shortName: "OUM", type: "Private", currency: "MYR", website: "https://www.oum.edu.my",
+    programmes: {
+      "Doctor of Nursing": "55,992.00",
+      "Doctor of Business Administration": "49,392.00",
+      "Doctor of Philosophy (Information Technology / Engineering / Science)": "42,584.40",
+      "Doctor of Education": "38,592.00",
+      "Master of Information Science (Competitive Intelligence)": "35,520.00",
+      "Doctor of Philosophy (Business Administration / Education)": "34,030.80",
+      "Master of Business Administration (MBA)": "32,155.20",
+      "Doctor of Philosophy Generic (Arts)": "31,917.60",
+      "Master of Environmental Science Management": "30,816.00",
+      "Master of Counseling": "28,627.20",
+      "Master of Information Technology": "28,464.00",
+      "Master of English Studies": "27,518.40",
+      "Master of Quality Management": "26,352",
+      "Master of Management": "26,208",
+      "Master of Human Resource Management": "25,402",
+      "Master of Multimedia Communication": "24,336",
+      "Master of Occupational Safety & Health Risk Management": "24,091",
+      "Master of Project Management": "24,048.00",
+      "Master in Early Childhood Education": "24,000.00",
+      "Master of Nursing": "23,952.00",
+      "Master of Science / Master of Science (Engineering)": "23,448.00",
+      "Master of Instructional Design and Technology": "22,224",
+      "Master of Education": "22,075",
+      "Master of Software Engineering": "21,888",
+      "Master of Public Administration": "21,621.60",
+      "Master of Information Technology and Network Computing": "19,440.00",
+      "Master of Science (Business Administration)": "19,068.00",
+      "Master of Islamic Studies": "18,720",
+      "Postgraduate Diploma in Teaching": "10,440",
+      "Bachelor of Nursing Science (Honours) (Fee for 12 Credits)": "4,306",
+      "Bachelor of Business Administration / HRM / Management (Fee for 9 Credits)": "2,236",
+      "Bachelor of IT / Education (TESL / Math) / Tech Mgmt (Fee for 9 Credits)": "2,225",
+      "Bachelor of Psychology / Communication / Computer Science (Fee for 9 Credits)": "1,922"
+    }
+  },
+  {
+    university: "Universiti Kuala Lumpur (UniKL)", shortName: "UniKL", type: "Private", currency: "MYR", website: "https://www.unikl.edu.my",
+    programmes: {
+      "Bachelor of Medicine and Bachelor of Surgery (MBBS)": "88,400.00",
+      "Bachelor of Pharmacy (Honours)": "54,380.00",
+      "Master of Science (Water and Hydropower Engineering)": "52,800.00",
+      "Aircraft Maintenance License Program - EASA Part 66": "52,000.00",
+      "Bachelor of Science (Honours) in Pharmaceutical Technology": "39,000.00",
+      "Bachelor of Physiotherapy (Honours)": "39,000.00",
+      "Master of Electrical Engineering": "32,470.00",
+      "Bachelor of Game Development with Honours": "30,680.00",
+      "Bachelor in Financial Technology with Honours": "30,420.00",
+      "Master of Business Technology": "28,948.00",
+      "Bachelor of Project Management (Honours)": "26,000.00",
+      "Bachelor in Fashion Design with Marketing (Honours)": "26,000.00",
+      "Foundation in Medical Sciences - (MBBS)": "25,000",
+      "Bachelor of Business Technology (Hons) in Automotive Management": "24,700",
+      "Bachelor of Electrical Engineering Technology (Sustainable Energy) with Honours": "24,700",
+      "Bachelor of Environmental Management and Sustainability Technology with Honours": "24,700",
+      "Master in Aviation Management": "24,700",
+      "Bachelor of Engineering Technology (Water Engineering and Energy) / Water Resources Engineering Technology with Honours": "24,000.00",
+      "Bachelor of Science in Psychology (Honours)": "23,500.00",
+      "Bachelor of Petroleum Engineering Technology (Operation and Safety) with Honours": "23,400.00",
+      "Bachelor of Industrial Logistics (Hons)": "22,800.00",
+      "Bachelor of Multimedia Technology (Hons) in Computer Animation": "22,286",
+      "Bachelor of Aviation Management (Hons)": "22,280",
+      "Master of Engineering Technology in Biomedical Engineering": "22,100",
+      "Bachelor of Information Technology (Hons) in Internet of Things": "22,100.00",
+      "Master of Public Health": "22,000.00",
+      "Master of Maritime Operations and Management": "21,500.00",
+      "Bachelor of Science (Hons) in Analytical Economics": "21,160",
+      "Bachelor of Aircraft Engineering Technology (Hons) in Mechanical / Avionics": "21,100",
+      "Bachelor of Chemical Engineering / Electrical Engineering with Honours": "20,800",
+      "Bachelor of Occupational Safety & Health / Maritime Operations (Honours)": "20,800",
+      "Diploma in Physiotherapy": "20,800",
+      "Bachelor of Information Technology (Hons) in Software Engineering / Computer System Security": "20,114",
+      "Bachelor in Computing and Business Management with Honours": "20,114.00",
+      "Bachelor of Multimedia Technology (Hons) in Interactive Multimedia Design": "20,114.00",
+      "Master of Science in Public Health": "20,000.00",
+      "Bachelor of Nursing Science (Honours)": "20,000.00",
+      "Bachelor of Marine Engineering Technology with Honours": "19,920.00",
+      "Master of Quality Engineering and Management": "19,760.00",
+      "Bachelor of Engineering / Engineering Technology (Most Specialisations) with Honours": "19,500.00",
+      "Bachelor of Biomedical Science (Honours) / Environmental Health (Hons)": "19,500.00",
+      "Bachelor of Design (Honours) in Industrial Design": "19,500.00",
+      "Bachelor of Food Safety and Quality Technology": "19,500",
+      "Foundation in Computer Technology / Science": "19,500.00",
+      "Diploma of Engineering Technology (Quality Engineering)": "19,500",
+      "Master of Engineering in Structural Integrity / Mechanical": "19,200",
+      "Master of Business Administration / MBA (Entrepreneurship) / Master in Manufacturing Management": "18,000.00",
+      "Foundation in Creative Art and Design / Science and Technology / Science and Arts": "18,000.00",
+      "Bachelor of Computer Engineering Technology (Computer Systems) with Honours": "17,600.00",
+      "Master in Supply Chain Management": "17,300.00",
+      "Diploma in Nursing": "17,200.00",
+      "Foundation in Business": "17,000.00",
+      "Diploma of Engineering Technology (Railway System)": "17,000.00",
+      "Bachelor of Business Administration (Hons) in International Business / Marketing / Accounting": "16,900.00",
+      "Bachelor in Tourism Planning and Development (Honours)": "16,900.00",
+      "Diploma of Engineering Technology (Aeroplane / Avionics / Helicopter / Marine Engineering)": "16,900.00",
+      "Diploma in Pharmacy / Medical Imaging / Animation": "16,900.00",
+      "Bachelor of Electromechanical Engineering Technology with Honours": "16,300.00",
+      "Bachelor of Technology Management (Honours)": "16,286.00",
+      "Bachelor of Mechanical Engineering with Honours": "16,000.00",
+      "Master in Computer Science (Mix Mode)": "16,000.00",
+      "Diploma of Engineering Technology (Ship Design / Construction / Maintenance / Marine Electrical)": "15,600.00",
+      "Bachelor of Business Administration (Hons) (Management & Entrepreneurship / Islamic Finance)": "15,600.00",
+      "Diploma of Engineering Technology in Air Conditioning and Refrigeration / Automotive Maintenance": "15,400.00",
+      "Diploma in Chemical Engineering Technology / Food / Welding": "14,900.00",
+      "Diploma in Industrial Logistics": "14,700.00",
+      "Diploma in Medical Laboratory Technology / Environmental Health / Medical and Health Sciences": "14,690",
+      "Diploma of Engineering Technology (Computer & Networking / Industrial Automation / Mechanical Design / Production / Electrical and Electronics / etc.)": "14,100",
+      "Master of Science (Pharmacy) (By Research)": "13,400",
+      "Doctor of Philosophy (Pharmacy)": "13,400",
+      "Diploma in Information Technology / Multimedia": "11,700",
+      "Doctor of Philosophy (Medical Sciences)": "11,000",
+      "Doctor of Philosophy in Islamic Finance": "8,580",
+      "Master of Medical Science (By Research)": "7,000",
+      "Master / Doctor of Philosophy (Most Research Fields - IT / Management / Accounting / Engineering Tech / etc.)": "5,000",
+      "Master of Engineering Technology (Manufacturing) (By Research)": "3,600",
+      "Doctor of Philosophy (Manufacturing)": "3,600"
+    }
+  },
+  {
+    university: "Universiti Tenaga Nasional (UNITEN)", shortName: "UNITEN", type: "Private", currency: "MYR", website: "https://www.uniten.edu.my",
+    programmes: {
+      "Bachelor of Engineering (Electrical & Electronics / Power / Mechanical / Civil) (Hons)": "85,000",
+      "Bachelor of Accounting (Hons)": "73,300",
+      "Bachelor of Computer Science / Information Technology (All Specialisations) (Hons)": "66,500",
+      "Bachelor of Economics (Energy) / Business Economics (Hons)": "62,400",
+      "Bachelor of Finance / International Business / Business Administration (All Specialisations) (Hons)": "57,600",
+      "Master of Energy Management (Coursework & Project)": "48,000",
+      "PhD in Engineering / Industrial Science": "36,750",
+      "Master of Business Administration / Engineering Management (Coursework & Project)": "34,350",
+      "Diploma in Computer Science": "32,800",
+      "Diploma in Mechanical Engineering / Electrical Engineering / Accountancy": "31,800",
+      "PhD in Information and Communication Technology / Business Management": "29,925",
+      "Diploma in Financial Technology / Digital Business": "28,900",
+      "Diploma in Business Studies": "28,800",
+      "Master of Electrical Engineering / Information Technology (Coursework & Research)": "27,700",
+      "Master of Structural Engineering (Coursework & Project)": "27,700",
+      "Foundation in Engineering": "21,800",
+      "Foundation in (Computer Science / IT / Accounting / Business / Economics)": "19,800",
+      "Master by Research (All Specialisations)": "14,400"
+    }
+  },
+  {
+    university: "Universiti Tun Abdul Razak (UNIRAZAK)", shortName: "UniRazak", type: "Private", currency: "MYR", website: "https://unirazak.edu.my",
+    programmes: {
+      "Foundation in Arts": "24,600",
+      "Diploma in Management": "40,600",
+      "Diploma in Information Technology": "19,500",
+      "Diploma in Social Work (Conventional)": "40,600",
+      "Diploma in Early Childhood Education": "19,500",
+      "Diploma in Psychology": "19,500",
+      "Bachelor of Business Administration (Islamic Banking & Finance) (Honours)": "60,600",
+      "Bachelor of Business (Honours) in Business Analytics and Digital Marketing": "60,600",
+      "Bachelor of Business Administration (Honours) (Majors: FinTech, AI, etc.)": "60,600",
+      "Bachelor of Management (Honours) (Majors: Marketing, Entrepreneurship, etc.)": "60,600",
+      "Bachelor of Information Technology (Honours) (Majors: Computer Forensic, SE, etc.)": "38,500",
+      "Bachelor of Business Management (Honours) Entrepreneurship (Conventional)": "41,500",
+      "Bachelor of Accounting (Honours) (Accredited by CPA Australia)": "120,600",
+      "Bachelor in Accounting (Honours)": "36,500",
+      "Bachelor of Economics (Honours) (Conventional)": "36,500",
+      "Bachelor of Arts in Governance & Public Policy (Honours) (Conventional)": "36,500",
+      "Bachelor of Arts in Public Management (Honours) (Open Distance Learning)": "36,500",
+      "Bachelor of Taxation (Honours) (Conventional)": "36,500",
+      "Bachelor of Education (Early Childhood Education) (Honours)": "36,500",
+      "Bachelor of Psychology (Honours)": "36,500",
+      "Bachelor of Education (Honours)": "36,500",
+      "Postgraduate Diploma in Education (Open Distance Learning)": "9,000",
+      "Master in Strategic Human Resource Management": "43,600",
+      "Master in Business Administration": "43,600",
+      "Master in Management": "20,250",
+      "Master of Education": "14,500",
+      "Master of Philosophy": "28,500",
+      "Master of Public Management": "43,600",
+      "Master of Public Policy": "43,600",
+      "Doctor of Philosophy in Education": "50,600",
+      "Doctor of Philosophy": "28,500",
+      "Doctor of Business Administration": "40,500"
+    }
+  },
+  {
+    university: "UCSI University", shortName: "UCSI", type: "Private", currency: "MYR", website: "https://www.ucsiuniversity.edu.my",
+    programmes: {
+      "Doctor of Medicine": "341,340",
+      "Bachelor of Pharmacy (Hons)": "160,698",
+      "Bachelor of Optometry (Hons)": "102,750",
+      "BSc (Hons) Nutrition with Wellness": "99,600",
+      "Bachelor of Computer Engineering (Artificial Intelligence) with Honours": "97,345",
+      "BSc (Hons) Biotechnology": "92,570",
+      "Bachelor of Quantity Surveying (Hons)": "91,144",
+      "Bachelor of Environmental Engineering with Honours": "90,470",
+      "BMus (Hons) Classical Music / Contemporary Music": "89,180",
+      "Bachelor of Energy Engineering with Honours": "88,990",
+      "Bachelor of Petroleum Engineering with Honours": "88,820",
+      "Bachelor of Civil Engineering with Honours": "88,635",
+      "Bachelor of Chemical Engineering with Honours": "87,170",
+      "Bachelor of Architecture (BSc Hons)": "83,110",
+      "BSc (Hons) Food Science with Nutrition": "83,060",
+      "Bachelor of Mechatronic Engineering with Honours": "82,715",
+      "Bachelor of Mechanical Engineering with Honours": "82,480",
+      "Bachelor of Electrical and Electronic Engineering with Honours": "82,205",
+      "BSc (Hons) Forensic Science": "82,110",
+      "BSc (Hons) Aquatic Science": "81,720",
+      "Bachelor of Formulation Science (Honours)": "81,330",
+      "BSc (Hons) Applied Microbiology": "80,365",
+      "BSc (Hons) Actuarial Science with Data Analytics": "79,350",
+      "Bachelor of Nursing (Hons)": "74,010",
+      "BA (Hons) Culinary Management (KL Campus)": "73,100",
+      "BA (Hons) Interior Architecture": "73,000",
+      "Bachelor of Hospitality Administration": "72,050",
+      "BA (Hons) Fashion Design with Marketing": "71,850",
+      "BA (Hons) Hospitality Management (Springhill Campus)": "71,941",
+      "BCA (Hons) 3D Animation Design": "70,850",
+      "BSc (Hons) Actuarial Science / Actuarial Science & Finance": "68,900",
+      "BA (Hons) Psychology": "68,730",
+      "BA (Hons) Game Design": "68,415",
+      "BA (Hons) Mass Communication": "68,330",
+      "BA (Hons) Multimedia Design": "68,070",
+      "Bachelor of Arts (Honours) Entrepreneurship": "67,950",
+      "Bachelor of International and Sustainable Business (Honours)": "67,440",
+      "BA (Hons) Accounting / Accounting & Finance": "67,380",
+      "Bachelor of Financial Technology (Honours)": "66,490",
+      "Bachelor of Computer Science (Honours) / Mobile Computing / Business Information System": "65,820",
+      "BA (Hons) Branding & Advertising": "65,550",
+      "BSc (Hons) Finance & Investment / BA (Hons) Marketing / Logistics Management": "65,400 - 65,490",
+      "Bachelor of Computer Science in Data Science with Honours": "69,040",
+      "BA (Hons) English Language and Communication": "61,300",
+      "Diploma in Nursing": "54,140",
+      "Diploma in Pharmacy / Cosmetic Science / Packaging Science": "51,510 - 51,650",
+      "Diploma in Music Performance": "51,240",
+      "Diploma in Fashion Design": "48,420",
+      "Diploma in Architectural Studies": "49,995",
+      "Diploma in Interior Architecture": "46,395",
+      "Diploma of Engineering Technology (Industrial Design)": "45,530",
+      "Foundation in Science / Music": "20,700 - 24,200",
+      "Foundation in Arts": "20,000",
+      "Doctor of Philosophy (Medical Sciences)": "68,900",
+      "Doctor of Philosophy (Business and Management)": "45,468 (53,343 with bridging)",
+      "Doctor of Business Administration (DBA)": "71,600 (82,100 with bridging)",
+      "Doctor of Philosophy in Hospitality and Tourism": "60,000",
+      "Master of Clinical Psychology": "56,350 (61,550 with bridging)",
+      "Master of Business Administration (MBA)": "43,760 (47,240 with bridging)"
+    }
+  }
+];
+
+const allProgrammes = Array.from(new Set(rawData.flatMap(u => Object.keys(u.programmes)))).sort();
+
+// ==========================================================
+//     MAIN REACT APPLICATION (UI + Logic)
+// ==========================================================
+
+function App() {
+  const [search, setSearch] = React.useState("");
+  const [selectedSpecialty, setSelectedSpecialty] = React.useState("");
+  const [selectedLevel, setSelectedLevel] = React.useState(""); 
+  const [selectedType, setSelectedType] = React.useState(""); 
+  const [selectedMode, setSelectedMode] = React.useState(""); 
+  const [selectedDuration, setSelectedDuration] = React.useState(""); 
+  const [selectedAccreditation, setSelectedAccreditation] = React.useState("");
+  const [sortOption, setSortOption] = React.useState("default"); 
+  const [lang, setLang] = React.useState("en");
+  const [darkMode, setDarkMode] = React.useState(false);
+
+  const t = (en, ar) => (lang === "en" ? en : ar);
+
+  // Helper to determine if a programme matches a specific study level
+  const levelMatch = (progName, level) => {
+    if (!level) return true;
+    const lowerName = progName.toLowerCase();
+    
+    if (level === "Foundation") {
+      return lowerName.includes("foundation") || lowerName.includes("certificate") || lowerName.includes("a-level") || lowerName.includes("ausmat");
+    }
+    if (level === "Diploma") {
+      return lowerName.includes("diploma") && !lowerName.includes("postgraduate");
+    }
+    if (level === "Bachelor") {
+      if (lowerName.includes("doctor of medicine") || lowerName.includes("doctor of dental")) return true;
+      return lowerName.includes("bachelor") || lowerName.includes("degree") || /\b(bsc|ba|beng|bba|bca|bmus|bds|mbbs|md)\b/.test(lowerName);
+    }
+    if (level === "Master") {
+      return lowerName.includes("master") || lowerName.includes("postgraduate") || /\b(msc|mba|mmed|mphil|ma)\b/.test(lowerName);
+    }
+    if (level === "PhD") {
+      if (lowerName.includes("doctor of medicine") || lowerName.includes("doctor of dental")) return false;
+      return lowerName.includes("doctor") || lowerName.includes("phd") || /\b(dba|edd|deng|dtm|drph)\b/.test(lowerName);
+    }
+    return true;
+  };
+
+  // Helper to extract numeric price for sorting
+  const getPriceNum = (str) => {
+    if (!str) return Infinity;
+    const firstPart = str.split('-')[0]; 
+    const match = firstPart.replace(/,/g, '').match(/\d+(\.\d+)?/);
+    let val = match ? parseFloat(match[0]) : Infinity;
+    if (str.includes("USD")) val *= 4.5; // rough conversion to RM to keep sorting accurate
+    return isNaN(val) ? Infinity : val;
+  };
+
+  // Derive which programmes match the current filters
+  const matchingUniversities = React.useMemo(() => {
+    let universities = JSON.parse(JSON.stringify(rawData)); // deep copy
+
+    const searchKeywords = search.trim() ? expandKeywords(search.toLowerCase()).split(" ").filter(k => k.length > 0) : [];
+    const specKeywords = (selectedSpecialty && SPECIALTIES[selectedSpecialty]) ? SPECIALTIES[selectedSpecialty].keywords : null;
+
+    universities.forEach(u => {
+      // 1. Institution Type Match (Public/Private)
+      const uniType = universityTypes[u.shortName] || u.type;
+      if (selectedType && uniType !== selectedType) {
+        u.programmes = {};
+        return;
+      }
+
+      // 2. Accreditation (Allowed Universities check)
+      if (selectedAccreditation) {
+        const rules = ACCREDITATION_RULES[selectedAccreditation];
+        if (rules.allowedUnis && !rules.allowedUnis.includes(u.shortName)) {
+          u.programmes = {};
+          return;
+        }
+      }
+
+      const filteredProgs = {};
+      let minPriceForUni = Infinity;
+      let maxPriceForUni = -Infinity;
+
+      for (const [progName, price] of Object.entries(u.programmes)) {
+        const lowerName = progName.toLowerCase();
+        const specs = getProgramSpecs(progName, "en"); // Get duration/IELTS info
+        
+        // 3. Level Match
+        if (selectedLevel && !levelMatch(progName, selectedLevel)) continue;
+
+        // 4. Specialty Match
+        if (specKeywords && !specKeywords.some(kw => lowerName.includes(kw))) continue;
+
+        // 5. Keyword Search Match
+        if (searchKeywords.length > 0) {
+          const translatedP = translateProgramName(progName, "ar").toLowerCase();
+          const matchesSearch = searchKeywords.every(kw => lowerName.includes(kw) || translatedP.includes(kw));
+          if (!matchesSearch) continue;
+        }
+
+        // 6. Duration Match
+        if (selectedDuration && !specs.duration.includes(selectedDuration)) continue;
+
+        // 7. Study Mode Match
+        if (selectedMode) {
+          const isPostGrad = lowerName.includes("master") || lowerName.includes("phd") || lowerName.includes("doctor");
+          if (selectedMode === "Research" && !lowerName.includes("research")) continue;
+          if (selectedMode === "Mixed" && !lowerName.includes("mixed")) continue;
+          if (selectedMode === "Coursework") {
+            if (isPostGrad && !lowerName.includes("coursework") && !lowerName.includes("mixed") && lowerName.includes("research")) {
+              continue; 
+            }
+            if (isPostGrad && lowerName.includes("research")) continue;
+          }
+        }
+
+        // 8. Accreditation Rules check on programs
+        if (selectedAccreditation === "Oman") {
+          // Rule: Block MBBS/MD unless it's a PhD
+          if ((lowerName.includes("mbbs") || lowerName.includes("doctor of medicine") || lowerName.includes("bachelor of medicine") || lowerName.includes("dental surgery")) && !lowerName.includes("phd")) {
+            continue;
+          }
+          // Rule: APU only PhD
+          if (u.shortName === "APU" && !levelMatch(progName, "PhD")) continue;
+          // Rule: UCSI no DBA
+          if (u.shortName === "UCSI" && (lowerName === "dba" || lowerName.includes("doctor of business administration"))) continue;
+        }
+
+        if (selectedAccreditation === "Saudi Arabia") {
+          // Rule: No ODL or Online
+          if (lowerName.includes("odl") || lowerName.includes("online") || lowerName.includes("on-line") || lowerName.includes("distance")) {
+            continue;
+          }
+        }
+
+        // Price calculations for smart sorting
+        const numPrice = getPriceNum(price);
+        if (numPrice < minPriceForUni) minPriceForUni = numPrice;
+        if (numPrice !== Infinity && numPrice > maxPriceForUni) maxPriceForUni = numPrice;
+
+        // If all filters pass, keep the programme
+        filteredProgs[progName] = price;
+      }
+      
+      u.programmes = filteredProgs;
+      u.minPrice = minPriceForUni;
+      u.maxPrice = maxPriceForUni === -Infinity ? Infinity : maxPriceForUni;
+    });
+
+    // Remove universities that have 0 matched programmes
+    universities = universities.filter(u => Object.keys(u.programmes).length > 0);
+
+    // Sort Universities
+    if (sortOption === "default") return universities;
+
+    return universities.sort((a, b) => {
+      if (sortOption === "type") {
+        const typeA = universityTypes[a.shortName] || a.type;
+        const typeB = universityTypes[b.shortName] || b.type;
+        return typeA.localeCompare(typeB);
+      }
+      if (sortOption === "priceAsc") {
+        return a.minPrice - b.minPrice;
+      }
+      if (sortOption === "priceDesc") {
+        // High to Low: push Infinity (unlisted prices) to the bottom
+        const aVal = a.maxPrice === Infinity ? -1 : a.maxPrice;
+        const bVal = b.maxPrice === Infinity ? -1 : b.maxPrice;
+        return bVal - aVal;
+      }
+      return 0;
+    });
+  }, [search, selectedSpecialty, selectedLevel, selectedType, selectedMode, selectedDuration, selectedAccreditation, sortOption]);
+
+  return (
+    <div className={(darkMode ? "dark " : "") + (lang === "ar" ? "rtl" : "ltr")} dir={lang === "ar" ? "rtl" : "ltr"}>
+      <div className="app-container">
+
+        {/* HEADER */}
+        <div className="header-box">
+          <img className="header-logo"
+              src="https://marine-white-7l1epbg2wn.edgeone.app/cropped-Untitled-design-1_prev_ui-removebg-preview.png" 
+              alt="Logo" />
+          <h1 className="header-title">{t("Malaysia University Programme Finder", "البحث عن البرامج الجامعية في ماليزيا")}</h1>
+        </div>
+
+        <p className="subtitle">
+          {t("Search any program to see all universities offering it side-by-side.", "ابحث عن أي برنامج لرؤية جميع الجامعات التي تقدمه جنبًا إلى جنب.")}
+        </p>
+
+        {/* TOGGLE BUTTONS */}
+        <div className="controls-row">
+          <button className="lang-btn" onClick={() => setLang(lang === "en" ? "ar" : "en")}>
+            {t("عربي", "English")}
+          </button>
+          <button className="mode-btn" onClick={() => setDarkMode(!darkMode)}>
+            {darkMode ? t("Light Mode", "وضع النهار") : t("Dark Mode", "وضع الليل")}
+          </button>
+        </div>
+
+        {/* SEARCH AREA (GRID) */}
+        <div className="input-card">
+          <div className="filter-grid">
+            
+            {/* Accreditation */}
+            <div>
+              <label className="input-label">{t("Accreditation", "الاعتماد الأكاديمي")}</label>
+              <select className="select-box" value={selectedAccreditation} onChange={(e) => setSelectedAccreditation(e.target.value)}>
+                <option value="">{t("Any Country (No Filter)", "جميع الدول (بدون تصفية)")}</option>
+                {Object.keys(ACCREDITATION_RULES).map(country => (
+                  <option key={country} value={country}>{t(country, country === "Oman" ? "عُمان" : country === "UAE" ? "الإمارات" : country === "Saudi Arabia" ? "السعودية" : "العراق")}</option>
+                ))}
+              </select>
+            </div>
+
+            {/* Specialty / Field of Study */}
+            <div>
+              <label className="input-label">{t("Field of Study / Specialty", "التخصص الدراسي")}</label>
+              <select className="select-box" value={selectedSpecialty} onChange={(e) => setSelectedSpecialty(e.target.value)}>
+                <option value="">{t("All Specialties (80+ Options)", "جميع التخصصات (أكثر من 80 تخصص)")}</option>
+                {Object.keys(SPECIALTIES).sort().map(spec => (
+                  <option key={spec} value={spec}>{t(spec, SPECIALTIES[spec].ar)}</option>
+                ))}
+              </select>
+            </div>
+
+            {/* Level */}
+            <div>
+              <label className="input-label">{t("Study Level", "مستوى الدراسة")}</label>
+              <select className="select-box" value={selectedLevel} onChange={(e) => setSelectedLevel(e.target.value)}>
+                <option value="">{t("All Levels", "جميع المستويات")}</option>
+                <option value="Foundation">{t("Foundation & Certificate", "السنة التأسيسية والشهادات")}</option>
+                <option value="Diploma">{t("Diploma", "دبلوم")}</option>
+                <option value="Bachelor">{t("Bachelor's Degree", "بكالوريوس")}</option>
+                <option value="Master">{t("Master's Degree", "ماجستير")}</option>
+                <option value="PhD">{t("PhD & Doctorate", "دكتوراه")}</option>
+              </select>
+            </div>
+
+            {/* Institution Type */}
+            <div>
+              <label className="input-label">{t("Institution Type", "نوع المؤسسة")}</label>
+              <select className="select-box" value={selectedType} onChange={(e) => setSelectedType(e.target.value)}>
+                <option value="">{t("All Types", "جميع الأنواع")}</option>
+                <option value="Public">{t("Public", "حكومي")}</option>
+                <option value="Private">{t("Private", "خاص")}</option>
+              </select>
+            </div>
+
+            {/* Study Mode */}
+            <div>
+              <label className="input-label">{t("Study Mode", "نظام الدراسة")}</label>
+              <select className="select-box" value={selectedMode} onChange={(e) => setSelectedMode(e.target.value)}>
+                <option value="">{t("All Modes", "جميع الأنظمة")}</option>
+                <option value="Coursework">{t("Coursework", "مواد دراسية")}</option>
+                <option value="Research">{t("Research", "بحث علمي")}</option>
+                <option value="Mixed">{t("Mixed Mode", "نظام مختلط")}</option>
+              </select>
+            </div>
+
+            {/* Duration */}
+            <div>
+              <label className="input-label">{t("Duration (Years)", "مدة الدراسة")}</label>
+              <select className="select-box" value={selectedDuration} onChange={(e) => setSelectedDuration(e.target.value)}>
+                <option value="">{t("Any Duration", "أي مدة")}</option>
+                <option value="1">{t("1 Year", "سنة واحدة")}</option>
+                <option value="2">{t("2 Years", "سنتين")}</option>
+                <option value="3">{t("3 Years", "3 سنوات")}</option>
+                <option value="4">{t("4 Years", "4 سنوات")}</option>
+                <option value="5">{t("5 Years", "5 سنوات")}</option>
+              </select>
+            </div>
+
+            {/* Keyword */}
+            <div>
+              <label className="input-label">{t("Keyword Search", "البحث السريع")}</label>
+              <input
+                className="input-box"
+                type="text"
+                placeholder={t("e.g. Data Science, MBA...", "مثل: صيدلة، MBA...")}
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+              />
+            </div>
+
+          </div>
+        </div>
+
+        {/* ACCREDITATION NOTICES */}
+        {selectedAccreditation && ACCREDITATION_RULES[selectedAccreditation] && (
+          <div className="accreditation-notice">
+            {t(ACCREDITATION_RULES[selectedAccreditation].notice.en, ACCREDITATION_RULES[selectedAccreditation].notice.ar)}
+          </div>
+        )}
+
+        {/* RESULTS TITLE & SORT BAR */}
+        <div className="filter-bar">
+           <h2 className="result-title">
+             {t("Matching Universities:", "الجامعات المطابقة:")} <span className="result-highlight">{matchingUniversities.length}</span>
+           </h2>
+
+           {matchingUniversities.length > 0 && (
+             <div className="sort-wrapper">
+               <span className="input-label" style={{marginBottom:0}}>
+                 {t("Sort By:", "ترتيب حسب:")}
+               </span>
+               <select className="sort-select" value={sortOption} onChange={(e) => setSortOption(e.target.value)}>
+                 <option value="default">{t("Default", "افتراضي")}</option>
+                 <option value="priceAsc">{t("Price (Low to High)", "السعر (من الأقل للأعلى)")}</option>
+                 <option value="priceDesc">{t("Price (High to Low)", "السعر (من الأعلى للأقل)")}</option>
+                 <option value="type">{t("Type (Public/Private)", "النوع (حكومي/خاص)")}</option>
+               </select>
+             </div>
+           )}
+        </div>
+
+        {/* RESULTS AREA */}
+        {matchingUniversities.length === 0 ? (
+          <p className="no-result">
+            {t("No universities found for this specific search.", "لم يتم العثور على جامعات لهذا البحث المحدد.")}
+          </p>
+        ) : (
+          <div className="uni-grid">
+            {matchingUniversities.map((u) => (
+              <div key={u.university} className="uni-card">
+                <div className="uni-name">{u.university}</div>
+                
+                <div className="uni-small">
+                  <strong>{t("Type", "النوع")}:</strong> {universityTypes[u.shortName] || u.type}
+                </div>
+
+                <div className="prog-list">
+                  {Object.entries(u.programmes).map(([progName, priceStr]) => {
+                    const specs = getProgramSpecs(progName, lang);
+                    return (
+                    <div key={progName} className="prog-item">
+                      <div className="prog-item-title">
+                        {translateProgramName(progName, lang)}
+                      </div>
+                      
+                      <div className="prog-item-specs">
+                        <span className="spec-badge">⏳ {t("Duration:", "المدة:")} {specs.duration}</span>
+                        <span className="spec-badge">📝 {t("IELTS:", "الآيلتس:")} {specs.ielts}</span>
+                      </div>
+
+                      <div className="prog-item-price">
+                        {priceStr.includes("USD") || priceStr.includes("MYR") || priceStr.includes("RM") || priceStr.includes("Credits") 
+                          ? priceStr 
+                          : priceStr + " " + u.currency}
+                      </div>
+                    </div>
+                  )})}
+                </div>
+                
+                <a href={u.website} target="_blank" rel="noopener noreferrer" className="website-link">
+                  {t("Visit Website", "زيارة الموقع")}
+                </a>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
+const root = ReactDOM.createRoot(document.getElementById("root"));
+root.render(<App />);
+</script>
+
+</body>
+</html>
