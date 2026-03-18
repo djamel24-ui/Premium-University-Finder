@@ -159,10 +159,28 @@ body, html {
   padding: 18px; border-radius: 8px; margin-bottom: 25px; font-size: 14px; color: var(--text); line-height: 1.5;
 }
 .filter-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: wrap; gap: 10px; }
-.sort-wrapper { display: flex; align-items: center; gap: 10px; }
+.sort-wrapper { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
 .sort-select {
   padding: 8px 12px; border-radius: 8px; border: 1px solid var(--card-border);
   background: var(--bg); color: var(--text); font-size: 14px;
+}
+.download-btn {
+  background: #10b981;
+  color: white;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.download-btn:hover {
+  background: #059669;
+  transform: translateY(-1px);
 }
 
 /* ==========================================================
@@ -951,115 +969,111 @@ let rawData = [
     }
   },
   {
-    university: "Universiti Teknologi Malaysia (UTM)",
-  "shortName": "UTM",
-  "type": "Public",
-  "currency": "MYR",
-  "website": "https://www.utm.my",
-  "programmes": {
-    "Bachelor of Engineering (Civil, Chemical, Mechanical, Electrical, etc.)": "75,000.00",
-    "Bachelor of Computer Science (SE, Network, Graphics, AI)": "71,000.00",
-    "Bachelor of Accounting": "63,000.00",
-    "Bachelor of Management (Marketing / Technology)": "63,000.00",
-    "Bachelor of Science (Chemistry, Mathematics, Physics, Biology)": "63,000.00",
-    "Bachelor of Quantity Surveying / Landscape Architecture": "59,000.00",
-    "Bachelor of Science (Industrial Design)": "59,000.00",
-    "Bachelor of Geoinformation / Property Management": "51,620.00",
-    "Bachelor of Science in Architecture": "87,350.00",
-    "Bachelor of Psychology with Human Resource Development": "63,000.00",
-    "Bachelor of Science (Human Resource Development)": "63,000.00",
-    "Bachelor of Engineering (MJIIT Programs - KL Campus)": "75,000.00",
-    "Master in Chemical Engineering (Coursework)": "31,000.00",
-    "Master in Bioprocess Engineering (Coursework)": "31,000.00",
-    "Master in Petroleum Engineering (Coursework)": "31,000.00",
-    "Master in Process Plant Management (Coursework)": "31,000.00",
-    "Master of Gas Engineering and Management (Coursework)": "31,000.00",
-    "Master of Herbal Technology (Coursework)": "31,000.00",
-    "Master of Science (Energy Management) (Coursework/ODL)": "40,950.00",
-    "Master of Science (Safety, Health and Environment) (Coursework)": "31,000.00",
-    "Master of Science (Polymer Technology) (Coursework)": "31,000.00",
-    "Master of Science in Food Processing Innovation (Coursework)": "31,000.00",
-    "Doctor of Engineering (Process Plant Management) (Mixed-Mode)": "57,600.00",
-    "Master of Philosophy (Chemical, Bioprocess, Gas, Petroleum, Polymer, or Environmental Engineering) (Research Mode)": "28,400.00",
-    "PhD (Chemical, Bioprocess, Gas, Petroleum, Polymer, or Environmental Engineering) (Research Mode)": "51,600.00",
-    "Master of Engineering (Civil) (Coursework)": "31,000.00",
-    "Master of Engineering (Construction Management) (Coursework)": "31,000.00",
-    "Master of Engineering (Environmental Management) (Coursework)": "31,000.00",
-    "Master of Engineering (Structure) (Coursework)": "31,000.00",
-    "Master in Geotechnical Engineering (Coursework)": "31,000.00",
-    "Master in Hydraulics and Hydrology (Coursework)": "31,000.00",
-    "Master in Transportation Engineering (Coursework)": "31,000.00",
-    "Master of Forensic Engineering (Coursework)": "36,300.00",
-    "Master of Project Management (Coursework)": "31,000.00",
-    "Doctor of Engineering (Construction Technology and Management) (Mixed-Mode)": "57,600.00",
-    "Master of Philosophy (Civil, Construction, Env, Structure, Geotechnics, Highway) (Research Mode)": "28,400.00",
-    "PhD (Civil, Construction, Env, Structure, Geotechnics, Highway) (Research Mode)": "51,600.00",
-    "Master of Science in Biomedical Engineering (Coursework)": "31,000.00",
-    "Master of Engineering (Wireless Communication) (Coursework)": "31,000.00",
-    "Master of Engineering (Computer & Microelectronic Systems) (Coursework)": "31,000.00",
-    "Master of Engineering (Electrical Power and Energy) (Coursework)": "31,000.00",
-    "Master of Engineering (Mechatronics and Automatic Control) (Coursework)": "31,000.00",
-    "Master of Philosophy (Biomedical, Electrical, Rehabilitation Tech, Health Science) (Research Mode)": "28,400.00",
-    "PhD (Biomedical, Electrical, Rehabilitation Tech, Health Science) (Research Mode)": "51,600.00",
-    "Master of Science (Industrial Engineering) (Coursework)": "31,000.00",
-    "Master of Science (Mechanical Engineering) (Coursework)": "31,000.00",
-    "Dual Degree MSc (Mechanical) UTM & Kyushu University / Pusan National University": "31,000.00",
-    "Master of Philosophy (Mechanical Engineering) (Research Mode)": "28,400.00",
-    "PhD (Mechanical Engineering) (Research Mode)": "51,600.00",
-    "Master in Data Science (Coursework)": "26,500.00",
-    "Master in Innovative Computing (Coursework)": "26,500.00",
-    "Master of Cyber Security (Coursework/ODL)": "34,650.00 - 38,130.00",
-    "Master of Science (Informatics) (Coursework)": "26,204.00",
-    "Master of Science (Information Security Assurance) (Coursework)": "26,204.00",
-    "Master of Software Engineering (Coursework)": "26,204.00",
-    "Master of Computer Science (Mixed-Mode/ODL)": "34,650.00 - 38,130.00",
-    "Master of Philosophy (Software Engineering, Computer Science, Informatics) (Research Mode)": "25,400.00",
-    "PhD (Software Engineering, Computer Science, Informatics) (Research Mode)": "48,600.00",
-    "Master of Architecture (Coursework)": "29,500.00",
-    "Master of Asset and Facilities Management (Coursework)": "29,500.00",
-    "Master of Real Estate (Coursework)": "29,500.00",
-    "Master of Tourism Planning (Coursework)": "29,500.00",
-    "Master of Science (Construction Contract Management) (Coursework)": "29,500.00",
-    "Master of Science (Geoinformatics) (Coursework)": "29,500.00",
-    "Master of Science (Urban & Regional Planning) (Coursework)": "29,500.00",
-    "Master of Science in Remote Sensing (Coursework)": "29,500.00",
-    "Master of Science in Geomatics (Coursework)": "29,500.00",
-    "Master of Science in Land Administration (Coursework)": "29,500.00",
-    "Master of Science in Transport Planning (Coursework)": "29,500.00",
-    "Master of Philosophy (Architecture, Landscape, QS, Urban Planning) (Research Mode)": "25,400.00",
-    "PhD (Architecture, Landscape, QS, Urban Planning) (Research Mode)": "48,600.00",
-    "Master of Science (IT Entrepreneurship) (Coursework)": "32,147.00",
-    "Master of Business Administration (MBA) (Coursework)": "32,154.00 - 37,400.00",
-    "Doctor of Business Administration (DBA) (Mixed-Mode)": "60,154.00",
-    "Master of Information Technology / Master of Management (Mixed-Mode)": "26,500.00",
-    "Master of Philosophy (Management, Information Systems, IT Entrepreneurship) (Research Mode)": "25,400.00",
-    "PhD (Management, Information Systems, IT Entrepreneurship) (Research Mode)": "48,600.00",
-    "Master of Forensic Science (Coursework)": "28,500.00",
-    "Master of Science (Chemistry, Biotech, Physics, Math, Eng Math) (Mixed-Mode)": "28,500.00",
-    "Master of Philosophy (Chemistry, Physics, Mathematics, Bioscience) (Research Mode)": "28,400.00",
-    "PhD (Chemistry, Physics, Mathematics, Bioscience) (Research Mode)": "48,600.00",
-    "Master of Education (TESL, Chemistry, Math, Physics, TVET, Ed Technology, etc.) (Coursework/ODL)": "34,650.00 - 36,390.00",
-    "Master in Education (Various Specialisations) (Mixed-Mode)": "26,500.00",
-    "Doctor in Education (EdD)": "51,600.00",
-    "Master of Philosophy (Curriculum, Ed Psychology, Online Learning, etc.) (Research Mode)": "25,400.00",
-    "PhD (Curriculum, Ed Psychology, Online Learning, etc.) (Research Mode)": "48,600.00",
-    "Master in Science, Technology and Innovation Policy (Coursework)": "26,500.00",
-    "Master of Human Resource Development (Coursework)": "26,500.00",
-    "Master in Islamic Studies (Coursework)": "26,500.00",
-    "Master of Language in Communication and Digital Culture (Coursework)": "34,650.00",
-    "Master of Philosophy (Policy Studies, HRD, Islamic Studies, Linguistics) (Research Mode)": "25,400.00",
-    "PhD (Policy Studies, HRD, Islamic Studies, Linguistics) (Research Mode)": "48,600.00",
-    "Master in Occupational Safety and Health Management (Coursework)": "37,204.00",
-    "Master of Science (Computer Systems Engineering / Business Intelligence & Analytics) (Coursework/ODL)": "26,204.00 - 34,650.00",
-    "Master of Science (Engineering Business Management) (Coursework)": "33,504.00",
-    "Master of Science (Engineering Design / Systems / Sustainable Infrastructure) (Coursework)": "31,554.00 - 33,554.00",
-    "Master of Professional Science / Master in Sustainable System (Coursework)": "28,500.00 - 29,554.00",
-    "Master of Disaster Risk Management (Coursework)": "36,004.00",
-    "Master of Technology and Innovation Management (Coursework)": "28,500.00",
-    "Doctor of Engineering in Engineering Business Management (Mixed-Mode)": "56,204.00",
-    "Master of Philosophy (Generic / Engineering Education) (Research Mode)": "25,400.00",
-    "PhD (Generic / Engineering Education) (Research Mode)": "48,600.00",
-    "Doctor of Professional Practice (DPP) (100% Online)": "71,490.00 - 86,190.00"
+    university: "Universiti Teknologi Malaysia (UTM)", shortName: "UTM", type: "Public", currency: "MYR", website: "https://www.utm.my",
+    programmes: {
+      "Bachelor of Engineering (Civil, Chemical, Mechanical, Electrical, etc.)": "75,000.00",
+      "Bachelor of Computer Science (SE, Network, Graphics, AI)": "71,000.00",
+      "Bachelor of Accounting": "63,000.00",
+      "Bachelor of Management (Marketing / Technology)": "63,000.00",
+      "Bachelor of Science (Chemistry, Mathematics, Physics, Biology)": "63,000.00",
+      "Bachelor of Quantity Surveying / Landscape Architecture": "59,000.00",
+      "Bachelor of Science (Industrial Design)": "59,000.00",
+      "Bachelor of Geoinformation / Property Management": "51,620.00",
+      "Bachelor of Science in Architecture": "87,350.00",
+      "Bachelor of Psychology with Human Resource Development": "63,000.00",
+      "Bachelor of Science (Human Resource Development)": "63,000.00",
+      "Bachelor of Engineering (MJIIT Programs - KL Campus)": "75,000.00",
+      "Master in Chemical Engineering (Coursework)": "31,000.00",
+      "Master in Bioprocess Engineering (Coursework)": "31,000.00",
+      "Master in Petroleum Engineering (Coursework)": "31,000.00",
+      "Master in Process Plant Management (Coursework)": "31,000.00",
+      "Master of Gas Engineering and Management (Coursework)": "31,000.00",
+      "Master of Herbal Technology (Coursework)": "31,000.00",
+      "Master of Science (Energy Management) (Coursework/ODL)": "40,950.00",
+      "Master of Science (Safety, Health and Environment) (Coursework)": "31,000.00",
+      "Master of Science (Polymer Technology) (Coursework)": "31,000.00",
+      "Master of Science in Food Processing Innovation (Coursework)": "31,000.00",
+      "Doctor of Engineering (Process Plant Management) (Mixed-Mode)": "57,600.00",
+      "Master of Philosophy (Chemical, Bioprocess, Gas, Petroleum, Polymer, or Environmental Engineering) (Research Mode)": "28,400.00",
+      "PhD (Chemical, Bioprocess, Gas, Petroleum, Polymer, or Environmental Engineering) (Research Mode)": "51,600.00",
+      "Master of Engineering (Civil) (Coursework)": "31,000.00",
+      "Master of Engineering (Construction Management) (Coursework)": "31,000.00",
+      "Master of Engineering (Environmental Management) (Coursework)": "31,000.00",
+      "Master of Engineering (Structure) (Coursework)": "31,000.00",
+      "Master in Geotechnical Engineering (Coursework)": "31,000.00",
+      "Master in Hydraulics and Hydrology (Coursework)": "31,000.00",
+      "Master in Transportation Engineering (Coursework)": "31,000.00",
+      "Master of Forensic Engineering (Coursework)": "36,300.00",
+      "Master of Project Management (Coursework)": "31,000.00",
+      "Doctor of Engineering (Construction Technology and Management) (Mixed-Mode)": "57,600.00",
+      "Master of Philosophy (Civil, Construction, Env, Structure, Geotechnics, Highway) (Research Mode)": "28,400.00",
+      "PhD (Civil, Construction, Env, Structure, Geotechnics, Highway) (Research Mode)": "51,600.00",
+      "Master of Science in Biomedical Engineering (Coursework)": "31,000.00",
+      "Master of Engineering (Wireless Communication) (Coursework)": "31,000.00",
+      "Master of Engineering (Computer & Microelectronic Systems) (Coursework)": "31,000.00",
+      "Master of Engineering (Electrical Power and Energy) (Coursework)": "31,000.00",
+      "Master of Engineering (Mechatronics and Automatic Control) (Coursework)": "31,000.00",
+      "Master of Philosophy (Biomedical, Electrical, Rehabilitation Tech, Health Science) (Research Mode)": "28,400.00",
+      "PhD (Biomedical, Electrical, Rehabilitation Tech, Health Science) (Research Mode)": "51,600.00",
+      "Master of Science (Industrial Engineering) (Coursework)": "31,000.00",
+      "Master of Science (Mechanical Engineering) (Coursework)": "31,000.00",
+      "Dual Degree MSc (Mechanical) UTM & Kyushu University / Pusan National University": "31,000.00",
+      "Master of Philosophy (Mechanical Engineering) (Research Mode)": "28,400.00",
+      "PhD (Mechanical Engineering) (Research Mode)": "51,600.00",
+      "Master in Data Science (Coursework)": "26,500.00",
+      "Master in Innovative Computing (Coursework)": "26,500.00",
+      "Master of Cyber Security (Coursework/ODL)": "34,650.00 - 38,130.00",
+      "Master of Science (Informatics) (Coursework)": "26,204.00",
+      "Master of Science (Information Security Assurance) (Coursework)": "26,204.00",
+      "Master of Software Engineering (Coursework)": "26,204.00",
+      "Master of Computer Science (Mixed-Mode/ODL)": "34,650.00 - 38,130.00",
+      "Master of Philosophy (Software Engineering, Computer Science, Informatics) (Research Mode)": "25,400.00",
+      "PhD (Software Engineering, Computer Science, Informatics) (Research Mode)": "48,600.00",
+      "Master of Architecture (Coursework)": "29,500.00",
+      "Master of Asset and Facilities Management (Coursework)": "29,500.00",
+      "Master of Real Estate (Coursework)": "29,500.00",
+      "Master of Tourism Planning (Coursework)": "29,500.00",
+      "Master of Science (Construction Contract Management) (Coursework)": "29,500.00",
+      "Master of Science (Geoinformatics) (Coursework)": "29,500.00",
+      "Master of Science (Urban & Regional Planning) (Coursework)": "29,500.00",
+      "Master of Science in Remote Sensing (Coursework)": "29,500.00",
+      "Master of Science in Geomatics (Coursework)": "29,500.00",
+      "Master of Science in Land Administration (Coursework)": "29,500.00",
+      "Master of Science in Transport Planning (Coursework)": "29,500.00",
+      "Master of Philosophy (Architecture, Landscape, QS, Urban Planning) (Research Mode)": "25,400.00",
+      "PhD (Architecture, Landscape, QS, Urban Planning) (Research Mode)": "48,600.00",
+      "Master of Science (IT Entrepreneurship) (Coursework)": "32,147.00",
+      "Master of Business Administration (MBA) (Coursework)": "32,154.00 - 37,400.00",
+      "Doctor of Business Administration (DBA) (Mixed-Mode)": "60,154.00",
+      "Master of Information Technology / Master of Management (Mixed-Mode)": "26,500.00",
+      "Master of Philosophy (Management, Information Systems, IT Entrepreneurship) (Research Mode)": "25,400.00",
+      "PhD (Management, Information Systems, IT Entrepreneurship) (Research Mode)": "48,600.00",
+      "Master of Forensic Science (Coursework)": "28,500.00",
+      "Master of Science (Chemistry, Biotech, Physics, Math, Eng Math) (Mixed-Mode)": "28,500.00",
+      "Master of Philosophy (Chemistry, Physics, Mathematics, Bioscience) (Research Mode)": "28,400.00",
+      "PhD (Chemistry, Physics, Mathematics, Bioscience) (Research Mode)": "48,600.00",
+      "Master of Education (TESL, Chemistry, Math, Physics, TVET, Ed Technology, etc.) (Coursework/ODL)": "34,650.00 - 36,390.00",
+      "Master in Education (Various Specialisations) (Mixed-Mode)": "26,500.00",
+      "Doctor in Education (EdD)": "51,600.00",
+      "Master of Philosophy (Curriculum, Ed Psychology, Online Learning, etc.) (Research Mode)": "25,400.00",
+      "PhD (Curriculum, Ed Psychology, Online Learning, etc.) (Research Mode)": "48,600.00",
+      "Master in Science, Technology and Innovation Policy (Coursework)": "26,500.00",
+      "Master of Human Resource Development (Coursework)": "26,500.00",
+      "Master in Islamic Studies (Coursework)": "26,500.00",
+      "Master of Language in Communication and Digital Culture (Coursework)": "34,650.00",
+      "Master of Philosophy (Policy Studies, HRD, Islamic Studies, Linguistics) (Research Mode)": "25,400.00",
+      "PhD (Policy Studies, HRD, Islamic Studies, Linguistics) (Research Mode)": "48,600.00",
+      "Master in Occupational Safety and Health Management (Coursework)": "37,204.00",
+      "Master of Science (Computer Systems Engineering / Business Intelligence & Analytics) (Coursework/ODL)": "26,204.00 - 34,650.00",
+      "Master of Science (Engineering Business Management) (Coursework)": "33,504.00",
+      "Master of Science (Engineering Design / Systems / Sustainable Infrastructure) (Coursework)": "31,554.00 - 33,554.00",
+      "Master of Professional Science / Master in Sustainable System (Coursework)": "28,500.00 - 29,554.00",
+      "Master of Disaster Risk Management (Coursework)": "36,004.00",
+      "Master of Technology and Innovation Management (Coursework)": "28,500.00",
+      "Doctor of Engineering in Engineering Business Management (Mixed-Mode)": "56,204.00",
+      "Master of Philosophy (Generic / Engineering Education) (Research Mode)": "25,400.00",
+      "PhD (Generic / Engineering Education) (Research Mode)": "48,600.00",
+      "Doctor of Professional Practice (DPP) (100% Online)": "71,490.00 - 86,190.00"
     }
   },
   {
@@ -1945,17 +1959,17 @@ let rawData = [
       "Bachelor of Financial Technology (Honours)": "66,490",
       "Bachelor of Computer Science (Honours) / Mobile Computing / Business Information System": "65,820",
       "BA (Hons) Branding & Advertising": "65,550",
-      "BSc (Hons) Finance & Investment / BA (Hons) Marketing / Logistics Management": "65,400 - 65,490",
+      "BSc (Hons) Finance & Investment / BA (Hons) Marketing / Logistics Management": "65,400 – 65,490",
       "Bachelor of Computer Science in Data Science with Honours": "69,040",
       "BA (Hons) English Language and Communication": "61,300",
       "Diploma in Nursing": "54,140",
-      "Diploma in Pharmacy / Cosmetic Science / Packaging Science": "51,510 - 51,650",
+      "Diploma in Pharmacy / Cosmetic Science / Packaging Science": "51,510 – 51,650",
       "Diploma in Music Performance": "51,240",
       "Diploma in Fashion Design": "48,420",
       "Diploma in Architectural Studies": "49,995",
       "Diploma in Interior Architecture": "46,395",
       "Diploma of Engineering Technology (Industrial Design)": "45,530",
-      "Foundation in Science / Music": "20,700 - 24,200",
+      "Foundation in Science / Music": "20,700 – 24,200",
       "Foundation in Arts": "20,000",
       "Doctor of Philosophy (Medical Sciences)": "68,900",
       "Doctor of Philosophy (Business and Management)": "45,468 (53,343 with bridging)",
@@ -2050,6 +2064,8 @@ function App() {
   const matchingUniversities = React.useMemo(() => {
     let universities = JSON.parse(JSON.stringify(rawData)); // deep copy
 
+    // Note: expandKeywords doesn't return an array, it returns a string with appended synonyms
+    // To handle accurate searching, we process token by token
     const searchTokens = search.toLowerCase().trim().split(/\s+/).filter(k => k.length > 0);
     const specKeywords = (selectedSpecialty && SPECIALTIES[selectedSpecialty]) ? SPECIALTIES[selectedSpecialty].keywords : null;
 
@@ -2088,6 +2104,7 @@ function App() {
         if (searchTokens.length > 0) {
           const translatedP = translateProgramName(progName, "ar").toLowerCase();
           
+          // For every token the user typed, check if the program name contains AT LEAST ONE synonym
           const matchesSearch = searchTokens.every(token => {
              const synonymsForToken = getSynonyms(token);
              return synonymsForToken.some(syn => lowerName.includes(syn) || translatedP.includes(syn));
@@ -2105,6 +2122,8 @@ function App() {
           if (selectedMode === "Research" && !lowerName.includes("research")) continue;
           if (selectedMode === "Mixed" && !lowerName.includes("mixed")) continue;
           if (selectedMode === "Coursework") {
+            // If it's Master/PhD, it MUST explicitly state coursework unless we want to be generous.
+            // But if it's Bachelor/Diploma, it's inherently coursework so let it pass.
             if (isPostGrad && !lowerName.includes("coursework") && !lowerName.includes("mixed") && lowerName.includes("research")) {
               continue; 
             }
@@ -2114,14 +2133,18 @@ function App() {
 
         // 8. Accreditation Rules check on programs
         if (selectedAccreditation === "Oman") {
+          // Rule: Block MBBS/MD unless it's a PhD
           if ((lowerName.includes("mbbs") || lowerName.includes("doctor of medicine") || lowerName.includes("bachelor of medicine") || lowerName.includes("dental surgery")) && !lowerName.includes("phd")) {
             continue;
           }
+          // Rule: APU only PhD
           if (u.shortName === "APU" && !levelMatch(progName, "PhD")) continue;
+          // Rule: UCSI no DBA
           if (u.shortName === "UCSI" && (lowerName === "dba" || lowerName.includes("doctor of business administration"))) continue;
         }
 
         if (selectedAccreditation === "Saudi Arabia") {
+          // Rule: No ODL or Online
           if (lowerName.includes("odl") || lowerName.includes("online") || lowerName.includes("on-line") || lowerName.includes("distance")) {
             continue;
           }
@@ -2157,6 +2180,7 @@ function App() {
         return a.minPrice - b.minPrice;
       }
       if (sortOption === "priceDesc") {
+        // High to Low: push Infinity (unlisted prices) to the bottom
         const aVal = a.maxPrice === Infinity ? -1 : a.maxPrice;
         const bVal = b.maxPrice === Infinity ? -1 : b.maxPrice;
         return bVal - aVal;
@@ -2165,6 +2189,52 @@ function App() {
     });
   }, [search, selectedSpecialty, selectedLevel, selectedType, selectedMode, selectedDuration, selectedAccreditation, sortOption]);
 
+  const downloadCSV = () => {
+    if (matchingUniversities.length === 0) return;
+
+    // Define headers
+    const headers = [
+      "University", 
+      "Type", 
+      "Programme", 
+      "Duration", 
+      "IELTS Requirement", 
+      "Price"
+    ];
+    
+    const rows = [];
+
+    // Populate rows based on the filtered results shown on screen
+    matchingUniversities.forEach(u => {
+      const uniType = universityTypes[u.shortName] || u.type;
+      
+      Object.entries(u.programmes).forEach(([progName, priceStr]) => {
+        // Use English for the CSV to keep it universally readable
+        const specs = getProgramSpecs(progName, "en"); 
+        
+        rows.push([
+          `"${u.university}"`,
+          `"${uniType}"`,
+          `"${progName}"`,
+          `"${specs.duration}"`,
+          `"${specs.ielts}"`,
+          `"${priceStr}"`
+        ].join(","));
+      });
+    });
+
+    // Create and trigger CSV download
+    const csvContent = headers.join(",") + "\n" + rows.join("\n");
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.setAttribute("href", url);
+    link.setAttribute("download", "university_results.csv");
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
   const logoSrc = darkMode 
     ? "https://image2url.com/r2/default/images/1773802956881-f5bfcde7-3167-4dea-962a-7b999e8bb9fb.png" 
     : "https://marine-white-7l1epbg2wn.edgeone.app/cropped-Untitled-design-1_prev_ui-removebg-preview.png";
@@ -2172,30 +2242,48 @@ function App() {
   // LOGIN SCREEN
   if (!isAuthenticated) {
     return (
-      <div className="theme-wrapper" dir={lang === "ar" ? "rtl" : "ltr"}>
-        <div className="controls-row" style={{padding: "20px"}}>
-          <button className="lang-btn" onClick={() => setLang(lang === "en" ? "ar" : "en")}>{t("عربي", "English")}</button>
-          <button className="mode-btn" onClick={() => setDarkMode(!darkMode)}>
-            {darkMode ? t("Light Mode", "وضع النهار") : t("Dark Mode", "وضع الليل")}
-          </button>
-        </div>
-        <div className="login-container">
-          <div className="login-box">
-            <img className="header-logo" style={{margin: "0 auto 15px", width:"90px", height:"90px"}} src={logoSrc} alt="Logo" />
-            <h2 style={{margin: "0 0 10px 0"}}>{t("Premium Language Centre", "مركز بريميوم للغات")}</h2>
-            <p style={{margin: "0 0 20px 0", fontSize: "14px", opacity: 0.8}}>{t("Malaysia University Finder", "نظام البحث عن الجامعات الماليزية")}</p>
-            <form onSubmit={handleLogin}>
-              <input 
-                type="password" 
-                className="login-input" 
-                placeholder={t("Enter Pin Code", "أدخل الرمز السري")} 
-                value={passwordInput}
-                onChange={(e) => setPasswordInput(e.target.value)}
-              />
-              {passError && <div className="login-error">{t("Incorrect PIN. Try again.", "الرمز السري خاطئ. حاول مرة أخرى.")}</div>}
-              <button type="submit" className="login-btn">{t("Login", "دخول")}</button>
-            </form>
+      <div className="theme-wrapper" dir={lang === "ar" ? "rtl" : "ltr"} style={{ display: "flex", alignItems: "center", justifyContent: "center", minHeight: "100vh", padding: "20px" }}>
+        <div className="login-box" style={{ maxWidth: "480px" }}>
+          
+          {/* Top Row: Language Button + Logo + Dark Mode Button */}
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "20px" }}>
+            <button 
+              className="lang-btn" 
+              style={{ padding: "10px 15px", fontSize: "13px", margin: 0 }}
+              onClick={() => setLang(lang === "en" ? "ar" : "en")}
+            >
+              {t("عربي", "English")}
+            </button>
+            
+            <img 
+              className="header-logo" 
+              style={{ width: "90px", height: "90px", margin: "0 10px", objectFit: "contain" }} 
+              src={logoSrc} 
+              alt="Logo" 
+            />
+            
+            <button 
+              className="mode-btn" 
+              style={{ padding: "10px 15px", fontSize: "13px", margin: 0 }}
+              onClick={() => setDarkMode(!darkMode)}
+            >
+              {darkMode ? t("Light Mode", "وضع النهار") : t("Dark Mode", "وضع الليل")}
+            </button>
           </div>
+
+          <h2 style={{margin: "0 0 10px 0"}}>{t("Premium Language Centre", "مركز بريميوم للغات")}</h2>
+          <p style={{margin: "0 0 20px 0", fontSize: "14px", opacity: 0.8}}>{t("Malaysia University Finder", "نظام البحث عن الجامعات الماليزية")}</p>
+          <form onSubmit={handleLogin}>
+            <input 
+              type="password" 
+              className="login-input" 
+              placeholder={t("Enter Pin Code", "أدخل الرمز السري")} 
+              value={passwordInput}
+              onChange={(e) => setPasswordInput(e.target.value)}
+            />
+            {passError && <div className="login-error">{t("Incorrect PIN. Try again.", "الرمز السري خاطئ. حاول مرة أخرى.")}</div>}
+            <button type="submit" className="login-btn">{t("Login", "دخول")}</button>
+          </form>
         </div>
       </div>
     );
@@ -2330,6 +2418,9 @@ function App() {
 
              {matchingUniversities.length > 0 && (
                <div className="sort-wrapper">
+                 <button className="download-btn" onClick={downloadCSV}>
+                   📥 {t("Download CSV", "تحميل CSV")}
+                 </button>
                  <span className="input-label" style={{marginBottom:0}}>
                    {t("Sort By:", "ترتيب حسب:")}
                  </span>
