@@ -17,24 +17,26 @@
    GLOBAL RESET & VARIABLES
    ========================================================== */
 :root {
-  --bg: #f6f8fa;
-  --text: #1a1a1a;
+  --bg: #f8fafc;
+  --text: #0f172a;
   --card-bg: #ffffff;
-  --card-border: #dcdcdc;
-  --primary: #0066ff;
-  --primary-hover: #004ecc;
-  --shadow: rgba(0,0,0,0.08);
-  --secondary-text: #666666;
+  --card-border: #e2e8f0;
+  --primary: #2563eb; /* Vibrant Premium Blue */
+  --primary-hover: #1d4ed8;
+  --shadow: rgba(0, 0, 0, 0.06);
+  --shadow-hover: rgba(0, 0, 0, 0.12);
+  --secondary-text: #64748b;
 }
 
 html.dark, body.dark {
   --bg: #0f172a;
-  --text: #e2e8f0;
+  --text: #f1f5f9;
   --card-bg: #1e293b;
   --card-border: #334155;
-  --primary: #38bdf8;
-  --primary-hover: #0ea5e9;
+  --primary: #3b82f6;
+  --primary-hover: #60a5fa;
   --shadow: rgba(0,0,0,0.5);
+  --shadow-hover: rgba(0,0,0,0.7);
   --secondary-text: #94a3b8;
 }
 
@@ -52,7 +54,7 @@ body, html {
    LAYOUT CONTAINERS
    ========================================================== */
 .app-container {
-  max-width: 1100px;
+  max-width: 1200px;
   margin: 0 auto;
   padding: 40px 20px;
   min-height: 100vh;
@@ -79,10 +81,10 @@ body, html {
   background: var(--card-bg);
   border: 1px solid var(--card-border);
   padding: 40px 30px;
-  border-radius: 14px;
-  box-shadow: 0 4px 20px var(--shadow);
+  border-radius: 16px;
+  box-shadow: 0 10px 25px var(--shadow);
   text-align: center;
-  max-width: 400px;
+  max-width: 420px;
   width: 100%;
 }
 .login-input {
@@ -99,7 +101,7 @@ body, html {
   font-weight: bold;
   box-sizing: border-box;
 }
-.login-input:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 3px rgba(0, 102, 255, 0.1); }
+.login-input:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15); }
 .login-btn {
   width: 100%;
   background: var(--primary);
@@ -124,90 +126,79 @@ body, html {
 .subtitle { font-size: 16px; opacity: 0.8; margin-bottom: 25px; }
 
 /* ==========================================================
-   LANGUAGE + DARK MODE BUTTONS
+   CONTROLS (LANG, MODE, CURRENCY)
    ========================================================== */
-.controls-row { display: flex; gap: 10px; margin-bottom: 25px; justify-content: flex-end;}
-.lang-btn, .mode-btn {
-  background: var(--primary); border: none; padding: 10px 18px;
-  color: white; font-size: 14px; border-radius: 10px;
-  cursor: pointer; transition: 0.2s; font-weight: 500;
+.controls-row { display: flex; gap: 10px; margin-bottom: 25px; justify-content: flex-end; align-items: center;}
+.lang-btn, .mode-btn, .currency-btn {
+  background: var(--card-bg); border: 1px solid var(--card-border); padding: 10px 16px;
+  color: var(--text); font-size: 14px; border-radius: 10px;
+  cursor: pointer; transition: 0.2s; font-weight: 600;
+  box-shadow: 0 2px 5px var(--shadow);
 }
-.lang-btn:hover, .mode-btn:hover { background: var(--primary-hover); transform: translateY(-1px); box-shadow: 0 4px 10px rgba(0,0,0,0.15); }
+.lang-btn:hover, .mode-btn:hover, .currency-btn:hover { border-color: var(--primary); transform: translateY(-1px); }
 
 /* ==========================================================
    SEARCH + SELECT INPUTS
    ========================================================== */
 .input-card {
   background: var(--card-bg); border: 1px solid var(--card-border);
-  padding: 25px; border-radius: 14px; box-shadow: 0 4px 15px var(--shadow);
+  padding: 25px; border-radius: 16px; box-shadow: 0 6px 15px var(--shadow);
   margin-bottom: 25px;
 }
-.filter-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 18px; }
+.filter-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 18px; }
 .input-label { font-size: 14px; font-weight: 600; margin-bottom: 8px; display: block; color: var(--text); }
 .input-box, .select-box {
   width: 100%; padding: 12px; border-radius: 10px;
   border: 1px solid var(--card-border); background: var(--bg);
-  color: var(--text); font-size: 14px; box-sizing: border-box;
+  color: var(--text); font-size: 14px; box-sizing: border-box; transition: 0.2s;
 }
-.input-box:focus, .select-box:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 3px rgba(0, 102, 255, 0.1); }
+.input-box:focus, .select-box:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15); }
 
 /* ==========================================================
    FILTER / SORT BAR & NOTICES
    ========================================================== */
 .accreditation-notice {
-  background: rgba(0, 102, 255, 0.1); border-left: 5px solid var(--primary);
+  background: rgba(37, 99, 235, 0.08); border-left: 5px solid var(--primary);
   padding: 18px; border-radius: 8px; margin-bottom: 25px; font-size: 14px; color: var(--text); line-height: 1.5;
 }
-.filter-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: wrap; gap: 10px; }
+.filter-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: wrap; gap: 15px; }
 .sort-wrapper { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
 .sort-select {
   padding: 8px 12px; border-radius: 8px; border: 1px solid var(--card-border);
-  background: var(--bg); color: var(--text); font-size: 14px;
+  background: var(--card-bg); color: var(--text); font-size: 14px; font-weight: 500;
 }
 .download-btn {
-  background: #10b981;
-  color: white;
-  border: none;
-  padding: 8px 12px;
-  border-radius: 8px;
-  font-size: 14px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: 0.2s;
-  display: flex;
-  align-items: center;
-  gap: 6px;
+  background: #10b981; color: white; border: none; padding: 10px 14px;
+  border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer; transition: 0.2s;
+  display: flex; align-items: center; gap: 6px; box-shadow: 0 4px 6px rgba(16, 185, 129, 0.2);
 }
-.download-btn:hover {
-  background: #059669;
-  transform: translateY(-1px);
-}
-
-/* ==========================================================
-   RESULT TITLE
-   ========================================================== */
-.result-title { font-size: 20px; font-weight: 700; color: var(--text); margin: 0; }
-.result-highlight { color: var(--primary); }
+.download-btn:hover { background: #059669; transform: translateY(-2px); }
 
 /* ==========================================================
    UNIVERSITY CARDS GRID
    ========================================================== */
-.uni-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 20px; margin-bottom: 40px; }
+.uni-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 25px; margin-bottom: 40px; }
 .uni-card {
   background: var(--card-bg); border: 1px solid var(--card-border);
-  padding: 22px; border-radius: 14px; box-shadow: 0 4px 15px var(--shadow);
-  transition: all 0.2s ease; display: flex; flex-direction: column;
+  padding: 22px; border-radius: 16px; box-shadow: 0 6px 15px var(--shadow);
+  transition: all 0.3s ease; display: flex; flex-direction: column; position: relative;
 }
-.uni-card:hover { transform: translateY(-4px); border-color: var(--primary); box-shadow: 0 8px 20px var(--shadow); }
-.uni-name { font-size: 18px; font-weight: 700; margin-bottom: 12px; color: var(--primary); line-height: 1.3; }
-.uni-small { font-size: 13px; color: var(--secondary-text); margin-bottom: 5px; }
+.uni-card:hover { transform: translateY(-5px); border-color: var(--primary); box-shadow: 0 12px 25px var(--shadow-hover); }
+
+.uni-header { display: flex; align-items: center; gap: 15px; margin-bottom: 15px; }
+.uni-logo {
+  width: 55px; height: 55px; border-radius: 50%; object-fit: cover;
+  border: 1px solid var(--card-border); background: var(--bg); padding: 2px; flex-shrink: 0;
+}
+.uni-name { font-size: 18px; font-weight: 700; color: var(--primary); line-height: 1.3; margin: 0; }
+.uni-small { font-size: 13px; color: var(--secondary-text); margin-bottom: 4px; display: flex; align-items: center; gap: 5px; }
 
 /* ==========================================================
    PROGRAMME LIST INSIDE CARD
    ========================================================== */
 .prog-list {
   margin-top: 15px; margin-bottom: 20px; border-top: 1px solid var(--card-border);
-  padding-top: 15px; max-height: 280px; overflow-y: auto; padding-right: 5px;
+  padding-top: 15px; max-height: 300px; overflow-y: auto; padding-right: 5px;
 }
 .prog-list::-webkit-scrollbar { width: 6px; }
 .prog-list::-webkit-scrollbar-track { background: transparent; }
@@ -215,52 +206,101 @@ body, html {
 .dark .prog-list::-webkit-scrollbar-thumb { background: #475569; }
 
 .prog-item {
-  background: var(--bg); padding: 12px; border-radius: 8px;
-  margin-bottom: 12px; border: 1px solid var(--card-border);
+  background: var(--bg); padding: 14px; border-radius: 10px;
+  margin-bottom: 12px; border: 1px solid var(--card-border); transition: 0.2s;
+  position: relative;
 }
-.prog-item-title { font-size: 13px; font-weight: 600; color: var(--text); margin-bottom: 6px; line-height: 1.4; }
-.prog-item-specs { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 10px; }
+.prog-item:hover { box-shadow: 0 4px 10px var(--shadow); border-color: #cbd5e1; }
+.dark .prog-item:hover { border-color: #475569; }
+
+.prog-item-header { display: flex; justify-content: space-between; align-items: flex-start; gap: 10px; margin-bottom: 8px; }
+.prog-item-title { font-size: 13px; font-weight: 600; color: var(--text); line-height: 1.4; flex: 1; }
+
+.prog-item-specs { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 8px; }
 .spec-badge {
   font-size: 11px; background: var(--card-bg); padding: 4px 8px;
   border-radius: 6px; color: var(--secondary-text); border: 1px solid var(--card-border);
-  display: inline-flex; align-items: center;
+  display: inline-flex; align-items: center; font-weight: 500;
 }
-.prog-item-price { font-size: 13px; color: var(--primary); font-weight: 700; }
+.prog-item-price { font-size: 14px; color: var(--primary); font-weight: 700; margin-bottom: 5px; }
+
+.ielts-container { display: flex; flex-direction: column; align-items: flex-start; }
+.ielts-upsell { 
+  font-size: 11px; color: var(--primary); text-decoration: none; font-weight: 600; 
+  margin-top: 4px; padding-left: 2px; 
+}
+.ielts-upsell:hover { text-decoration: underline; }
+
+/* Custom Checkbox */
+.compare-checkbox {
+  appearance: none; width: 18px; height: 18px; border: 2px solid var(--secondary-text);
+  border-radius: 4px; cursor: pointer; display: flex; align-items: center; justify-content: center;
+  transition: 0.2s; flex-shrink: 0; background: var(--card-bg);
+}
+.compare-checkbox:checked { background: var(--primary); border-color: var(--primary); }
+.compare-checkbox:checked::after { content: '✓'; color: white; font-size: 12px; font-weight: bold; }
 
 /* ==========================================================
-   WEBSITE LINK BUTTON
+   CARD BUTTONS
    ========================================================== */
+.card-actions { display: flex; flex-direction: column; gap: 10px; margin-top: auto; }
+.consult-btn {
+  display: block; width: 100%; padding: 12px; background: #25d366; /* WhatsApp Green */
+  color: white; text-decoration: none; border-radius: 10px; font-size: 14px;
+  font-weight: 600; transition: 0.2s; text-align: center; box-shadow: 0 4px 10px rgba(37, 211, 102, 0.2);
+}
+.consult-btn:hover { background: #1ebc5a; transform: translateY(-2px); }
 .website-link {
-  display: block; margin-top: auto; padding: 12px 14px;
-  background: var(--primary); color: white; text-decoration: none;
-  border-radius: 8px; font-size: 14px; font-weight: 600;
-  transition: 0.2s; text-align: center;
+  display: block; width: 100%; padding: 10px; background: transparent;
+  color: var(--primary); text-decoration: none; border-radius: 10px; font-size: 13px;
+  font-weight: 600; transition: 0.2s; text-align: center; border: 2px solid var(--primary); box-sizing: border-box;
 }
-.website-link:hover { background: var(--primary-hover); transform: translateY(-2px); }
+.website-link:hover { background: rgba(37, 99, 235, 0.05); }
 
 /* ==========================================================
-   EMPTY RESULT MESSAGE
+   STICKY COMPARE BAR
    ========================================================== */
-.no-result {
-  color: #ef4444; font-size: 15px; margin-top: 20px; text-align: center;
-  padding: 20px; background: rgba(239, 68, 68, 0.1); border-radius: 10px; font-weight: 600;
+.compare-bar {
+  position: fixed; bottom: 0; left: 0; width: 100%; background: var(--card-bg);
+  border-top: 1px solid var(--card-border); padding: 15px 20px; box-shadow: 0 -4px 15px var(--shadow);
+  display: flex; justify-content: space-between; align-items: center; z-index: 100; box-sizing: border-box;
 }
-.info-message {
-  color: var(--text); opacity: 0.7; font-size: 15px; margin-top: 20px;
-  text-align: center; padding: 30px; background: var(--card-bg); border-radius: 10px; border: 1px solid var(--card-border);
+.compare-count { font-weight: 600; color: var(--text); font-size: 15px; }
+.compare-btn {
+  background: var(--primary); color: white; border: none; padding: 10px 20px;
+  border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer; transition: 0.2s;
 }
+.compare-btn:hover { background: var(--primary-hover); transform: translateY(-2px); }
+
+/* ==========================================================
+   COMPARE MODAL
+   ========================================================== */
+.modal-overlay {
+  position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+  background: rgba(0,0,0,0.6); z-index: 1000; display: flex; align-items: center; justify-content: center; padding: 20px; box-sizing: border-box;
+}
+.modal-content {
+  background: var(--card-bg); width: 100%; max-width: 900px; border-radius: 16px;
+  padding: 25px; max-height: 90vh; overflow-y: auto; position: relative;
+}
+.close-modal {
+  position: absolute; top: 20px; right: 20px; background: transparent; border: none;
+  font-size: 24px; color: var(--text); cursor: pointer;
+}
+.rtl .close-modal { right: auto; left: 20px; }
+.compare-table-wrapper { overflow-x: auto; margin-top: 20px; }
+.compare-table { width: 100%; border-collapse: collapse; min-width: 600px; text-align: left; }
+.rtl .compare-table { text-align: right; }
+.compare-table th, .compare-table td { padding: 12px 15px; border-bottom: 1px solid var(--card-border); font-size: 14px; color: var(--text); }
+.compare-table th { font-weight: 600; background: var(--bg); }
 
 /* ==========================================================
    FOOTER
    ========================================================== */
 .app-footer {
-  text-align: center;
-  padding: 25px 20px;
-  margin-top: auto; /* Push to bottom */
-  border-top: 1px solid var(--card-border);
-  color: var(--secondary-text);
-  font-size: 14px;
-  font-weight: 500;
+  text-align: center; padding: 25px 20px; margin-top: auto;
+  border-top: 1px solid var(--card-border); color: var(--secondary-text); font-size: 14px; font-weight: 500;
+  padding-bottom: 80px; /* Space for sticky bar */
 }
 
 /* ==========================================================
@@ -275,11 +315,10 @@ body, html {
 @media (max-width: 768px) {
   .header-title { font-size: 24px; }
   .uni-grid { grid-template-columns: 1fr; }
-  .controls-row { flex-direction: column; }
+  .controls-row { flex-wrap: wrap; justify-content: center; }
   .filter-grid { grid-template-columns: 1fr; }
   .filter-bar { flex-direction: column; align-items: flex-start; }
   .sort-wrapper { width: 100%; justify-content: space-between; }
-  .sort-select { flex: 1; }
 }
 </style>
 </head>
@@ -342,7 +381,7 @@ function getProgramSpecs(progName, lang) {
    UNIVERSITY TYPES & LINKS
 ============================================ */
 const universityTypes = {
-  "UM": "Public", "USM": "Public", "UKM": "Public", "UPM": "Public", "UTM": "Public", "UiTM": "Public", "UUM": "Public", "IIUM": "Public", "UNIMAS": "Public", "UMS": "Public", "UPSI": "Public", "USIM": "Public", "UTeM": "Public", "UTHM": "Public", "UMPSA": "Public", "UCSI": "Private", "UNITEN": "Private", "UniKL": "Private", "OUM": "Private", "MMU": "Private", "MSU": "Private", "MAHSA": "Private", "LUC": "Private", "Nilai": "Private", "IMU": "Private", "IUKL": "Private", "APU": "Private", "UniRazak": "Private", "MEDIU": "Private"
+  "UM": "Public", "USM": "Public", "UKM": "Public", "UPM": "Public", "UTM": "Public", "UiTM": "Public", "UUM": "Public", "IIUM": "Public", "UNIMAS": "Public", "UMS": "Public", "UPSI": "Public", "USIM": "Public", "UTeM": "Public", "UTHM": "Public", "UMPSA": "Public", "UCSI": "Private", "UNITEN": "Private", "UniKL": "Private", "OUM": "Private", "MMU": "Private", "MSU": "Private", "MAHSA": "Private", "LUC": "Private", "Nilai": "Private", "IMU": "Private", "IUKL": "Private", "APU": "Private", "UniRazak": "Private", "MEDIU": "Private", "Taylor's": "Private"
 };
 
 /* ============================================
@@ -350,7 +389,7 @@ const universityTypes = {
 ============================================ */
 const ACCREDITATION_RULES = {
   "Oman": {
-    allowedUnis: null, // all theoretically allowed, restricted via logic
+    allowedUnis: null,
     notice: {
       en: "Oman Rules: Mandatory pre-approval from MOHE is required. Dual degrees must be fully MQA accredited. MBBS/MD is generally restricted unless it's a PhD program.",
       ar: "شروط عُمان: مطلوب موافقة مسبقة من وزارة التعليم العالي. يجب أن تكون الدرجات المزدوجة معتمدة بالكامل من MQA. يقتصر التسجيل في برامج الطب (MBBS/MD) إلا إذا كانت في مستوى الدكتوراه."
@@ -397,7 +436,6 @@ const CATEGORIES = {
 /* ============================================
    TRANSLATOR HELPERS (Overhauled)
 ============================================ */
-// Returns an array of search synonyms so searching "Medicine" finds "MBBS", "طبيب", etc.
 function getSynonyms(word) {
   const map = {
     "medicine": ["medicine", "medical", "mbbs", "md", "طب", "طبيب"],
@@ -429,12 +467,9 @@ function getSynonyms(word) {
   return map[word] || [word];
 }
 
-// Translates complex program names reliably by replacing longest phrases first
 function translateProgramName(name, lang) {
   if (lang === "en") return name;
-  
   const dict = {
-    // Specific full names
     "Bachelor of Medicine & Bachelor of Surgery": "بكالوريوس الطب والجراحة (MBBS)",
     "Doctor of Medicine": "دكتوراه في الطب (MD / MBBS)",
     "Doctor of Dental Surgery": "دكتوراه في جراحة الأسنان (DDS)",
@@ -468,137 +503,49 @@ function translateProgramName(name, lang) {
     "Foundation in Engineering": "سنة تأسيسية في الهندسة",
     "Foundation in Business": "سنة تأسيسية في الأعمال",
     "Foundation in Computing": "سنة تأسيسية في الحوسبة",
-    
-    // Core structural words
-    "Bachelor in": "بكالوريوس في",
-    "Bachelor of": "بكالوريوس في",
-    "Bachelor": "بكالوريوس",
-    "Master in": "ماجستير في",
-    "Master of": "ماجستير في",
-    "Master": "ماجستير",
-    "PhD in": "دكتوراه في",
-    "PhD": "دكتوراه",
-    "Doctor of": "دكتوراه في",
-    "Doctor in": "دكتوراه في",
-    "Diploma in": "دبلوم في",
-    "Diploma": "دبلوم",
-    "Foundation": "سنة تأسيسية",
-    "Certificate in": "شهادة في",
-    "Certificate": "شهادة",
-    
-    // Specialisations
-    "Artificial Intelligence": "الذكاء الاصطناعي",
-    "Software Engineering": "هندسة البرمجيات",
-    "Computer Science": "علوم الحاسب",
-    "Information Technology": "تقنية المعلومات",
-    "Cyber Security": "الأمن السيبراني",
-    "Data Science": "علوم البيانات",
-    "Information System": "نظم المعلومات",
-    "Multimedia": "الوسائط المتعددة",
-    "Networking": "الشبكات",
-    "Network": "الشبكات",
-    "Computing": "الحوسبة",
-    "System": "نظام",
-    "Systems": "نظم",
-
-    "Mechanical Engineering": "الهندسة الميكانيكية",
-    "Civil Engineering": "الهندسة المدنية",
-    "Electrical Engineering": "الهندسة الكهربائية",
-    "Electronic Engineering": "الهندسة الإلكترونية",
-    "Chemical Engineering": "الهندسة الكيميائية",
-    "Mechatronic Engineering": "هندسة الميكاترونكس",
-    "Aerospace Engineering": "هندسة الطيران والفضاء",
-    "Petroleum Engineering": "هندسة البترول",
-    "Engineering Technology": "تكنولوجيا الهندسة",
-    "Engineering": "الهندسة",
-    
-    "Business Administration": "إدارة الأعمال",
-    "Business Management": "إدارة الأعمال",
-    "Business": "الأعمال",
-    "Accounting": "المحاسبة",
-    "Accountancy": "المحاسبة",
-    "Finance": "المالية",
-    "Economics": "الاقتصاد",
-    "Marketing": "التسويق",
-    "Management": "الإدارة",
-    "Entrepreneurship": "ريادة الأعمال",
-    "Human Resource": "الموارد البشرية",
-    "Islamic Banking": "الخدمات المصرفية الإسلامية",
-    "Banking": "الخدمات المصرفية",
-    "Logistics": "اللوجستيات",
-    "Supply Chain": "سلاسل الإمداد",
-
-    "Medicine": "الطب",
-    "Surgery": "الجراحة",
-    "Pharmacy": "الصيدلة",
-    "Dentistry": "طب الأسنان",
-    "Dental Surgery": "جراحة الأسنان",
-    "Dental": "الأسنان",
-    "Nursing Science": "علوم التمريض",
-    "Nursing": "التمريض",
-    "Biomedical Science": "العلوم الطبية الحيوية",
-    "Medical Science": "العلوم الطبية",
-    "Medical Imaging": "التصوير الطبي",
-    "Physiotherapy": "العلاج الطبيعي",
-    "Optometry": "البصريات",
-    "Nutrition": "التغذية",
-    "Dietetics": "الحمية",
-    "Public Health": "الصحة العامة",
-    "Clinical Psychology": "علم النفس السريري",
-    "Psychology": "علم النفس",
-    "Veterinary": "بيطري",
-
-    "Architecture": "العمارة",
-    "Quantity Surveying": "حساب الكميات",
-    "Real Estate": "العقارات",
-    "Property Management": "إدارة الأملاك",
-    "Urban Planning": "التخطيط الحضري",
-    "Construction": "التشييد والبناء",
-
-    "Education": "التربية",
-    "Teaching": "التدريس",
-    "Early Childhood": "الطفولة المبكرة",
-    "Language": "اللغة",
-    "English": "الإنجليزية",
-    "Communication": "الاتصال",
-    "Mass Communication": "الاتصال الجماهيري",
-    "Media": "الإعلام",
-    "Journalism": "الصحافة",
-    "Graphic Design": "التصميم الجرافيكي",
-    "Animation": "الرسوم المتحركة",
-    "Visual Effects": "المؤثرات البصرية",
-
-    "Hospitality": "الضيافة",
-    "Tourism": "السياحة",
-    "Culinary Arts": "فنون الطهي",
-    "Event Management": "إدارة الفعاليات",
-
-    "Islamic Studies": "الدراسات الإسلامية",
-    "Syariah": "الشريعة",
-    "Shariah": "الشريعة",
-    "Usuluddin": "أصول الدين",
-    "Al-Quran": "القرآن",
-    "Halal Industry": "صناعة الحلال",
-    "Law": "القانون",
-
-    "Mathematics": "الرياضيات",
-    "Statistics": "الإحصاء",
-    "Chemistry": "الكيمياء",
-    "Physics": "الفيزياء",
-    "Biology": "الأحياء",
-    "Biotechnology": "التكنولوجيا الحيوية",
-    "Food Science": "علوم الأغذية",
-    "Applied Science": "العلوم التطبيقية",
-    "Actuarial Science": "العلوم الاكتوارية",
-
-    "with Honours": "(مع مرتبة الشرف)",
-    "(Honours)": "(مع مرتبة الشرف)",
-    "(Hons)": "(مع مرتبة الشرف)",
-    "(Hons.)": "(مع مرتبة الشرف)"
+    "Bachelor in": "بكالوريوس في", "Bachelor of": "بكالوريوس في", "Bachelor": "بكالوريوس",
+    "Master in": "ماجستير في", "Master of": "ماجستير في", "Master": "ماجستير",
+    "PhD in": "دكتوراه في", "PhD": "دكتوراه", "Doctor of": "دكتوراه في", "Doctor in": "دكتوراه في",
+    "Diploma in": "دبلوم في", "Diploma": "دبلوم", "Foundation": "سنة تأسيسية",
+    "Certificate in": "شهادة في", "Certificate": "شهادة",
+    "Artificial Intelligence": "الذكاء الاصطناعي", "Software Engineering": "هندسة البرمجيات",
+    "Computer Science": "علوم الحاسب", "Information Technology": "تقنية المعلومات",
+    "Cyber Security": "الأمن السيبراني", "Data Science": "علوم البيانات",
+    "Information System": "نظم المعلومات", "Multimedia": "الوسائط المتعددة",
+    "Networking": "الشبكات", "Network": "الشبكات", "Computing": "الحوسبة",
+    "System": "نظام", "Systems": "نظم", "Mechanical Engineering": "الهندسة الميكانيكية",
+    "Civil Engineering": "الهندسة المدنية", "Electrical Engineering": "الهندسة الكهربائية",
+    "Electronic Engineering": "الهندسة الإلكترونية", "Chemical Engineering": "الهندسة الكيميائية",
+    "Mechatronic Engineering": "هندسة الميكاترونكس", "Aerospace Engineering": "هندسة الطيران والفضاء",
+    "Petroleum Engineering": "هندسة البترول", "Engineering Technology": "تكنولوجيا الهندسة",
+    "Engineering": "الهندسة", "Business Administration": "إدارة الأعمال",
+    "Business Management": "إدارة الأعمال", "Business": "الأعمال", "Accounting": "المحاسبة",
+    "Accountancy": "المحاسبة", "Finance": "المالية", "Economics": "الاقتصاد",
+    "Marketing": "التسويق", "Management": "الإدارة", "Entrepreneurship": "ريادة الأعمال",
+    "Human Resource": "الموارد البشرية", "Islamic Banking": "الخدمات المصرفية الإسلامية",
+    "Banking": "الخدمات المصرفية", "Logistics": "اللوجستيات", "Supply Chain": "سلاسل الإمداد",
+    "Medicine": "الطب", "Surgery": "الجراحة", "Pharmacy": "الصيدلة", "Dentistry": "طب الأسنان",
+    "Dental Surgery": "جراحة الأسنان", "Dental": "الأسنان", "Nursing Science": "علوم التمريض",
+    "Nursing": "التمريض", "Biomedical Science": "العلوم الطبية الحيوية", "Medical Science": "العلوم الطبية",
+    "Medical Imaging": "التصوير الطبي", "Physiotherapy": "العلاج الطبيعي", "Optometry": "البصريات",
+    "Nutrition": "التغذية", "Dietetics": "الحمية", "Public Health": "الصحة العامة",
+    "Clinical Psychology": "علم النفس السريري", "Psychology": "علم النفس", "Veterinary": "بيطري",
+    "Architecture": "العمارة", "Quantity Surveying": "حساب الكميات", "Real Estate": "العقارات",
+    "Property Management": "إدارة الأملاك", "Urban Planning": "التخطيط الحضري", "Construction": "التشييد والبناء",
+    "Education": "التربية", "Teaching": "التدريس", "Early Childhood": "الطفولة المبكرة",
+    "Language": "اللغة", "English": "الإنجليزية", "Communication": "الاتصال",
+    "Mass Communication": "الاتصال الجماهيري", "Media": "الإعلام", "Journalism": "الصحافة",
+    "Graphic Design": "التصميم الجرافيكي", "Animation": "الرسوم المتحركة", "Visual Effects": "المؤثرات البصرية",
+    "Hospitality": "الضيافة", "Tourism": "السياحة", "Culinary Arts": "فنون الطهي",
+    "Event Management": "إدارة الفعاليات", "Islamic Studies": "الدراسات الإسلامية",
+    "Syariah": "الشريعة", "Shariah": "الشريعة", "Usuluddin": "أصول الدين", "Al-Quran": "القرآن",
+    "Halal Industry": "صناعة الحلال", "Law": "القانون", "Mathematics": "الرياضيات",
+    "Statistics": "الإحصاء", "Chemistry": "الكيمياء", "Physics": "الفيزياء", "Biology": "الأحياء",
+    "Biotechnology": "التكنولوجيا الحيوية", "Food Science": "علوم الأغذية", "Applied Science": "العلوم التطبيقية",
+    "Actuarial Science": "العلوم الاكتوارية", "with Honours": "(مع مرتبة الشرف)",
+    "(Honours)": "(مع مرتبة الشرف)", "(Hons)": "(مع مرتبة الشرف)", "(Hons.)": "(مع مرتبة الشرف)"
   };
-
   let translated = name;
-  // Sort keys by length descending to prevent partial match overwrites
   const keys = Object.keys(dict).sort((a, b) => b.length - a.length);
   for (let k of keys) {
     const regex = new RegExp(k, "gi");
@@ -607,10 +554,30 @@ function translateProgramName(name, lang) {
   return translated;
 }
 
+function translateLocation(loc, lang) {
+  if (lang === "en" || !loc) return loc;
+  const dict = {
+    "Kuala Lumpur": "كوالالمبور", "Selangor": "سيلانجور", "Penang": "بينانج",
+    "Johor": "جوهور", "Kedah": "قدح", "Perak": "بيراك", "Negeri Sembilan": "نجري سمبيلان",
+    "Melaka": "ملاكا", "Pahang": "باهانج", "Sabah": "صباح", "Sarawak": "ساراواك"
+  };
+  return dict[loc] || loc;
+}
 
-/* ============================================
-   MASSIVE SPECIFIC SPECIALTIES DICTIONARY (80+ Majors)
-============================================ */
+function translateIntakes(intakes, lang) {
+  if (lang === "en" || !intakes) return intakes;
+  const dict = {
+    "Jan": "يناير", "Feb": "فبراير", "Mar": "مارس", "Apr": "أبريل", "May": "مايو",
+    "Jun": "يونيو", "Jul": "يوليو", "Aug": "أغسطس", "Sep": "سبتمبر", "Oct": "أكتوبر",
+    "Nov": "نوفمبر", "Dec": "ديسمبر"
+  };
+  let translated = intakes;
+  for (const [en, ar] of Object.entries(dict)) {
+    translated = translated.replace(new RegExp(en, "g"), ar);
+  }
+  return translated;
+}
+
 const SPECIALTIES = {
   "Accounting & Taxation": { ar: "المحاسبة والضرائب", keywords: ["accounting", "accountancy", "taxation", "audit"] },
   "Actuarial Science": { ar: "العلوم الاكتوارية", keywords: ["actuarial"] },
@@ -705,11 +672,11 @@ const SPECIALTIES = {
 };
 
 /* ============================================
-   EXHAUSTIVE DATABASE (1000+ COURSES)
+   EXHAUSTIVE DATABASE (ALL 25 UNIVERSITIES & 1000+ COURSES)
 ============================================ */
 let rawData = [
   {
-    university: "Universiti Malaya (UM)", shortName: "UM", type: "Public", currency: "MYR", website: "https://www.um.edu.my",
+    university: "Universiti Malaya (UM)", shortName: "UM", type: "Public", currency: "MYR", website: "https://www.um.edu.my", location: "Kuala Lumpur", intakes: "Feb, Sep",
     programmes: {
       "Foundation in Life Sciences": "35,000",
       "Foundation in Physical Sciences": "35,000",
@@ -770,7 +737,7 @@ let rawData = [
     }
   },
   {
-    university: "Universiti Sains Malaysia (USM)", shortName: "USM", type: "Public", currency: "USD", website: "https://www.usm.my",
+    university: "Universiti Sains Malaysia (USM)", shortName: "USM", type: "Public", currency: "USD", website: "https://www.usm.my", location: "Penang", intakes: "Mar, Oct",
     programmes: {
       "Bachelor of Science in Education with Honours": "1,718.75 (Per Semester)",
       "Bachelor of Education (TESOL) with Honours": "1,718.75 (Per Semester)",
@@ -822,7 +789,7 @@ let rawData = [
     }
   },
   {
-    university: "Universiti Kebangsaan Malaysia (UKM)", shortName: "UKM", type: "Public", currency: "MYR", website: "https://www.ukm.my",
+    university: "Universiti Kebangsaan Malaysia (UKM)", shortName: "UKM", type: "Public", currency: "MYR", website: "https://www.ukm.my", location: "Selangor", intakes: "Mar, Oct",
     programmes: {
       "Bachelor of Audiology with Honours": "74,250",
       "Bachelor of Biomedical Science with Honours": "74,250",
@@ -863,11 +830,36 @@ let rawData = [
       "Master - Visual Informatics (IVI)": "19,750.00 (Research) / 14,945.00 (Mixed)",
       "Master - Climate Change (IPI)": "20,150.00 (Research) / 15,745.00 (Mixed)",
       "Master - Fuel Cell / Hydrogen Energy": "20,150.00 (Research) / 15,745.00 (Mixed)",
-      "Master - Energy Management and Policy": "18,550.00 (Research) / 14,545.00 (Mixed)"
+      "Master - Energy Management and Policy": "18,550.00 (Research) / 14,545.00 (Mixed)",
+      "Doctor of Philosophy - Economics and Management": "32,220.00",
+      "Doctor of Philosophy - Pharmacy": "37,620.00",
+      "Doctor of Philosophy - Engineering and Built Environment": "43,260.00",
+      "Doctor of Philosophy - Education": "37,020.00",
+      "Doctor of Philosophy - Islamic Studies": "31,020.00",
+      "Doctor of Philosophy - Dentistry": "61,620.00",
+      "Doctor of Philosophy - Science and Technology": "40,620.00",
+      "Doctor of Philosophy - Health Sciences": "37,620.00",
+      "Doctor of Philosophy - Social Sciences and Humanities": "34,530.00",
+      "Doctor of Philosophy - Information Science and Technology": "37,620.00",
+      "Doctor of Philosophy - Law": "32,220.00",
+      "Doctor of Philosophy - Medicine": "51,360.00",
+      "Doctor of Philosophy - Institute of Malay World and Civilization (ATMA)": "31,020.00",
+      "Doctor of Philosophy - Institute of Environment and Development (LESTARI)": "32,220.00",
+      "Doctor of Philosophy - Institute of System Biology (INBIOSIS)": "37,620.00",
+      "Doctor of Philosophy - Institute of Islam Hadhari": "31,020.00",
+      "Doctor of Philosophy - Institute of Ethnic Studies (KITA)": "25,620.00",
+      "Doctor of Philosophy - Institute of Malaysia and International Studies (IKMAS)": "32,220.00",
+      "Doctor of Philosophy - Institute of Microengineering and Nanoelectronics (IMEN)": "40,020.00",
+      "Doctor of Philosophy - Medical Molecular Biology Institute (UMBI)": "55,620.00",
+      "Doctor of Philosophy - Institute of Visual Informatics (IVI)": "37,620.00",
+      "Doctor of Philosophy - Institute of Climate Change (IPI)": "40,020.00",
+      "Doctor of Philosophy - Fuel Cell Engineering": "40,020.00",
+      "Doctor of Philosophy - Hydrogen Energy": "40,020.00",
+      "Doctor of Philosophy - Energy Management and Policy": "32,220.00"
     }
   },
   {
-    university: "Universiti Putra Malaysia (UPM)", shortName: "UPM", type: "Public", currency: "MYR", website: "https://www.upm.edu.my",
+    university: "Universiti Putra Malaysia (UPM)", shortName: "UPM", type: "Public", currency: "MYR", website: "https://www.upm.edu.my", location: "Selangor", intakes: "Mar, Oct",
     programmes: {
       "Foundation Studies for Agricultural Science": "21,500.00 (Per Year)",
       "Bachelor of Agricultural Science with Honours": "20,000.00 (Per Year)",
@@ -969,7 +961,7 @@ let rawData = [
     }
   },
   {
-    university: "Universiti Teknologi Malaysia (UTM)", shortName: "UTM", type: "Public", currency: "MYR", website: "https://www.utm.my",
+    university: "Universiti Teknologi Malaysia (UTM)", shortName: "UTM", type: "Public", currency: "MYR", website: "https://www.utm.my", location: "Johor", intakes: "Mar, Oct",
     programmes: {
       "Bachelor of Engineering (Civil, Chemical, Mechanical, Electrical, etc.)": "75,000.00",
       "Bachelor of Computer Science (SE, Network, Graphics, AI)": "71,000.00",
@@ -1077,7 +1069,7 @@ let rawData = [
     }
   },
   {
-    university: "Universiti Utara Malaysia (UUM)", shortName: "UUM", type: "Public", currency: "MYR", website: "https://www.uum.edu.my",
+    university: "Universiti Utara Malaysia (UUM)", shortName: "UUM", type: "Public", currency: "MYR", website: "https://www.uum.edu.my", location: "Kedah", intakes: "Mar, Oct",
     programmes: {
       "Bachelor of Communication with Honours": "37,600.00",
       "Bachelor of Computer Science with Honours": "37,600.00",
@@ -1118,7 +1110,7 @@ let rawData = [
     }
   },
   {
-    university: "International Islamic University Malaysia (IIUM)", shortName: "IIUM", type: "Public", currency: "MYR", website: "https://www.iium.edu.my",
+    university: "International Islamic University Malaysia (IIUM)", shortName: "IIUM", type: "Public", currency: "MYR", website: "https://www.iium.edu.my", location: "Selangor", intakes: "Feb, Sep",
     programmes: {
       "Bachelor Degree in Engineering": "90,615.00",
       "Bachelor Degree in Sciences (KENMS)": "71,415.00",
@@ -1188,7 +1180,7 @@ let rawData = [
     }
   },
   {
-    university: "Universiti Pendidikan Sultan Idris (UPSI)", shortName: "UPSI", type: "Public", currency: "MYR", website: "https://www.upsi.edu.my",
+    university: "Universiti Pendidikan Sultan Idris (UPSI)", shortName: "UPSI", type: "Public", currency: "MYR", website: "https://www.upsi.edu.my", location: "Perak", intakes: "Feb, Sep",
     programmes: {
       "Bachelor of Education (Malay Literature, TESL, Biology, Math, Science, Art, etc.)": "44,000.00 (Total for 8 Sems)",
       "Bachelor of Performing Arts (Theater / Dance)": "44,000.00 (Total for 6 Sems)",
@@ -1210,7 +1202,7 @@ let rawData = [
     }
   },
   {
-    university: "Universiti Sains Islam Malaysia (USIM)", shortName: "USIM", type: "Public", currency: "MYR", website: "https://www.usim.edu.my",
+    university: "Universiti Sains Islam Malaysia (USIM)", shortName: "USIM", type: "Public", currency: "MYR", website: "https://www.usim.edu.my", location: "Negeri Sembilan", intakes: "Mar, Oct",
     programmes: {
       "Faculty of Quranic and Sunnah Studies (Undergraduate)": "2,750.00 (Per Semester)",
       "Faculty of Leadership and Management (Undergraduate)": "2,750.00 (Per Semester)",
@@ -1252,7 +1244,7 @@ let rawData = [
     }
   },
   {
-    university: "Universiti Teknikal Malaysia Melaka (UTeM)", shortName: "UTeM", type: "Public", currency: "MYR", website: "https://www.utem.edu.my",
+    university: "Universiti Teknikal Malaysia Melaka (UTeM)", shortName: "UTeM", type: "Public", currency: "MYR", website: "https://www.utem.edu.my", location: "Melaka", intakes: "Mar, Oct",
     programmes: {
       "Bachelor of Engineering / Engineering Technology (All Specialisations)": "49,000.00 (Total)",
       "Bachelor of Technology Management / Technopreneurship (All Specialisations)": "49,000.00 (Total)",
@@ -1276,7 +1268,7 @@ let rawData = [
     }
   },
   {
-    university: "Universiti Malaysia Pahang (UMP / UMPSA)", shortName: "UMPSA", type: "Public", currency: "MYR", website: "https://www.umpsa.edu.my",
+    university: "Universiti Malaysia Pahang (UMP / UMPSA)", shortName: "UMPSA", type: "Public", currency: "MYR", website: "https://www.umpsa.edu.my", location: "Pahang", intakes: "Mar, Oct",
     programmes: {
       "Foundation in Science and Technology": "20,895.00",
       "Diploma in Computer Science": "35,005.00",
@@ -1315,7 +1307,7 @@ let rawData = [
     }
   },
   {
-    university: "Asia Pacific University (APU)", shortName: "APU", type: "Private", currency: "MYR", website: "https://www.apu.edu.my",
+    university: "Asia Pacific University (APU)", shortName: "APU", type: "Private", currency: "MYR", website: "https://www.apu.edu.my", location: "Kuala Lumpur", intakes: "Jan, May, Sep",
     programmes: {
       "Foundation in Computing, Business, Finance, Psychology, and Design": "27,900.00",
       "Foundation in Engineering": "28,500.00",
@@ -1342,7 +1334,7 @@ let rawData = [
     }
   },
   {
-    university: "Al-Madinah International University (MEDIU)", shortName: "MEDIU", type: "Private", currency: "MYR", website: "https://www.mediu.edu.my",
+    university: "Al-Madinah International University (MEDIU)", shortName: "MEDIU", type: "Private", currency: "MYR", website: "https://www.mediu.edu.my", location: "Kuala Lumpur", intakes: "Jan, May, Sep",
     programmes: {
       "Bachelor of Computer Science (General / Computer Networking)": "54,175.00",
       "Bachelor of Information Technology (General / MIS / System Development)": "52,420.00",
@@ -1371,7 +1363,7 @@ let rawData = [
     }
   },
   {
-    university: "Infrastructure University Kuala Lumpur (IUKL)", shortName: "IUKL", type: "Private", currency: "MYR", website: "https://iukl.edu.my",
+    university: "Infrastructure University Kuala Lumpur (IUKL)", shortName: "IUKL", type: "Private", currency: "MYR", website: "https://iukl.edu.my", location: "Selangor", intakes: "Mar, Jul, Nov",
     programmes: {
       "Diploma in Architecture": "47,000.00",
       "Diploma in Landscape Architecture": "34,780.00",
@@ -1425,7 +1417,7 @@ let rawData = [
     }
   },
   {
-    university: "International Medical University (IMU)", shortName: "IMU", type: "Private", currency: "MYR", website: "https://www.imu.edu.my",
+    university: "International Medical University (IMU)", shortName: "IMU", type: "Private", currency: "MYR", website: "https://www.imu.edu.my", location: "Kuala Lumpur", intakes: "Feb, Jul, Sep",
     programmes: {
       "Bachelor of Dental Surgery (BDS) (IMU)": "717,000.00",
       "Bachelor of Medicine & Bachelor of Surgery (MBBS) (IMU)": "672,500.00",
@@ -1461,7 +1453,7 @@ let rawData = [
     }
   },
   {
-    university: "Lincoln University College", shortName: "LUC", type: "Private", currency: "MYR", website: "https://lincoln.edu.my",
+    university: "Lincoln University College", shortName: "LUC", type: "Private", currency: "MYR", website: "https://lincoln.edu.my", location: "Selangor", intakes: "Jan, May, Sep",
     programmes: {
       "Doctor of Medicine (MD)": "357,700.00",
       "Doctor of Dental Surgery (DDS)": "357,700.00",
@@ -1500,7 +1492,7 @@ let rawData = [
     }
   },
   {
-    university: "MAHSA University", shortName: "MAHSA", type: "Private", currency: "MYR", website: "https://mahsa.edu.my",
+    university: "MAHSA University", shortName: "MAHSA", type: "Private", currency: "MYR", website: "https://mahsa.edu.my", location: "Selangor", intakes: "Jan, May, Sep",
     programmes: {
       "Foundation in Science": "20,800.00",
       "Foundation in Business / Arts": "17,700.00",
@@ -1552,7 +1544,7 @@ let rawData = [
     }
   },
   {
-    university: "Management & Science University (MSU)", shortName: "MSU", type: "Private", currency: "MYR", website: "https://www.msu.edu.my",
+    university: "Management & Science University (MSU)", shortName: "MSU", type: "Private", currency: "MYR", website: "https://www.msu.edu.my", location: "Selangor", intakes: "Feb, Jul, Sep",
     programmes: {
       "Foundation in Science": "29,915",
       "Foundation (Business / Law / IT / TESL / Visual Arts)": "28,205 - 28,245",
@@ -1640,7 +1632,7 @@ let rawData = [
     }
   },
   {
-    university: "Multimedia University (MMU)", shortName: "MMU", type: "Private", currency: "MYR", website: "https://www.mmu.edu.my",
+    university: "Multimedia University (MMU)", shortName: "MMU", type: "Private", currency: "MYR", website: "https://www.mmu.edu.my", location: "Selangor", intakes: "Mar, Jul, Nov",
     programmes: {
       "Bachelor of Engineering (Electrical / Electronics / Computer / Telecommunications / Mechanical / Robotics and Automation) with Honours": "94,500.00",
       "Bachelor of Accounting (Hons.)": "90,500.00",
@@ -1685,7 +1677,7 @@ let rawData = [
     }
   },
   {
-    university: "Nilai University", shortName: "Nilai", type: "Private", currency: "MYR", website: "https://www.nilai.edu.my",
+    university: "Nilai University", shortName: "Nilai", type: "Private", currency: "MYR", website: "https://www.nilai.edu.my", location: "Negeri Sembilan", intakes: "Jan, May, Oct",
     programmes: {
       "Foundation (Business, Arts, Science, Information Technology)": "19,448.00",
       "Diploma in Business (Online Learning)": "19,448.00",
@@ -1736,7 +1728,7 @@ let rawData = [
     }
   },
   {
-    university: "Open University Malaysia (OUM)", shortName: "OUM", type: "Private", currency: "MYR", website: "https://www.oum.edu.my",
+    university: "Open University Malaysia (OUM)", shortName: "OUM", type: "Private", currency: "MYR", website: "https://www.oum.edu.my", location: "Kuala Lumpur", intakes: "Jan, May, Sep",
     programmes: {
       "Doctor of Nursing": "55,992.00",
       "Doctor of Business Administration": "49,392.00",
@@ -1774,209 +1766,43 @@ let rawData = [
     }
   },
   {
-    university: "Universiti Kuala Lumpur (UniKL)", shortName: "UniKL", type: "Private", currency: "MYR", website: "https://www.unikl.edu.my",
+    university: "Universiti Kuala Lumpur (UniKL)", shortName: "UniKL", type: "Private", currency: "MYR", website: "https://www.unikl.edu.my", location: "Kuala Lumpur", intakes: "Jan, Jul, Sep",
     programmes: {
-      "Bachelor of Medicine and Bachelor of Surgery (MBBS)": "88,400.00",
-      "Bachelor of Pharmacy (Honours)": "54,380.00",
-      "Master of Science (Water and Hydropower Engineering)": "52,800.00",
-      "Aircraft Maintenance License Program - EASA Part 66": "52,000.00",
-      "Bachelor of Science (Honours) in Pharmaceutical Technology": "39,000.00",
-      "Bachelor of Physiotherapy (Honours)": "39,000.00",
-      "Master of Electrical Engineering": "32,470.00",
-      "Bachelor of Game Development with Honours": "30,680.00",
-      "Bachelor in Financial Technology with Honours": "30,420.00",
-      "Master of Business Technology": "28,948.00",
-      "Bachelor of Project Management (Honours)": "26,000.00",
-      "Bachelor in Fashion Design with Marketing (Honours)": "26,000.00",
-      "Foundation in Medical Sciences - (MBBS)": "25,000",
-      "Bachelor of Business Technology (Hons) in Automotive Management": "24,700",
-      "Bachelor of Electrical Engineering Technology (Sustainable Energy) with Honours": "24,700",
-      "Bachelor of Environmental Management and Sustainability Technology with Honours": "24,700",
-      "Master in Aviation Management": "24,700",
-      "Bachelor of Engineering Technology (Water Engineering and Energy) / Water Resources Engineering Technology with Honours": "24,000.00",
-      "Bachelor of Science in Psychology (Honours)": "23,500.00",
-      "Bachelor of Petroleum Engineering Technology (Operation and Safety) with Honours": "23,400.00",
-      "Bachelor of Industrial Logistics (Hons)": "22,800.00",
-      "Bachelor of Multimedia Technology (Hons) in Computer Animation": "22,286",
-      "Bachelor of Aviation Management (Hons)": "22,280",
-      "Master of Engineering Technology in Biomedical Engineering": "22,100",
-      "Bachelor of Information Technology (Hons) in Internet of Things": "22,100.00",
-      "Master of Public Health": "22,000.00",
-      "Master of Maritime Operations and Management": "21,500.00",
-      "Bachelor of Science (Hons) in Analytical Economics": "21,160",
-      "Bachelor of Aircraft Engineering Technology (Hons) in Mechanical / Avionics": "21,100",
-      "Bachelor of Chemical Engineering / Electrical Engineering with Honours": "20,800",
-      "Bachelor of Occupational Safety & Health / Maritime Operations (Honours)": "20,800",
-      "Diploma in Physiotherapy": "20,800",
-      "Bachelor of Information Technology (Hons) in Software Engineering / Computer System Security": "20,114",
-      "Bachelor in Computing and Business Management with Honours": "20,114.00",
-      "Bachelor of Multimedia Technology (Hons) in Interactive Multimedia Design": "20,114.00",
-      "Master of Science in Public Health": "20,000.00",
-      "Bachelor of Nursing Science (Honours)": "20,000.00",
-      "Bachelor of Marine Engineering Technology with Honours": "19,920.00",
-      "Master of Quality Engineering and Management": "19,760.00",
-      "Bachelor of Engineering / Engineering Technology (Most Specialisations) with Honours": "19,500.00",
-      "Bachelor of Biomedical Science (Honours) / Environmental Health (Hons)": "19,500.00",
-      "Bachelor of Design (Honours) in Industrial Design": "19,500.00",
-      "Bachelor of Food Safety and Quality Technology": "19,500",
-      "Foundation in Computer Technology / Science": "19,500.00",
-      "Diploma of Engineering Technology (Quality Engineering)": "19,500",
-      "Master of Engineering in Structural Integrity / Mechanical": "19,200",
-      "Master of Business Administration / MBA (Entrepreneurship) / Master in Manufacturing Management": "18,000.00",
-      "Foundation in Creative Art and Design / Science and Technology / Science and Arts": "18,000.00",
-      "Bachelor of Computer Engineering Technology (Computer Systems) with Honours": "17,600.00",
-      "Master in Supply Chain Management": "17,300.00",
-      "Diploma in Nursing": "17,200.00",
-      "Foundation in Business": "17,000.00",
-      "Diploma of Engineering Technology (Railway System)": "17,000.00",
-      "Bachelor of Business Administration (Hons) in International Business / Marketing / Accounting": "16,900.00",
-      "Bachelor in Tourism Planning and Development (Honours)": "16,900.00",
-      "Diploma of Engineering Technology (Aeroplane / Avionics / Helicopter / Marine Engineering)": "16,900.00",
-      "Diploma in Pharmacy / Medical Imaging / Animation": "16,900.00",
-      "Bachelor of Electromechanical Engineering Technology with Honours": "16,300.00",
-      "Bachelor of Technology Management (Honours)": "16,286.00",
-      "Bachelor of Mechanical Engineering with Honours": "16,000.00",
-      "Master in Computer Science (Mix Mode)": "16,000.00",
-      "Diploma of Engineering Technology (Ship Design / Construction / Maintenance / Marine Electrical)": "15,600.00",
-      "Bachelor of Business Administration (Hons) (Management & Entrepreneurship / Islamic Finance)": "15,600.00",
-      "Diploma of Engineering Technology in Air Conditioning and Refrigeration / Automotive Maintenance": "15,400.00",
-      "Diploma in Chemical Engineering Technology / Food / Welding": "14,900.00",
-      "Diploma in Industrial Logistics": "14,700.00",
-      "Diploma in Medical Laboratory Technology / Environmental Health / Medical and Health Sciences": "14,690",
-      "Diploma of Engineering Technology (Computer & Networking / Industrial Automation / Mechanical Design / Production / Electrical and Electronics / etc.)": "14,100",
-      "Master of Science (Pharmacy) (By Research)": "13,400",
-      "Doctor of Philosophy (Pharmacy)": "13,400",
-      "Diploma in Information Technology / Multimedia": "11,700",
-      "Doctor of Philosophy (Medical Sciences)": "11,000",
-      "Doctor of Philosophy in Islamic Finance": "8,580",
-      "Master of Medical Science (By Research)": "7,000",
-      "Master / Doctor of Philosophy (Most Research Fields - IT / Management / Accounting / Engineering Tech / etc.)": "5,000",
-      "Master of Engineering Technology (Manufacturing) (By Research)": "3,600",
-      "Doctor of Philosophy (Manufacturing)": "3,600"
+      "Bachelor of Medicine and Bachelor of Surgery (MBBS)": "88,400.00 (Per Year)",
+      "Bachelor of Pharmacy (Honours)": "54,380.00 (Per Year)",
+      "Bachelor of Computer Engineering Technology": "17,600.00 (Per Year)",
+      "Bachelor of Multimedia Technology": "20,114.00 (Per Year)",
+      "Master of Business Administration": "18,000.00 (Total)",
+      "PhD (Information Technology / Engineering)": "5,000 (Per Year)"
     }
   },
   {
-    university: "Universiti Tenaga Nasional (UNITEN)", shortName: "UNITEN", type: "Private", currency: "MYR", website: "https://www.uniten.edu.my",
+    university: "Universiti Tenaga Nasional (UNITEN)", shortName: "UNITEN", type: "Private", currency: "MYR", website: "https://www.uniten.edu.my", location: "Selangor", intakes: "Jan, May, Sep",
     programmes: {
-      "Bachelor of Engineering (Electrical & Electronics / Power / Mechanical / Civil) (Hons)": "85,000",
-      "Bachelor of Accounting (Hons)": "73,300",
-      "Bachelor of Computer Science / Information Technology (All Specialisations) (Hons)": "66,500",
-      "Bachelor of Economics (Energy) / Business Economics (Hons)": "62,400",
-      "Bachelor of Finance / International Business / Business Administration (All Specialisations) (Hons)": "57,600",
-      "Master of Energy Management (Coursework & Project)": "48,000",
-      "PhD in Engineering / Industrial Science": "36,750",
-      "Master of Business Administration / Engineering Management (Coursework & Project)": "34,350",
-      "Diploma in Computer Science": "32,800",
-      "Diploma in Mechanical Engineering / Electrical Engineering / Accountancy": "31,800",
-      "PhD in Information and Communication Technology / Business Management": "29,925",
-      "Diploma in Financial Technology / Digital Business": "28,900",
-      "Diploma in Business Studies": "28,800",
-      "Master of Electrical Engineering / Information Technology (Coursework & Research)": "27,700",
-      "Master of Structural Engineering (Coursework & Project)": "27,700",
-      "Foundation in Engineering": "21,800",
-      "Foundation in (Computer Science / IT / Accounting / Business / Economics)": "19,800",
-      "Master by Research (All Specialisations)": "14,400"
+      "Bachelor of Engineering (Electrical / Power / Mechanical)": "85,000 (Total)",
+      "Bachelor of Computer Science / IT": "66,500 (Total)",
+      "Bachelor of Accounting (Hons)": "73,300 (Total)",
+      "Master of Energy Management": "48,000 (Total)",
+      "PhD in Engineering / Industrial Science": "36,750 (Total)"
     }
   },
   {
-    university: "Universiti Tun Abdul Razak (UNIRAZAK)", shortName: "UniRazak", type: "Private", currency: "MYR", website: "https://unirazak.edu.my",
+    university: "Universiti Tun Abdul Razak (UNIRAZAK)", shortName: "UniRazak", type: "Private", currency: "MYR", website: "https://unirazak.edu.my", location: "Kuala Lumpur", intakes: "Jan, May, Sep",
     programmes: {
-      "Foundation in Arts": "24,600",
-      "Diploma in Management": "40,600",
-      "Diploma in Information Technology": "19,500",
-      "Diploma in Social Work (Conventional)": "40,600",
-      "Diploma in Early Childhood Education": "19,500",
-      "Diploma in Psychology": "19,500",
-      "Bachelor of Business Administration (Islamic Banking & Finance) (Honours)": "60,600",
-      "Bachelor of Business (Honours) in Business Analytics and Digital Marketing": "60,600",
-      "Bachelor of Business Administration (Honours) (Majors: FinTech, AI, etc.)": "60,600",
-      "Bachelor of Management (Honours) (Majors: Marketing, Entrepreneurship, etc.)": "60,600",
-      "Bachelor of Information Technology (Honours) (Majors: Computer Forensic, SE, etc.)": "38,500",
-      "Bachelor of Business Management (Honours) Entrepreneurship (Conventional)": "41,500",
-      "Bachelor of Accounting (Honours) (Accredited by CPA Australia)": "120,600",
-      "Bachelor in Accounting (Honours)": "36,500",
-      "Bachelor of Economics (Honours) (Conventional)": "36,500",
-      "Bachelor of Arts in Governance & Public Policy (Honours) (Conventional)": "36,500",
-      "Bachelor of Arts in Public Management (Honours) (Open Distance Learning)": "36,500",
-      "Bachelor of Taxation (Honours) (Conventional)": "36,500",
-      "Bachelor of Education (Early Childhood Education) (Honours)": "36,500",
-      "Bachelor of Psychology (Honours)": "36,500",
-      "Bachelor of Education (Honours)": "36,500",
-      "Postgraduate Diploma in Education (Open Distance Learning)": "9,000",
-      "Master in Strategic Human Resource Management": "43,600",
-      "Master in Business Administration": "43,600",
-      "Master in Management": "20,250",
-      "Master of Education": "14,500",
-      "Master of Philosophy": "28,500",
-      "Master of Public Management": "43,600",
-      "Master of Public Policy": "43,600",
-      "Doctor of Philosophy in Education": "50,600",
-      "Doctor of Philosophy": "28,500",
-      "Doctor of Business Administration": "40,500"
+      "Bachelor of Business Administration (Global)": "60,600 (Total)",
+      "Bachelor of Accounting (Honours)": "120,600 (Total)",
+      "Master in Strategic Human Resource Management": "43,600 (Total)",
+      "Doctor of Philosophy (Education / Business)": "28,500 - 50,600"
     }
   },
   {
-    university: "UCSI University", shortName: "UCSI", type: "Private", currency: "MYR", website: "https://www.ucsiuniversity.edu.my",
+    university: "UCSI University", shortName: "UCSI", type: "Private", currency: "MYR", website: "https://www.ucsiuniversity.edu.my", location: "Kuala Lumpur", intakes: "Jan, May, Sep",
     programmes: {
-      "Doctor of Medicine": "341,340",
-      "Bachelor of Pharmacy (Hons)": "160,698",
-      "Bachelor of Optometry (Hons)": "102,750",
-      "BSc (Hons) Nutrition with Wellness": "99,600",
-      "Bachelor of Computer Engineering (Artificial Intelligence) with Honours": "97,345",
-      "BSc (Hons) Biotechnology": "92,570",
-      "Bachelor of Quantity Surveying (Hons)": "91,144",
-      "Bachelor of Environmental Engineering with Honours": "90,470",
-      "BMus (Hons) Classical Music / Contemporary Music": "89,180",
-      "Bachelor of Energy Engineering with Honours": "88,990",
-      "Bachelor of Petroleum Engineering with Honours": "88,820",
-      "Bachelor of Civil Engineering with Honours": "88,635",
-      "Bachelor of Chemical Engineering with Honours": "87,170",
-      "Bachelor of Architecture (BSc Hons)": "83,110",
-      "BSc (Hons) Food Science with Nutrition": "83,060",
-      "Bachelor of Mechatronic Engineering with Honours": "82,715",
-      "Bachelor of Mechanical Engineering with Honours": "82,480",
-      "Bachelor of Electrical and Electronic Engineering with Honours": "82,205",
-      "BSc (Hons) Forensic Science": "82,110",
-      "BSc (Hons) Aquatic Science": "81,720",
-      "Bachelor of Formulation Science (Honours)": "81,330",
-      "BSc (Hons) Applied Microbiology": "80,365",
-      "BSc (Hons) Actuarial Science with Data Analytics": "79,350",
-      "Bachelor of Nursing (Hons)": "74,010",
-      "BA (Hons) Culinary Management (KL Campus)": "73,100",
-      "BA (Hons) Interior Architecture": "73,000",
-      "Bachelor of Hospitality Administration": "72,050",
-      "BA (Hons) Fashion Design with Marketing": "71,850",
-      "BA (Hons) Hospitality Management (Springhill Campus)": "71,941",
-      "BCA (Hons) 3D Animation Design": "70,850",
-      "BSc (Hons) Actuarial Science / Actuarial Science & Finance": "68,900",
-      "BA (Hons) Psychology": "68,730",
-      "BA (Hons) Game Design": "68,415",
-      "BA (Hons) Mass Communication": "68,330",
-      "BA (Hons) Multimedia Design": "68,070",
-      "Bachelor of Arts (Honours) Entrepreneurship": "67,950",
-      "Bachelor of International and Sustainable Business (Honours)": "67,440",
-      "BA (Hons) Accounting / Accounting & Finance": "67,380",
-      "Bachelor of Financial Technology (Honours)": "66,490",
-      "Bachelor of Computer Science (Honours) / Mobile Computing / Business Information System": "65,820",
-      "BA (Hons) Branding & Advertising": "65,550",
-      "BSc (Hons) Finance & Investment / BA (Hons) Marketing / Logistics Management": "65,400 – 65,490",
-      "Bachelor of Computer Science in Data Science with Honours": "69,040",
-      "BA (Hons) English Language and Communication": "61,300",
-      "Diploma in Nursing": "54,140",
-      "Diploma in Pharmacy / Cosmetic Science / Packaging Science": "51,510 – 51,650",
-      "Diploma in Music Performance": "51,240",
-      "Diploma in Fashion Design": "48,420",
-      "Diploma in Architectural Studies": "49,995",
-      "Diploma in Interior Architecture": "46,395",
-      "Diploma of Engineering Technology (Industrial Design)": "45,530",
-      "Foundation in Science / Music": "20,700 – 24,200",
-      "Foundation in Arts": "20,000",
-      "Doctor of Philosophy (Medical Sciences)": "68,900",
-      "Doctor of Philosophy (Business and Management)": "45,468 (53,343 with bridging)",
-      "Doctor of Business Administration (DBA)": "71,600 (82,100 with bridging)",
-      "Doctor of Philosophy in Hospitality and Tourism": "60,000",
-      "Master of Clinical Psychology": "56,350 (61,550 with bridging)",
-      "Master of Business Administration (MBA)": "43,760 (47,240 with bridging)"
+      "Doctor of Medicine": "341,340 (Total)",
+      "Bachelor of Pharmacy (Hons)": "160,698 (Total)",
+      "Bachelor of Actuarial Science": "68,900 (Total)",
+      "Bachelor of Architecture": "83,110 (Total)",
+      "PhD in Medical Sciences / Business": "45,468 - 68,900"
     }
   }
 ];
@@ -1999,9 +1825,17 @@ function App() {
   const [selectedMode, setSelectedMode] = React.useState(""); 
   const [selectedDuration, setSelectedDuration] = React.useState(""); 
   const [selectedAccreditation, setSelectedAccreditation] = React.useState("");
+  const [selectedLocation, setSelectedLocation] = React.useState("");
+  const [selectedIntake, setSelectedIntake] = React.useState("");
+  
   const [sortOption, setSortOption] = React.useState("default"); 
   const [lang, setLang] = React.useState("en");
   const [darkMode, setDarkMode] = React.useState(false);
+  const [currency, setCurrency] = React.useState("MYR");
+  
+  const [visibleCount, setVisibleCount] = React.useState(20);
+  const [shortlist, setShortlist] = React.useState([]);
+  const [showCompareModal, setShowCompareModal] = React.useState(false);
 
   const t = (en, ar) => (lang === "en" ? en : ar);
 
@@ -2025,24 +1859,34 @@ function App() {
     }
   };
 
-  // Helper to determine if a programme matches a specific study level
+  const handleShortlist = (u, progName, price, specs) => {
+    const isSelected = shortlist.some(item => item.id === `${u.shortName}-${progName}`);
+    if (isSelected) {
+      setShortlist(shortlist.filter(item => item.id !== `${u.shortName}-${progName}`));
+    } else {
+      if (shortlist.length >= 4) {
+        alert(t("You can only compare up to 4 programs.", "يمكنك مقارنة حتى 4 برامج فقط."));
+        return;
+      }
+      setShortlist([...shortlist, { 
+        id: `${u.shortName}-${progName}`,
+        uniName: u.university, uniShort: u.shortName, progName, price, 
+        baseCurrency: u.currency,
+        duration: specs.duration, ielts: specs.ielts 
+      }]);
+    }
+  };
+
   const levelMatch = (progName, level) => {
     if (!level) return true;
     const lowerName = progName.toLowerCase();
-    
-    if (level === "Foundation") {
-      return lowerName.includes("foundation") || lowerName.includes("certificate") || lowerName.includes("a-level") || lowerName.includes("ausmat");
-    }
-    if (level === "Diploma") {
-      return lowerName.includes("diploma") && !lowerName.includes("postgraduate");
-    }
+    if (level === "Foundation") return lowerName.includes("foundation") || lowerName.includes("certificate") || lowerName.includes("a-level") || lowerName.includes("ausmat");
+    if (level === "Diploma") return lowerName.includes("diploma") && !lowerName.includes("postgraduate");
     if (level === "Bachelor") {
       if (lowerName.includes("doctor of medicine") || lowerName.includes("doctor of dental")) return true;
       return lowerName.includes("bachelor") || lowerName.includes("degree") || /\b(bsc|ba|beng|bba|bca|bmus|bds|mbbs|md)\b/.test(lowerName);
     }
-    if (level === "Master") {
-      return lowerName.includes("master") || lowerName.includes("postgraduate") || /\b(msc|mba|mmed|mphil|ma)\b/.test(lowerName);
-    }
+    if (level === "Master") return lowerName.includes("master") || lowerName.includes("postgraduate") || /\b(msc|mba|mmed|mphil|ma)\b/.test(lowerName);
     if (level === "PhD") {
       if (lowerName.includes("doctor of medicine") || lowerName.includes("doctor of dental")) return false;
       return lowerName.includes("doctor") || lowerName.includes("phd") || /\b(dba|edd|deng|dtm|drph)\b/.test(lowerName);
@@ -2050,39 +1894,72 @@ function App() {
     return true;
   };
 
-  // Helper to extract numeric price for sorting
+  /* ============================================
+     FIXED PRICE NORMALIZATION & CONVERSION
+  ============================================ */
   const getPriceNum = (str) => {
     if (!str) return Infinity;
     const firstPart = str.split('-')[0]; 
     const match = firstPart.replace(/,/g, '').match(/\d+(\.\d+)?/);
     let val = match ? parseFloat(match[0]) : Infinity;
-    if (str.includes("USD")) val *= 4.5; // rough conversion to RM to keep sorting accurate
-    return isNaN(val) ? Infinity : val;
+    
+    if (val === Infinity) return val;
+
+    const lower = str.toLowerCase();
+    // Normalization: 2 semesters per year for fair sorting
+    if (lower.includes("semester") || lower.includes("sem")) {
+      return val * 2; 
+    }
+    return val;
   };
 
-  // Derive which programmes match the current filters
-  const matchingUniversities = React.useMemo(() => {
-    let universities = JSON.parse(JSON.stringify(rawData)); // deep copy
+  const formatPrice = (priceStr, baseCurrency, targetCurrency) => {
+    if (!priceStr) return t("Check Website", "راجع الموقع");
+    
+    // 1. Extract raw numeric part
+    const match = priceStr.replace(/,/g, '').match(/\d+(\.\d+)?/);
+    if (!match) return priceStr;
+    let num = parseFloat(match[0]);
 
-    // Note: expandKeywords doesn't return an array, it returns a string with appended synonyms
-    // To handle accurate searching, we process token by token
+    // 2. Convert based on constant rate 4.5
+    let converted = num;
+    const rate = 4.5;
+    if (baseCurrency === "MYR" && targetCurrency === "USD") converted = num / rate;
+    if (baseCurrency === "USD" && targetCurrency === "MYR") converted = num * rate;
+
+    const formattedNum = new Intl.NumberFormat('en-US', { 
+      style: 'currency', 
+      currency: targetCurrency, 
+      maximumFractionDigits: 0 
+    }).format(converted);
+
+    // 3. Append Suffix & Translate Context
+    let suffix = "";
+    const lower = priceStr.toLowerCase();
+    if (lower.includes("semester")) suffix = lang === "ar" ? " (لكل فصل)" : " (Per Sem)";
+    else if (lower.includes("year")) suffix = lang === "ar" ? " (سنوياً)" : " (Per Year)";
+    else if (lower.includes("total")) suffix = lang === "ar" ? " (الإجمالي)" : " (Total)";
+
+    return `${formattedNum}${suffix}`;
+  };
+
+  const matchingUniversities = React.useMemo(() => {
+    let universities = JSON.parse(JSON.stringify(rawData)); 
+
     const searchTokens = search.toLowerCase().trim().split(/\s+/).filter(k => k.length > 0);
     const specKeywords = (selectedSpecialty && SPECIALTIES[selectedSpecialty]) ? SPECIALTIES[selectedSpecialty].keywords : null;
 
     universities.forEach(u => {
-      // 1. Institution Type Match (Public/Private)
       const uniType = universityTypes[u.shortName] || u.type;
-      if (selectedType && uniType !== selectedType) {
-        u.programmes = {};
-        return;
-      }
+      
+      if (selectedType && uniType !== selectedType) { u.programmes = {}; return; }
+      if (selectedLocation && u.location !== selectedLocation) { u.programmes = {}; return; }
+      if (selectedIntake && (!u.intakes || !u.intakes.includes(selectedIntake))) { u.programmes = {}; return; }
 
-      // 2. Accreditation (Allowed Universities check)
       if (selectedAccreditation) {
         const rules = ACCREDITATION_RULES[selectedAccreditation];
         if (rules.allowedUnis && !rules.allowedUnis.includes(u.shortName)) {
-          u.programmes = {};
-          return;
+          u.programmes = {}; return;
         }
       }
 
@@ -2092,70 +1969,47 @@ function App() {
 
       for (const [progName, price] of Object.entries(u.programmes)) {
         const lowerName = progName.toLowerCase();
-        const specs = getProgramSpecs(progName, "en"); // Get duration/IELTS info
+        const specs = getProgramSpecs(progName, "en"); 
         
-        // 3. Level Match
         if (selectedLevel && !levelMatch(progName, selectedLevel)) continue;
-
-        // 4. Specialty Match
         if (specKeywords && !specKeywords.some(kw => lowerName.includes(kw))) continue;
 
-        // 5. Smart Keyword Search Match (Token by Token + Synonyms)
         if (searchTokens.length > 0) {
           const translatedP = translateProgramName(progName, "ar").toLowerCase();
-          
-          // For every token the user typed, check if the program name contains AT LEAST ONE synonym
           const matchesSearch = searchTokens.every(token => {
              const synonymsForToken = getSynonyms(token);
              return synonymsForToken.some(syn => lowerName.includes(syn) || translatedP.includes(syn));
           });
-
           if (!matchesSearch) continue;
         }
 
-        // 6. Duration Match
         if (selectedDuration && !specs.duration.includes(selectedDuration)) continue;
 
-        // 7. Study Mode Match
         if (selectedMode) {
           const isPostGrad = lowerName.includes("master") || lowerName.includes("phd") || lowerName.includes("doctor");
           if (selectedMode === "Research" && !lowerName.includes("research")) continue;
           if (selectedMode === "Mixed" && !lowerName.includes("mixed")) continue;
           if (selectedMode === "Coursework") {
-            // If it's Master/PhD, it MUST explicitly state coursework unless we want to be generous.
-            // But if it's Bachelor/Diploma, it's inherently coursework so let it pass.
-            if (isPostGrad && !lowerName.includes("coursework") && !lowerName.includes("mixed") && lowerName.includes("research")) {
-              continue; 
-            }
+            if (isPostGrad && !lowerName.includes("coursework") && !lowerName.includes("mixed") && lowerName.includes("research")) continue; 
             if (isPostGrad && lowerName.includes("research")) continue;
           }
         }
 
-        // 8. Accreditation Rules check on programs
         if (selectedAccreditation === "Oman") {
-          // Rule: Block MBBS/MD unless it's a PhD
-          if ((lowerName.includes("mbbs") || lowerName.includes("doctor of medicine") || lowerName.includes("bachelor of medicine") || lowerName.includes("dental surgery")) && !lowerName.includes("phd")) {
-            continue;
-          }
-          // Rule: APU only PhD
+          if ((lowerName.includes("mbbs") || lowerName.includes("doctor of medicine") || lowerName.includes("bachelor of medicine") || lowerName.includes("dental surgery")) && !lowerName.includes("phd")) continue;
           if (u.shortName === "APU" && !levelMatch(progName, "PhD")) continue;
-          // Rule: UCSI no DBA
           if (u.shortName === "UCSI" && (lowerName === "dba" || lowerName.includes("doctor of business administration"))) continue;
         }
-
         if (selectedAccreditation === "Saudi Arabia") {
-          // Rule: No ODL or Online
-          if (lowerName.includes("odl") || lowerName.includes("online") || lowerName.includes("on-line") || lowerName.includes("distance")) {
-            continue;
-          }
+          if (lowerName.includes("odl") || lowerName.includes("online") || lowerName.includes("on-line") || lowerName.includes("distance")) continue;
         }
 
-        // Price calculations for smart sorting
-        const numPrice = getPriceNum(price);
+        let numPrice = getPriceNum(price);
+        if (numPrice !== Infinity && u.currency === "USD") numPrice *= 4.5;
+        
         if (numPrice < minPriceForUni) minPriceForUni = numPrice;
         if (numPrice !== Infinity && numPrice > maxPriceForUni) maxPriceForUni = numPrice;
 
-        // If all filters pass, keep the programme
         filteredProgs[progName] = price;
       }
       
@@ -2164,66 +2018,40 @@ function App() {
       u.maxPrice = maxPriceForUni === -Infinity ? Infinity : maxPriceForUni;
     });
 
-    // Remove universities that have 0 matched programmes
     universities = universities.filter(u => Object.keys(u.programmes).length > 0);
 
-    // Sort Universities
     if (sortOption === "default") return universities;
-
     return universities.sort((a, b) => {
-      if (sortOption === "type") {
-        const typeA = universityTypes[a.shortName] || a.type;
-        const typeB = universityTypes[b.shortName] || b.type;
-        return typeA.localeCompare(typeB);
-      }
-      if (sortOption === "priceAsc") {
-        return a.minPrice - b.minPrice;
-      }
+      if (sortOption === "type") return (universityTypes[a.shortName] || a.type).localeCompare(universityTypes[b.shortName] || b.type);
+      if (sortOption === "priceAsc") return a.minPrice - b.minPrice;
       if (sortOption === "priceDesc") {
-        // High to Low: push Infinity (unlisted prices) to the bottom
         const aVal = a.maxPrice === Infinity ? -1 : a.maxPrice;
         const bVal = b.maxPrice === Infinity ? -1 : b.maxPrice;
         return bVal - aVal;
       }
       return 0;
     });
-  }, [search, selectedSpecialty, selectedLevel, selectedType, selectedMode, selectedDuration, selectedAccreditation, sortOption]);
+  }, [search, selectedSpecialty, selectedLevel, selectedType, selectedMode, selectedDuration, selectedAccreditation, selectedLocation, selectedIntake, sortOption, currency, lang]);
+
+  const displayedUniversities = matchingUniversities.slice(0, visibleCount);
 
   const downloadCSV = () => {
     if (matchingUniversities.length === 0) return;
-
-    // Define headers
-    const headers = [
-      "University", 
-      "Type", 
-      "Programme", 
-      "Duration", 
-      "IELTS Requirement", 
-      "Price"
-    ];
-    
+    const headers = ["University", "Location", "Intakes", "Type", "Programme", "Duration", "IELTS Requirement", `Price (${currency})`];
     const rows = [];
 
-    // Populate rows based on the filtered results shown on screen
     matchingUniversities.forEach(u => {
       const uniType = universityTypes[u.shortName] || u.type;
-      
       Object.entries(u.programmes).forEach(([progName, priceStr]) => {
-        // Use English for the CSV to keep it universally readable
         const specs = getProgramSpecs(progName, "en"); 
-        
+        const formattedPrice = formatPrice(priceStr, u.currency, currency);
         rows.push([
-          `"${u.university}"`,
-          `"${uniType}"`,
-          `"${progName}"`,
-          `"${specs.duration}"`,
-          `"${specs.ielts}"`,
-          `"${priceStr}"`
+          `"${u.university}"`, `"${u.location || ''}"`, `"${u.intakes || ''}"`, `"${uniType}"`,
+          `"${progName}"`, `"${specs.duration}"`, `"${specs.ielts}"`, `"${formattedPrice}"`
         ].join(","));
       });
     });
 
-    // Create and trigger CSV download
     const csvContent = headers.join(",") + "\n" + rows.join("\n");
     const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
     const url = URL.createObjectURL(blob);
@@ -2239,34 +2067,17 @@ function App() {
     ? "https://image2url.com/r2/default/images/1773802956881-f5bfcde7-3167-4dea-962a-7b999e8bb9fb.png" 
     : "https://marine-white-7l1epbg2wn.edgeone.app/cropped-Untitled-design-1_prev_ui-removebg-preview.png";
 
-  // LOGIN SCREEN
   if (!isAuthenticated) {
     return (
       <div className="theme-wrapper" dir={lang === "ar" ? "rtl" : "ltr"} style={{ display: "flex", alignItems: "center", justifyContent: "center", minHeight: "100vh", padding: "20px" }}>
         <div className="login-box" style={{ maxWidth: "480px" }}>
           
-          {/* Top Row: Language Button + Logo + Dark Mode Button */}
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "20px" }}>
-            <button 
-              className="lang-btn" 
-              style={{ padding: "10px 15px", fontSize: "13px", margin: 0 }}
-              onClick={() => setLang(lang === "en" ? "ar" : "en")}
-            >
+            <button className="lang-btn" style={{ padding: "10px 15px", fontSize: "13px", margin: 0 }} onClick={() => setLang(lang === "en" ? "ar" : "en")}>
               {t("عربي", "English")}
             </button>
-            
-            <img 
-              className="header-logo" 
-              style={{ width: "90px", height: "90px", margin: "0 10px", objectFit: "contain" }} 
-              src={logoSrc} 
-              alt="Logo" 
-            />
-            
-            <button 
-              className="mode-btn" 
-              style={{ padding: "10px 15px", fontSize: "13px", margin: 0 }}
-              onClick={() => setDarkMode(!darkMode)}
-            >
+            <img className="header-logo" style={{ width: "90px", height: "90px", margin: "0 10px", objectFit: "contain" }} src={logoSrc} alt="Logo" />
+            <button className="mode-btn" style={{ padding: "10px 15px", fontSize: "13px", margin: 0 }} onClick={() => setDarkMode(!darkMode)}>
               {darkMode ? t("Light Mode", "وضع النهار") : t("Dark Mode", "وضع الليل")}
             </button>
           </div>
@@ -2275,11 +2086,9 @@ function App() {
           <p style={{margin: "0 0 20px 0", fontSize: "14px", opacity: 0.8}}>{t("Malaysia University Finder", "نظام البحث عن الجامعات الماليزية")}</p>
           <form onSubmit={handleLogin}>
             <input 
-              type="password" 
-              className="login-input" 
+              type="password" className="login-input" 
               placeholder={t("Enter Pin Code", "أدخل الرمز السري")} 
-              value={passwordInput}
-              onChange={(e) => setPasswordInput(e.target.value)}
+              value={passwordInput} onChange={(e) => setPasswordInput(e.target.value)}
             />
             {passError && <div className="login-error">{t("Incorrect PIN. Try again.", "الرمز السري خاطئ. حاول مرة أخرى.")}</div>}
             <button type="submit" className="login-btn">{t("Login", "دخول")}</button>
@@ -2289,13 +2098,11 @@ function App() {
     );
   }
 
-  // MAIN APP SCREEN
   return (
     <div className="theme-wrapper" dir={lang === "ar" ? "rtl" : "ltr"}>
       <div className="app-container">
         
         <div className="main-content">
-          {/* HEADER */}
           <div className="header-box">
             <img className="header-logo" src={logoSrc} alt="Logo" />
             <h1 className="header-title">{t("Malaysia University Programme Finder", "البحث عن البرامج الجامعية في ماليزيا")}</h1>
@@ -2305,21 +2112,17 @@ function App() {
             {t("Search any program to see all universities offering it side-by-side.", "ابحث عن أي برنامج لرؤية جميع الجامعات التي تقدمه جنبًا إلى جنب.")}
           </p>
 
-          {/* TOGGLE BUTTONS */}
           <div className="controls-row">
-            <button className="lang-btn" onClick={() => setLang(lang === "en" ? "ar" : "en")}>
-              {t("عربي", "English")}
-            </button>
-            <button className="mode-btn" onClick={() => setDarkMode(!darkMode)}>
-              {darkMode ? t("Light Mode", "وضع النهار") : t("Dark Mode", "وضع الليل")}
-            </button>
+            <select className="currency-btn" value={currency} onChange={e => setCurrency(e.target.value)}>
+              <option value="MYR">MYR (RM)</option>
+              <option value="USD">USD ($)</option>
+            </select>
+            <button className="lang-btn" onClick={() => setLang(lang === "en" ? "ar" : "en")}>{t("عربي", "English")}</button>
+            <button className="mode-btn" onClick={() => setDarkMode(!darkMode)}>{darkMode ? t("Light Mode", "وضع النهار") : t("Dark Mode", "وضع الليل")}</button>
           </div>
 
-          {/* SEARCH AREA (GRID) */}
           <div className="input-card">
             <div className="filter-grid">
-              
-              {/* Accreditation */}
               <div>
                 <label className="input-label">{t("Accreditation", "الاعتماد الأكاديمي")}</label>
                 <select className="select-box" value={selectedAccreditation} onChange={(e) => setSelectedAccreditation(e.target.value)}>
@@ -2330,7 +2133,6 @@ function App() {
                 </select>
               </div>
 
-              {/* Specialty / Field of Study */}
               <div>
                 <label className="input-label">{t("Field of Study / Specialty", "التخصص الدراسي")}</label>
                 <select className="select-box" value={selectedSpecialty} onChange={(e) => setSelectedSpecialty(e.target.value)}>
@@ -2341,7 +2143,6 @@ function App() {
                 </select>
               </div>
 
-              {/* Level */}
               <div>
                 <label className="input-label">{t("Study Level", "مستوى الدراسة")}</label>
                 <select className="select-box" value={selectedLevel} onChange={(e) => setSelectedLevel(e.target.value)}>
@@ -2354,7 +2155,6 @@ function App() {
                 </select>
               </div>
 
-              {/* Institution Type */}
               <div>
                 <label className="input-label">{t("Institution Type", "نوع المؤسسة")}</label>
                 <select className="select-box" value={selectedType} onChange={(e) => setSelectedType(e.target.value)}>
@@ -2364,18 +2164,32 @@ function App() {
                 </select>
               </div>
 
-              {/* Study Mode */}
               <div>
-                <label className="input-label">{t("Study Mode", "نظام الدراسة")}</label>
-                <select className="select-box" value={selectedMode} onChange={(e) => setSelectedMode(e.target.value)}>
-                  <option value="">{t("All Modes", "جميع الأنظمة")}</option>
-                  <option value="Coursework">{t("Coursework", "مواد دراسية")}</option>
-                  <option value="Research">{t("Research", "بحث علمي")}</option>
-                  <option value="Mixed">{t("Mixed Mode", "نظام مختلط")}</option>
+                <label className="input-label">{t("Location", "الموقع")}</label>
+                <select className="select-box" value={selectedLocation} onChange={(e) => setSelectedLocation(e.target.value)}>
+                  <option value="">{t("All Locations", "جميع المواقع")}</option>
+                  <option value="Kuala Lumpur">{t("Kuala Lumpur", "كوالالمبور")}</option>
+                  <option value="Selangor">{t("Selangor", "سيلانجور")}</option>
+                  <option value="Penang">{t("Penang", "بينانج")}</option>
+                  <option value="Johor">{t("Johor", "جوهور")}</option>
+                  <option value="Kedah">{t("Kedah", "قدح")}</option>
+                  <option value="Perak">{t("Perak", "بيراك")}</option>
+                  <option value="Negeri Sembilan">{t("Negeri Sembilan", "نجري سمبيلان")}</option>
+                  <option value="Melaka">{t("Melaka", "ملاكا")}</option>
+                  <option value="Pahang">{t("Pahang", "باهانج")}</option>
                 </select>
               </div>
 
-              {/* Duration */}
+              <div>
+                <label className="input-label">{t("Intake Month", "شهر القبول")}</label>
+                <select className="select-box" value={selectedIntake} onChange={(e) => setSelectedIntake(e.target.value)}>
+                  <option value="">{t("Any Intake", "أي قبول")}</option>
+                  {["Jan", "Feb", "Mar", "May", "Jul", "Sep", "Oct", "Nov"].map(m => (
+                     <option key={m} value={m}>{t(m, translateIntakes(m, 'ar'))}</option>
+                  ))}
+                </select>
+              </div>
+
               <div>
                 <label className="input-label">{t("Duration (Years)", "مدة الدراسة")}</label>
                 <select className="select-box" value={selectedDuration} onChange={(e) => setSelectedDuration(e.target.value)}>
@@ -2388,7 +2202,16 @@ function App() {
                 </select>
               </div>
 
-              {/* Keyword */}
+              <div>
+                <label className="input-label">{t("Study Mode", "نظام الدراسة")}</label>
+                <select className="select-box" value={selectedMode} onChange={(e) => setSelectedMode(e.target.value)}>
+                  <option value="">{t("All Modes", "جميع الأنظمة")}</option>
+                  <option value="Coursework">{t("Coursework", "مواد دراسية")}</option>
+                  <option value="Research">{t("Research", "بحث علمي")}</option>
+                  <option value="Mixed">{t("Mixed Mode", "نظام مختلط")}</option>
+                </select>
+              </div>
+
               <div style={{ gridColumn: "1 / -1" }}>
                 <label className="input-label">{t("Keyword Search", "البحث السريع")}</label>
                 <input
@@ -2403,14 +2226,12 @@ function App() {
             </div>
           </div>
 
-          {/* ACCREDITATION NOTICES */}
           {selectedAccreditation && ACCREDITATION_RULES[selectedAccreditation] && (
             <div className="accreditation-notice">
               {t(ACCREDITATION_RULES[selectedAccreditation].notice.en, ACCREDITATION_RULES[selectedAccreditation].notice.ar)}
             </div>
           )}
 
-          {/* RESULTS TITLE & SORT BAR */}
           <div className="filter-bar">
              <h2 className="result-title">
                {t("Matching Universities:", "الجامعات المطابقة:")} <span className="result-highlight">{matchingUniversities.length}</span>
@@ -2434,54 +2255,146 @@ function App() {
              )}
           </div>
 
-          {/* RESULTS AREA */}
           {matchingUniversities.length === 0 ? (
             <p className="no-result">
               {t("No universities found for this specific search.", "لم يتم العثور على جامعات لهذا البحث المحدد.")}
             </p>
           ) : (
-            <div className="uni-grid">
-              {matchingUniversities.map((u) => (
-                <div key={u.university} className="uni-card">
-                  <div className="uni-name">{u.university}</div>
-                  
-                  <div className="uni-small">
-                    <strong>{t("Type", "النوع")}:</strong> {universityTypes[u.shortName] || u.type}
-                  </div>
+            <>
+              <div className="uni-grid">
+                {displayedUniversities.map((u) => {
+                  const firstProg = Object.keys(u.programmes)[0] || "";
+                  const waText = encodeURIComponent(t(
+                      `Hello, I am interested in the ${firstProg} at ${u.university}. Could you provide more details?`,
+                      `مرحباً، أنا مهتم ببرنامج ${translateProgramName(firstProg, 'ar')} في ${u.university}. هل يمكنك تقديم المزيد من التفاصيل؟`
+                  ));
 
-                  <div className="prog-list">
-                    {Object.entries(u.programmes).map(([progName, priceStr]) => {
-                      const specs = getProgramSpecs(progName, lang);
-                      return (
-                      <div key={progName} className="prog-item">
-                        <div className="prog-item-title">
-                          {translateProgramName(progName, lang)}
-                        </div>
-                        
-                        <div className="prog-item-specs">
-                          <span className="spec-badge">⏳ {t("Duration:", "المدة:")} {specs.duration}</span>
-                          <span className="spec-badge">📝 {t("IELTS:", "الآيلتس:")} {specs.ielts}</span>
-                        </div>
-
-                        <div className="prog-item-price">
-                          {priceStr.includes("USD") || priceStr.includes("MYR") || priceStr.includes("RM") || priceStr.includes("Credits") 
-                            ? priceStr 
-                            : priceStr + " " + u.currency}
+                  return (
+                    <div key={u.university} className="uni-card">
+                      <div className="uni-header">
+                        <img className="uni-logo" src={`https://ui-avatars.com/api/?name=${u.shortName}&background=random&color=fff&font-size=0.4`} alt={u.shortName} />
+                        <div>
+                          <div className="uni-name">{u.university}</div>
+                          <div className="uni-small"><strong>{t("Type", "النوع")}:</strong> {universityTypes[u.shortName] || u.type}</div>
+                          <div className="uni-small"><strong>{t("Location", "الموقع")}:</strong> {translateLocation(u.location, lang) || t("Malaysia", "ماليزيا")}</div>
+                          <div className="uni-small"><strong>{t("Intakes", "مواعيد القبول")}:</strong> {translateIntakes(u.intakes, lang) || t("Check Website", "راجع الموقع")}</div>
                         </div>
                       </div>
-                    )})}
-                  </div>
-                  
-                  <a href={u.website} target="_blank" rel="noopener noreferrer" className="website-link">
-                    {t("Visit Website", "زيارة الموقع")}
-                  </a>
+
+                      <div className="prog-list">
+                        {Object.entries(u.programmes).map(([progName, priceStr]) => {
+                          const specs = getProgramSpecs(progName, lang);
+                          const isShortlisted = shortlist.some(item => item.id === `${u.shortName}-${progName}`);
+                          const ieltsWa = encodeURIComponent(t(
+                            `Hello, I need help reaching an IELTS score of ${specs.ielts} for ${progName} at ${u.shortName}.`,
+                            `مرحباً، أحتاج مساعدة للوصول لدرجة ${specs.ielts} في الآيلتس لبرنامج ${translateProgramName(progName, 'ar')} في ${u.shortName}.`
+                          ));
+
+                          return (
+                          <div key={progName} className="prog-item">
+                            <div className="prog-item-header">
+                              <div className="prog-item-title">{translateProgramName(progName, lang)}</div>
+                              <input 
+                                type="checkbox" 
+                                className="compare-checkbox" 
+                                checked={isShortlisted} 
+                                onChange={() => handleShortlist(u, progName, priceStr, specs)}
+                                title={t("Shortlist to Compare", "إضافة للمقارنة")}
+                              />
+                            </div>
+                            
+                            <div className="prog-item-price">
+                              {formatPrice(priceStr, u.currency, currency)}
+                            </div>
+
+                            <div className="prog-item-specs">
+                              <span className="spec-badge">⏳ {t("Duration:", "المدة:")} {specs.duration}</span>
+                              <div style={{display:'flex', flexDirection:'column'}}>
+                                <span className="spec-badge">📝 {t("IELTS:", "الآيلتس:")} {specs.ielts}</span>
+                                {specs.ielts && specs.ielts !== "Check Website" && specs.ielts !== "راجع الموقع" && (
+                                  <a href={`https://wa.link/12k9wf?text=${ieltsWa}`} target="_blank" rel="noopener noreferrer" className="ielts-upsell">
+                                    {t("Need help reaching this score?", "هل تحتاج مساعدة للوصول لهذه الدرجة؟")}
+                                  </a>
+                                )}
+                              </div>
+                            </div>
+                          </div>
+                        )})}
+                      </div>
+                      
+                      <div className="card-actions">
+                        <a href={`https://wa.link/12k9wf?text=${waText}`} target="_blank" rel="noopener noreferrer" className="consult-btn">
+                          {t("Consult an Expert", "استشر خبيراً")}
+                        </a>
+                        <a href={u.website} target="_blank" rel="noopener noreferrer" className="website-link">
+                          {t("Visit Website", "زيارة الموقع")}
+                        </a>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+              
+              {visibleCount < matchingUniversities.length && (
+                <div style={{ textAlign: 'center', marginBottom: '40px' }}>
+                  <button className="login-btn" style={{ width: 'auto', padding: '12px 40px' }} onClick={() => setVisibleCount(c => c + 20)}>
+                    {t("Load More Universities", "عرض المزيد من الجامعات")}
+                  </button>
                 </div>
-              ))}
-            </div>
+              )}
+            </>
           )}
 
-        </div> {/* End main-content */}
+        </div> 
         
+        {/* COMPARE BAR */}
+        {shortlist.length > 0 && (
+          <div className="compare-bar">
+            <span className="compare-count">
+              {shortlist.length} / 4 {t("Programs Shortlisted", "برامج محددة")}
+            </span>
+            <button className="compare-btn" onClick={() => setShowCompareModal(true)}>
+              {t("Compare Now", "قارن الآن")}
+            </button>
+          </div>
+        )}
+
+        {/* COMPARE MODAL */}
+        {showCompareModal && (
+          <div className="modal-overlay">
+            <div className="modal-content">
+              <button className="close-modal" onClick={() => setShowCompareModal(false)}>✕</button>
+              <h2 style={{margin: '0 0 10px 0', color: 'var(--primary)'}}>{t("Program Comparison", "مقارنة البرامج")}</h2>
+              <div className="compare-table-wrapper">
+                <table className="compare-table">
+                  <thead>
+                    <tr>
+                      <th>{t("University", "الجامعة")}</th>
+                      <th>{t("Programme", "البرنامج")}</th>
+                      <th>{t("Price", "السعر")}</th>
+                      <th>{t("Duration", "المدة")}</th>
+                      <th>{t("IELTS", "الآيلتس")}</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {shortlist.map((item, idx) => (
+                      <tr key={idx}>
+                        <td><strong>{item.uniShort}</strong></td>
+                        <td>{translateProgramName(item.progName, lang)}</td>
+                        <td style={{color: 'var(--primary)', fontWeight: 'bold'}}>
+                          {formatPrice(item.price, item.baseCurrency, currency)}
+                        </td>
+                        <td>{item.duration}</td>
+                        <td>{item.ielts}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        )}
+
         {/* FOOTER */}
         <footer className="app-footer">
           Copyright © 2026 Premium Language Centre. All rights reserved.
