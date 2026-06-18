@@ -9,8 +9,11 @@
 <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
 <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
 
-<!-- Babel compiler -->
-<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+<!-- HTM (Replaces Babel to prevent local file:// security blocking) -->
+<script src="https://unpkg.com/htm/dist/htm.js"></script>
+
+<!-- Markdown Parser for AI Chat Links -->
+<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 
 <style>
 /* ==========================================================
@@ -295,6 +298,71 @@ body, html {
 .compare-table th { font-weight: 600; background: var(--bg); }
 
 /* ==========================================================
+   AI CHATBOT WIDGET
+   ========================================================== */
+.chat-widget-btn {
+  position: fixed; bottom: 85px; right: 25px;
+  background: var(--primary); color: white; border: none;
+  border-radius: 50%; width: 60px; height: 60px;
+  font-size: 28px; box-shadow: 0 4px 15px var(--shadow);
+  cursor: pointer; z-index: 1000; transition: 0.3s;
+  display: flex; align-items: center; justify-content: center;
+}
+.rtl .chat-widget-btn { right: auto; left: 25px; }
+.chat-widget-btn:hover { transform: scale(1.1); background: var(--primary-hover); }
+
+.chat-window {
+  position: fixed; bottom: 160px; right: 25px;
+  width: 350px; height: 500px; max-height: 70vh; max-width: 90vw;
+  background: var(--card-bg); border: 1px solid var(--card-border);
+  border-radius: 16px; box-shadow: 0 10px 25px var(--shadow-hover);
+  display: flex; flex-direction: column; z-index: 1000;
+  overflow: hidden; transition: 0.3s;
+}
+.rtl .chat-window { right: auto; left: 25px; }
+.chat-header {
+  background: var(--primary); color: white; padding: 15px;
+  font-weight: bold; display: flex; justify-content: space-between;
+  align-items: center;
+}
+.chat-close { background: transparent; border: none; color: white; font-size: 20px; cursor: pointer; }
+.chat-body {
+  flex: 1; overflow-y: auto; padding: 15px; display: flex; flex-direction: column; gap: 10px;
+}
+.chat-msg {
+  padding: 10px 14px; border-radius: 12px; font-size: 14px; line-height: 1.4;
+  max-width: 85%;
+}
+
+/* Markdown Styles inside Chat */
+.chat-msg p { margin: 0 0 8px 0; }
+.chat-msg p:last-child { margin: 0; }
+.chat-msg ul, .chat-msg ol { margin: 0 0 8px 0; padding-left: 20px; }
+.chat-msg li { margin-bottom: 4px; }
+.chat-msg a { text-decoration: underline; font-weight: 600; color: var(--primary); }
+.chat-msg strong { font-weight: 700; }
+
+.chat-msg.user { background: var(--primary); color: white; align-self: flex-end; border-bottom-right-radius: 2px; }
+.chat-msg.user a { color: #ffffff; }
+.chat-msg.assistant { background: var(--bg); color: var(--text); border: 1px solid var(--card-border); align-self: flex-start; border-bottom-left-radius: 2px; }
+.chat-msg.assistant a { color: var(--primary); }
+
+.chat-input-area {
+  display: flex; padding: 10px; border-top: 1px solid var(--card-border); background: var(--bg);
+}
+.chat-input {
+  flex: 1; padding: 10px; border: 1px solid var(--card-border); border-radius: 8px;
+  background: var(--card-bg); color: var(--text); font-family: inherit; font-size: 14px;
+}
+.chat-input:focus { outline: none; border-color: var(--primary); }
+.chat-send-btn {
+  background: var(--primary); color: white; border: none; padding: 10px 15px;
+  margin-left: 8px; border-radius: 8px; cursor: pointer; font-weight: bold;
+}
+.rtl .chat-send-btn { margin-left: 0; margin-right: 8px; }
+.chat-typing { font-style: italic; opacity: 0.7; font-size: 12px; }
+
+/* ==========================================================
    FOOTER
    ========================================================== */
 .app-footer {
@@ -326,7 +394,9 @@ body, html {
 <body>
 <div id="root"></div>
 
-<script type="text/babel">
+<script>
+// Bind HTM to React
+const html = htm.bind(React.createElement);
 
 /* ============================================
    PROGRAMME SPECS ESTIMATOR (Duration & IELTS)
@@ -674,7 +744,7 @@ const SPECIALTIES = {
 /* ============================================
    EXHAUSTIVE DATABASE (ALL 25 UNIVERSITIES & 1000+ COURSES)
 ============================================ */
-let rawData = [
+const rawData = [
   {
     university: "Universiti Malaya (UM)", shortName: "UM", type: "Public", currency: "MYR", website: "https://www.um.edu.my", location: "Kuala Lumpur", intakes: "Feb, Sep",
     programmes: {
@@ -788,75 +858,92 @@ let rawData = [
       "Master or PhD by Research (Social Sciences / Humanities / Languages)": "1,088.00 (Per Semester)"
     }
   },
-  {
-    university: "Universiti Kebangsaan Malaysia (UKM)", shortName: "UKM", type: "Public", currency: "MYR", website: "https://www.ukm.my", location: "Selangor", intakes: "Mar, Oct",
-    programmes: {
-      "Bachelor of Audiology with Honours": "74,250",
-      "Bachelor of Biomedical Science with Honours": "74,250",
-      "Bachelor of Optometry with Honours": "74,250",
-      "Bachelor of Speech Science with Honours": "74,250",
-      "Bachelor of Diagnostic Imaging and Radiotherapy with Honours": "74,250",
-      "Bachelor of Physiotherapy with Honours": "74,250",
-      "Bachelor of Occupational Health with Honours": "74,250",
-      "Bachelor of Dietetics with Honours": "74,250",
-      "Bachelor of Science Nutrition with Honours": "74,250",
-      "Bachelor of Environmental Health with Honours": "74,250",
-      "Bachelor of Forensic Science with Honours": "74,250",
-      "Master - Economics and Management": "18,550.00 (Research) / 14,545.00 (Mixed)",
-      "Master of Clinical Pharmacy": "37,750.00 (Research) / 14,945.00 (Mixed)",
-      "Master of Science (Pharmaceutical Analysis)": "27,750.00 (Research) / 14,945.00 (Mixed)",
-      "Master of Science (Pharmacy)": "19,750.00 (Research) / 14,945.00 (Mixed)",
-      "Master - Engineering and Built Environment": "23,030.00 (Research) / 17,985.00 (Mixed)",
-      "Master - Education": "17,750.00 (Research) / 14,145.00 (Mixed)",
-      "Master - Islamic Studies": "17,750.00 (Research) / 14,145.00 (Mixed)",
-      "Master of Clinical Dentistry": "281,175.00 (Research)",
-      "Master of Non-Clinical Dentistry": "30,910.00 (Research)",
-      "Master - Science and Technology": "21,150.00 (Research) / 14,945.00 (Mixed)",
-      "Master - Health Sciences": "19,750.00 (Research) / 14,945.00 (Mixed)",
-      "Master - Social Sciences and Humanities": "19,550.00 (Research) / 14,145.00 (Mixed)",
-      "Master - Information Science and Technology": "19,750.00 (Research) / 14,945.00 (Mixed)",
-      "Master - Law": "18,550.00 (Research) / 14,545.00 (Mixed)",
-      "Master of Clinical Medicine": "68,730.00 (Research)",
-      "Master of Non-Clinical Medicine": "30,910.00 (Research)",
-      "Master - ATMA (Malay World and Civilization)": "17,750.00 (Research) / 14,145.00 (Mixed)",
-      "Master - LESTARI (Environment and Development)": "18,550.00 (Research) / 14,545.00 (Mixed)",
-      "Master - INBIOSIS (System Biology)": "19,750.00 (Research) / 14,945.00 (Mixed)",
-      "Master - Islam Hadhari": "17,750.00 (Research) / 14,145.00 (Mixed)",
-      "Master - Ethnic Studies (KITA)": "17,750.00 (Research) / 14,145.00 (Mixed)",
-      "Master - IKMAS (Malaysia and International Studies)": "18,550.00 (Research) / 14,145.00 (Mixed)",
-      "Master - IMEN (Microengineering and Nanoelectronics)": "20,150.00 (Research) / 15,745.00 (Mixed)",
-      "Master - SERI (Solar Energy Research Institute)": "19,750.00 (Research) / 14,945.00 (Mixed)",
-      "Master - UMBI (Medical Molecular Biology Institute)": "29,750.00 (Research) / 24,545.00 (Mixed)",
-      "Master - Visual Informatics (IVI)": "19,750.00 (Research) / 14,945.00 (Mixed)",
-      "Master - Climate Change (IPI)": "20,150.00 (Research) / 15,745.00 (Mixed)",
-      "Master - Fuel Cell / Hydrogen Energy": "20,150.00 (Research) / 15,745.00 (Mixed)",
-      "Master - Energy Management and Policy": "18,550.00 (Research) / 14,545.00 (Mixed)",
-      "Doctor of Philosophy - Economics and Management": "32,220.00",
-      "Doctor of Philosophy - Pharmacy": "37,620.00",
-      "Doctor of Philosophy - Engineering and Built Environment": "43,260.00",
-      "Doctor of Philosophy - Education": "37,020.00",
-      "Doctor of Philosophy - Islamic Studies": "31,020.00",
-      "Doctor of Philosophy - Dentistry": "61,620.00",
-      "Doctor of Philosophy - Science and Technology": "40,620.00",
-      "Doctor of Philosophy - Health Sciences": "37,620.00",
-      "Doctor of Philosophy - Social Sciences and Humanities": "34,530.00",
-      "Doctor of Philosophy - Information Science and Technology": "37,620.00",
-      "Doctor of Philosophy - Law": "32,220.00",
-      "Doctor of Philosophy - Medicine": "51,360.00",
-      "Doctor of Philosophy - Institute of Malay World and Civilization (ATMA)": "31,020.00",
-      "Doctor of Philosophy - Institute of Environment and Development (LESTARI)": "32,220.00",
-      "Doctor of Philosophy - Institute of System Biology (INBIOSIS)": "37,620.00",
-      "Doctor of Philosophy - Institute of Islam Hadhari": "31,020.00",
-      "Doctor of Philosophy - Institute of Ethnic Studies (KITA)": "25,620.00",
-      "Doctor of Philosophy - Institute of Malaysia and International Studies (IKMAS)": "32,220.00",
-      "Doctor of Philosophy - Institute of Microengineering and Nanoelectronics (IMEN)": "40,020.00",
-      "Doctor of Philosophy - Medical Molecular Biology Institute (UMBI)": "55,620.00",
-      "Doctor of Philosophy - Institute of Visual Informatics (IVI)": "37,620.00",
-      "Doctor of Philosophy - Institute of Climate Change (IPI)": "40,020.00",
-      "Doctor of Philosophy - Fuel Cell Engineering": "40,020.00",
-      "Doctor of Philosophy - Hydrogen Energy": "40,020.00",
-      "Doctor of Philosophy - Energy Management and Policy": "32,220.00"
-    }
+{
+  "university": "Universiti Kebangsaan Malaysia (UKM)",
+  "shortName": "UKM",
+  "type": "Public",
+  "currency": "MYR",
+  "website": "https://www.ukm.my",
+  "location": "Selangor",
+  "intakes": "Mar, Oct",
+  "programmes": {
+    "Bachelor of Dentistry": "502,520",
+    "Bachelor of Doctor in Medicine": "402,520",
+    "Bachelor of Doctor Medicine UNPAD - International (Indonesian)": "317,520",
+    "Bachelor of Doctor Medicine UNPAD - International (Other Nationalities)": "110,600 (USD)",
+    "Bachelor of Pharmacy with Honours": "144,220",
+    "Bachelor of Engineering Double Degree UKM - UDE": "111,520",
+    "Bachelor of Audiology with Honours": "97,520",
+    "Bachelor of Biomedical Science with Honours": "97,520",
+    "Bachelor of Optometry with Honours": "97,520",
+    "Bachelor of Speech Science with Honours": "97,520",
+    "Bachelor of Diagnostic Imaging and Radiotherapy with Honours": "97,520",
+    "Bachelor of Physiotherapy with Honours": "97,520",
+    "Bachelor of Dietetics with Honours": "97,520",
+    "Bachelor of Science Nutrition with Honours": "97,520",
+    "Bachelor of Forensic Science with Honours": "97,520",
+    "Bachelor of Occupational Therapy with Honours": "97,520",
+    "Bachelor of Environmental & Occupational Health": "97,520",
+    "Bachelor of Mechanical / Chemical / Civil / Electronic / E&E Engineering": "90,820",
+    "Bachelor of Science Architecture Engineering": "90,820",
+    "Bachelor of Accounting": "76,120",
+    "Bachelor of Education (Sports & Recreations / TESL)": "76,120",
+    "Bachelor of Nursing": "75,320",
+    "Bachelor of Science (Geology / Marine / Biology / Physics / Chemistry / etc.)": "74,070",
+    "Bachelor of Occupational Health / Environmental Health": "74,250",
+    "Bachelor of Computer Science / Software Engineering": "70,020",
+    "Bachelor of Information Technology": "70,020",
+    "Bachelor of Science (Actuarial Science / Mathematics / Statistics)": "70,020",
+    "Bachelor of Social Sciences (Psychology)": "70,020",
+    "Bachelor of Education (Special Education)": "69,120",
+    "Bachelor of Islamic Studies (Shariah)": "61,420",
+    "Bachelor of Entrepreneurship / Business Administration / Economics": "59,920",
+    "Bachelor of Social Sciences (Media / Social Work / Geography / Politics / etc.)": "55,170",
+    "Bachelor of Arts (English Language / Malay Letters / History / etc.)": "55,170",
+    "Master of Clinical Dentistry (Research)": "281,175",
+    "Master of Clinical Medicine (Research)": "68,730",
+    "Master of Medical Science (Full Research)": "42,710",
+    "Master of Clinical Pharmacy (Research)": "37,750",
+    "Master of Nursing (Full Research)": "32,410",
+    "Master of Non-Clinical Dentistry / Medicine (Research)": "30,910",
+    "Master of Specialized Institutes (UMBI Research / SERI Research / etc.)": "29,750 - 17,750",
+    "Master of Law (Full Research)": "27,810",
+    "Master of Science Pharmaceutical Analysis (Research)": "27,750",
+    "Master of Islamic Studies (Full Research)": "26,610",
+    "Master of Education (Full Research)": "23,690",
+    "Master of Engineering and Built Environment (Research)": "23,030",
+    "Master of Science and Technology (Research)": "21,150",
+    "Master of Medical Education (Mixed / CW)": "24,210",
+    "Master of Information Science and Tech / Health Sciences (Research)": "19,750",
+    "Master of Social Sciences and Humanities (Research)": "19,550",
+    "Master of Economics and Management / Law (Research)": "18,550",
+    "Master of Education / Islamic Studies (Research)": "17,750",
+    "Master Programs (Mixed Mode Variants - Social Science / IT / Science)": "17,985 - 14,145",
+    "Master of Clinical Psychology (Coursework)": "55,350",
+    "Master (CW) Health (Education/Biomedical/Clinical Nutrition/Optometry)": "50,910",
+    "Master of Nursing / Community Health Science (Coursework)": "38,610",
+    "Master (CW) Social Sciences (Psychology / Linguistics / History / etc.)": "34,660",
+    "Master (CW) Science (Statistics / Chemistry / Physics / etc.)": "34,610",
+    "Master (CW) Data Science & Analytics": "34,620",
+    "Master (CW) Economics / Accounting / Islamic Economy": "32,820",
+    "Master (CW) Pharmaceutical Analysis / Clinical Pharmacy": "32,210",
+    "Master of Cyber Security / Data Science / Health Info (Executive)": "32,000",
+    "Master of Law (Coursework)": "31,910",
+    "Master of Education (Mixed Mode)": "30,210",
+    "Master of Engineering (International Executive Program)": "26,000 / 29,900",
+    "Master (CW) Education Programs (TESL / Islamic Ed / etc.)": "29,410",
+    "Master of IT / Information System / Comp Science (Executive)": "24,000",
+    "PhD Health Sciences / Medicine / Dentistry": "66,270",
+    "PhD Pharmacy": "60,210",
+    "PhD Science and Technology": "58,710",
+    "PhD Economics and Management (Mixed Mode)": "53,520",
+    "PhD Medicine (Mixed Mode) / Doctor in Public Health": "51,360",
+    "PhD Social Sciences and Humanities": "48,210",
+    "PhD Education": "47,610",
+    "PhD Law / Economics and Management (Research)": "44,910",
+    "PhD Islamic Studies": "43,230",
+    "Doctor of Business Administration (DBA)": "61,800"
+  }
   },
   {
     university: "Universiti Putra Malaysia (UPM)", shortName: "UPM", type: "Public", currency: "MYR", website: "https://www.upm.edu.my", location: "Selangor", intakes: "Mar, Oct",
@@ -1768,41 +1855,207 @@ let rawData = [
   {
     university: "Universiti Kuala Lumpur (UniKL)", shortName: "UniKL", type: "Private", currency: "MYR", website: "https://www.unikl.edu.my", location: "Kuala Lumpur", intakes: "Jan, Jul, Sep",
     programmes: {
-      "Bachelor of Medicine and Bachelor of Surgery (MBBS)": "88,400.00 (Per Year)",
-      "Bachelor of Pharmacy (Honours)": "54,380.00 (Per Year)",
-      "Bachelor of Computer Engineering Technology": "17,600.00 (Per Year)",
-      "Bachelor of Multimedia Technology": "20,114.00 (Per Year)",
-      "Master of Business Administration": "18,000.00 (Total)",
-      "PhD (Information Technology / Engineering)": "5,000 (Per Year)"
+      "Bachelor of Medicine and Bachelor of Surgery (MBBS)": "88,400.00",
+      "Bachelor of Pharmacy (Honours)": "54,380.00",
+      "Master of Science (Water and Hydropower Engineering)": "52,800.00",
+      "Aircraft Maintenance License Program - EASA Part 66": "52,000.00",
+      "Bachelor of Science (Honours) in Pharmaceutical Technology": "39,000.00",
+      "Bachelor of Physiotherapy (Honours)": "39,000.00",
+      "Master of Electrical Engineering": "32,470.00",
+      "Bachelor of Game Development with Honours": "30,680.00",
+      "Bachelor in Financial Technology with Honours": "30,420.00",
+      "Master of Business Technology": "28,948.00",
+      "Bachelor of Project Management (Honours)": "26,000.00",
+      "Bachelor in Fashion Design with Marketing (Honours)": "26,000.00",
+      "Foundation in Medical Sciences - (MBBS)": "25,000",
+      "Bachelor of Business Technology (Hons) in Automotive Management": "24,700",
+      "Bachelor of Electrical Engineering Technology (Sustainable Energy) with Honours": "24,700",
+      "Bachelor of Environmental Management and Sustainability Technology with Honours": "24,700",
+      "Master in Aviation Management": "24,700",
+      "Bachelor of Engineering Technology (Water Engineering and Energy) / Water Resources Engineering Technology with Honours": "24,000.00",
+      "Bachelor of Science in Psychology (Honours)": "23,500.00",
+      "Bachelor of Petroleum Engineering Technology (Operation and Safety) with Honours": "23,400.00",
+      "Bachelor of Industrial Logistics (Hons)": "22,800.00",
+      "Bachelor of Multimedia Technology (Hons) in Computer Animation": "22,286",
+      "Bachelor of Aviation Management (Hons)": "22,280",
+      "Master of Engineering Technology in Biomedical Engineering": "22,100",
+      "Bachelor of Information Technology (Hons) in Internet of Things": "22,100.00",
+      "Master of Public Health": "22,000.00",
+      "Master of Maritime Operations and Management": "21,500.00",
+      "Bachelor of Science (Hons) in Analytical Economics": "21,160",
+      "Bachelor of Aircraft Engineering Technology (Hons) in Mechanical / Avionics": "21,100",
+      "Bachelor of Chemical Engineering / Electrical Engineering with Honours": "20,800",
+      "Bachelor of Occupational Safety & Health / Maritime Operations (Honours)": "20,800",
+      "Diploma in Physiotherapy": "20,800",
+      "Bachelor of Information Technology (Hons) in Software Engineering / Computer System Security": "20,114",
+      "Bachelor in Computing and Business Management with Honours": "20,114.00",
+      "Bachelor of Multimedia Technology (Hons) in Interactive Multimedia Design": "20,114.00",
+      "Master of Science in Public Health": "20,000.00",
+      "Bachelor of Nursing Science (Honours)": "20,000.00",
+      "Bachelor of Marine Engineering Technology with Honours": "19,920.00",
+      "Master of Quality Engineering and Management": "19,760.00",
+      "Bachelor of Engineering / Engineering Technology (Most Specialisations) with Honours": "19,500.00",
+      "Bachelor of Biomedical Science (Honours) / Environmental Health (Hons)": "19,500.00",
+      "Bachelor of Design (Honours) in Industrial Design": "19,500.00",
+      "Bachelor of Food Safety and Quality Technology": "19,500",
+      "Foundation in Computer Technology / Science": "19,500.00",
+      "Diploma of Engineering Technology (Quality Engineering)": "19,500",
+      "Master of Engineering in Structural Integrity / Mechanical": "19,200",
+      "Master of Business Administration / MBA (Entrepreneurship) / Master in Manufacturing Management": "18,000.00",
+      "Foundation in Creative Art and Design / Science and Technology / Science and Arts": "18,000.00",
+      "Bachelor of Computer Engineering Technology (Computer Systems) with Honours": "17,600.00",
+      "Master in Supply Chain Management": "17,300.00",
+      "Diploma in Nursing": "17,200.00",
+      "Foundation in Business": "17,000.00",
+      "Diploma of Engineering Technology (Railway System)": "17,000.00",
+      "Bachelor of Business Administration (Hons) in International Business / Marketing / Accounting": "16,900.00",
+      "Bachelor in Tourism Planning and Development (Honours)": "16,900.00",
+      "Diploma of Engineering Technology (Aeroplane / Avionics / Helicopter / Marine Engineering)": "16,900.00",
+      "Diploma in Pharmacy / Medical Imaging / Animation": "16,900.00",
+      "Bachelor of Electromechanical Engineering Technology with Honours": "16,300.00",
+      "Bachelor of Technology Management (Honours)": "16,286.00",
+      "Bachelor of Mechanical Engineering with Honours": "16,000.00",
+      "Master in Computer Science (Mix Mode)": "16,000.00",
+      "Diploma of Engineering Technology (Ship Design / Construction / Maintenance / Marine Electrical)": "15,600.00",
+      "Bachelor of Business Administration (Hons) (Management & Entrepreneurship / Islamic Finance)": "15,600.00",
+      "Diploma of Engineering Technology in Air Conditioning and Refrigeration / Automotive Maintenance": "15,400.00",
+      "Diploma in Chemical Engineering Technology / Food / Welding": "14,900.00",
+      "Diploma in Industrial Logistics": "14,700.00",
+      "Diploma in Medical Laboratory Technology / Environmental Health / Medical and Health Sciences": "14,690",
+      "Diploma of Engineering Technology (Computer & Networking / Industrial Automation / Mechanical Design / Production / Electrical and Electronics / etc.)": "14,100",
+      "Master of Science (Pharmacy) (By Research)": "13,400",
+      "Doctor of Philosophy (Pharmacy)": "13,400",
+      "Diploma in Information Technology / Multimedia": "11,700",
+      "Doctor of Philosophy (Medical Sciences)": "11,000",
+      "Doctor of Philosophy in Islamic Finance": "8,580",
+      "Master of Medical Science (By Research)": "7,000",
+      "Master / Doctor of Philosophy (Most Research Fields - IT / Management / Accounting / Engineering Tech / etc.)": "5,000",
+      "Master of Engineering Technology (Manufacturing) (By Research)": "3,600",
+      "Doctor of Philosophy (Manufacturing)": "3,600"
     }
   },
   {
     university: "Universiti Tenaga Nasional (UNITEN)", shortName: "UNITEN", type: "Private", currency: "MYR", website: "https://www.uniten.edu.my", location: "Selangor", intakes: "Jan, May, Sep",
     programmes: {
-      "Bachelor of Engineering (Electrical / Power / Mechanical)": "85,000 (Total)",
-      "Bachelor of Computer Science / IT": "66,500 (Total)",
-      "Bachelor of Accounting (Hons)": "73,300 (Total)",
-      "Master of Energy Management": "48,000 (Total)",
-      "PhD in Engineering / Industrial Science": "36,750 (Total)"
+      "Bachelor of Engineering (Electrical & Electronics / Power / Mechanical / Civil) (Hons)": "85,000",
+      "Bachelor of Accounting (Hons)": "73,300",
+      "Bachelor of Computer Science / Information Technology (All Specialisations) (Hons)": "66,500",
+      "Bachelor of Economics (Energy) / Business Economics (Hons)": "62,400",
+      "Bachelor of Finance / International Business / Business Administration (All Specialisations) (Hons)": "57,600",
+      "Master of Energy Management (Coursework & Project)": "48,000",
+      "PhD in Engineering / Industrial Science": "36,750",
+      "Master of Business Administration / Engineering Management (Coursework & Project)": "34,350",
+      "Diploma in Computer Science": "32,800",
+      "Diploma in Mechanical Engineering / Electrical Engineering / Accountancy": "31,800",
+      "PhD in Information and Communication Technology / Business Management": "29,925",
+      "Diploma in Financial Technology / Digital Business": "28,900",
+      "Diploma in Business Studies": "28,800",
+      "Master of Electrical Engineering / Information Technology (Coursework & Research)": "27,700",
+      "Master of Structural Engineering (Coursework & Project)": "27,700",
+      "Foundation in Engineering": "21,800",
+      "Foundation in (Computer Science / IT / Accounting / Business / Economics)": "19,800",
+      "Master by Research (All Specialisations)": "14,400"
     }
   },
   {
     university: "Universiti Tun Abdul Razak (UNIRAZAK)", shortName: "UniRazak", type: "Private", currency: "MYR", website: "https://unirazak.edu.my", location: "Kuala Lumpur", intakes: "Jan, May, Sep",
     programmes: {
-      "Bachelor of Business Administration (Global)": "60,600 (Total)",
-      "Bachelor of Accounting (Honours)": "120,600 (Total)",
-      "Master in Strategic Human Resource Management": "43,600 (Total)",
-      "Doctor of Philosophy (Education / Business)": "28,500 - 50,600"
+      "Foundation in Arts": "24,600",
+      "Diploma in Management": "40,600",
+      "Diploma in Information Technology": "19,500",
+      "Diploma in Social Work (Conventional)": "40,600",
+      "Diploma in Early Childhood Education": "19,500",
+      "Diploma in Psychology": "19,500",
+      "Bachelor of Business Administration (Islamic Banking & Finance) (Honours)": "60,600",
+      "Bachelor of Business (Honours) in Business Analytics and Digital Marketing": "60,600",
+      "Bachelor of Business Administration (Honours) (Majors: FinTech, AI, etc.)": "60,600",
+      "Bachelor of Management (Honours) (Majors: Marketing, Entrepreneurship, etc.)": "60,600",
+      "Bachelor of Information Technology (Honours) (Majors: Computer Forensic, SE, etc.)": "38,500",
+      "Bachelor of Business Management (Honours) Entrepreneurship (Conventional)": "41,500",
+      "Bachelor of Accounting (Honours) (Accredited by CPA Australia)": "120,600",
+      "Bachelor in Accounting (Honours)": "36,500",
+      "Bachelor of Economics (Honours) (Conventional)": "36,500",
+      "Bachelor of Arts in Governance & Public Policy (Honours) (Conventional)": "36,500",
+      "Bachelor of Arts in Public Management (Honours) (Open Distance Learning)": "36,500",
+      "Bachelor of Taxation (Honours) (Conventional)": "36,500",
+      "Bachelor of Education (Early Childhood Education) (Honours)": "36,500",
+      "Bachelor of Psychology (Honours)": "36,500",
+      "Bachelor of Education (Honours)": "36,500",
+      "Postgraduate Diploma in Education (Open Distance Learning)": "9,000",
+      "Master in Strategic Human Resource Management": "43,600",
+      "Master in Business Administration": "43,600",
+      "Master in Management": "20,250",
+      "Master of Education": "14,500",
+      "Master of Philosophy": "28,500",
+      "Master of Public Management": "43,600",
+      "Master of Public Policy": "43,600",
+      "Doctor of Philosophy in Education": "50,600",
+      "Doctor of Philosophy": "28,500",
+      "Doctor of Business Administration": "40,500"
     }
   },
   {
     university: "UCSI University", shortName: "UCSI", type: "Private", currency: "MYR", website: "https://www.ucsiuniversity.edu.my", location: "Kuala Lumpur", intakes: "Jan, May, Sep",
     programmes: {
-      "Doctor of Medicine": "341,340 (Total)",
-      "Bachelor of Pharmacy (Hons)": "160,698 (Total)",
-      "Bachelor of Actuarial Science": "68,900 (Total)",
-      "Bachelor of Architecture": "83,110 (Total)",
-      "PhD in Medical Sciences / Business": "45,468 - 68,900"
+      "Doctor of Medicine": "341,340",
+      "Bachelor of Pharmacy (Hons)": "160,698",
+      "Bachelor of Optometry (Hons)": "102,750",
+      "BSc (Hons) Nutrition with Wellness": "99,600",
+      "Bachelor of Computer Engineering (Artificial Intelligence) with Honours": "97,345",
+      "BSc (Hons) Biotechnology": "92,570",
+      "Bachelor of Quantity Surveying (Hons)": "91,144",
+      "Bachelor of Environmental Engineering with Honours": "90,470",
+      "BMus (Hons) Classical Music / Contemporary Music": "89,180",
+      "Bachelor of Energy Engineering with Honours": "88,990",
+      "Bachelor of Petroleum Engineering with Honours": "88,820",
+      "Bachelor of Civil Engineering with Honours": "88,635",
+      "Bachelor of Chemical Engineering with Honours": "87,170",
+      "Bachelor of Architecture (BSc Hons)": "83,110",
+      "BSc (Hons) Food Science with Nutrition": "83,060",
+      "Bachelor of Mechatronic Engineering with Honours": "82,715",
+      "Bachelor of Mechanical Engineering with Honours": "82,480",
+      "Bachelor of Electrical and Electronic Engineering with Honours": "82,205",
+      "BSc (Hons) Forensic Science": "82,110",
+      "BSc (Hons) Aquatic Science": "81,720",
+      "Bachelor of Formulation Science (Honours)": "81,330",
+      "BSc (Hons) Applied Microbiology": "80,365",
+      "BSc (Hons) Actuarial Science with Data Analytics": "79,350",
+      "Bachelor of Nursing (Hons)": "74,010",
+      "BA (Hons) Culinary Management (KL Campus)": "73,100",
+      "BA (Hons) Interior Architecture": "73,000",
+      "Bachelor of Hospitality Administration": "72,050",
+      "BA (Hons) Fashion Design with Marketing": "71,850",
+      "BA (Hons) Hospitality Management (Springhill Campus)": "71,941",
+      "BCA (Hons) 3D Animation Design": "70,850",
+      "BSc (Hons) Actuarial Science / Actuarial Science & Finance": "68,900",
+      "BA (Hons) Psychology": "68,730",
+      "BA (Hons) Game Design": "68,415",
+      "BA (Hons) Mass Communication": "68,330",
+      "BA (Hons) Multimedia Design": "68,070",
+      "Bachelor of Arts (Honours) Entrepreneurship": "67,950",
+      "Bachelor of International and Sustainable Business (Honours)": "67,440",
+      "BA (Hons) Accounting / Accounting & Finance": "67,380",
+      "Bachelor of Financial Technology (Honours)": "66,490",
+      "Bachelor of Computer Science (Honours) / Mobile Computing / Business Information System": "65,820",
+      "BA (Hons) Branding & Advertising": "65,550",
+      "BSc (Hons) Finance & Investment / BA (Hons) Marketing / Logistics Management": "65,400 – 65,490",
+      "Bachelor of Computer Science in Data Science with Honours": "69,040",
+      "BA (Hons) English Language and Communication": "61,300",
+      "Diploma in Nursing": "54,140",
+      "Diploma in Pharmacy / Cosmetic Science / Packaging Science": "51,510 – 51,650",
+      "Diploma in Music Performance": "51,240",
+      "Diploma in Fashion Design": "48,420",
+      "Diploma in Architectural Studies": "49,995",
+      "Diploma in Interior Architecture": "46,395",
+      "Diploma of Engineering Technology (Industrial Design)": "45,530",
+      "Foundation in Science / Music": "20,700 – 24,200",
+      "Foundation in Arts": "20,000",
+      "Doctor of Philosophy (Medical Sciences)": "68,900",
+      "Doctor of Philosophy (Business and Management)": "45,468",
+      "Doctor of Business Administration (DBA)": "71,600",
+      "Doctor of Philosophy in Hospitality and Tourism": "60,000",
+      "Master of Clinical Psychology": "56,350",
+      "Master of Business Administration (MBA)": "43,760"
     }
   }
 ];
@@ -1812,6 +2065,202 @@ const allProgrammes = Array.from(new Set(rawData.flatMap(u => Object.keys(u.prog
 // ==========================================================
 //     MAIN REACT APPLICATION (UI + Logic)
 // ==========================================================
+
+// Global configuration for marked.js to safely render links
+if (window.marked) {
+  marked.use({
+    renderer: {
+      link(href, title, text) {
+        return `<a href="${href}" target="_blank" rel="noopener noreferrer">${text}</a>`;
+      }
+    }
+  });
+}
+
+function ChatWidget({ rawData, lang, t }) {
+  const [isChatOpen, setIsChatOpen] = React.useState(false);
+  const [chatMessages, setChatMessages] = React.useState([]);
+  const [chatInput, setChatInput] = React.useState("");
+  const [isTyping, setIsTyping] = React.useState(false);
+  const chatEndRef = React.useRef(null);
+
+  React.useEffect(() => {
+    setChatMessages([
+      { 
+        role: "assistant", 
+        content: lang === "en" ? "Hi! I am your AI Assistant. You can ask me about universities, programs, or get links for specific specialties." : "مرحباً! أنا المساعد الذكي. يمكنك سؤالي عن الجامعات، البرامج، أو الحصول على روابط لتخصصات معينة."
+      }
+    ]);
+  }, [lang]);
+
+  React.useEffect(() => {
+    if (chatEndRef.current) {
+      chatEndRef.current.scrollIntoView({ behavior: 'smooth' });
+    }
+  }, [chatMessages, isTyping, isChatOpen]);
+
+  const handleSendMessage = async (e) => {
+    e.preventDefault();
+    if (!chatInput.trim()) return;
+
+    const GROQ_KEY = "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";
+    const newUserMsg = { role: "user", content: chatInput };
+    setChatMessages(prev => [...prev, newUserMsg]);
+    setChatInput("");
+    setIsTyping(true);
+
+    try {
+        const userQuery = newUserMsg.content.toLowerCase();
+        
+        const stopWords = ['what', 'is', 'the', 'a', 'an', 'to', 'in', 'for', 'of', 'university', 'program', 'programs', 'show', 'me', 'list', 'are', 'there', 'close', 'specialty'];
+        const keywords = userQuery.split(/[\s,]+/).filter(w => w.length > 2 && !stopWords.includes(w));
+        
+        let relevantData = [];
+        rawData.forEach(u => {
+            const matches = Object.keys(u.programmes).filter(p => {
+                 const pLower = p.toLowerCase();
+                 return keywords.some(kw => pLower.includes(kw)) || pLower.includes(userQuery);
+            });
+            if (matches.length > 0) {
+                 relevantData.push(`${u.shortName} [${u.website}] offers: ${matches.slice(0, 8).join(', ')}`);
+            }
+        });
+
+        let dbContext = "";
+        if (relevantData.length > 0) {
+            dbContext = "Relevant database matches for user query:\n" + relevantData.slice(0, 10).join('\n');
+        } else {
+            dbContext = "NO MATCHES FOUND IN LOCAL DATABASE.";
+        }
+        
+        const response = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+            method: 'POST',
+            headers: {
+                'Authorization': `Bearer ${GROQ_KEY}`,
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                model: 'llama-3.1-8b-instant', 
+                stream: true,
+                messages: [
+                    { 
+                        role: 'system', 
+                        content: `You are an AI assistant for the 'Malaysia University Programme Finder'. 
+                        You help students find the right programs in Malaysia. 
+                        
+                        Local Database Context:
+                        ${dbContext}
+                        
+                        CRITICAL INSTRUCTIONS:
+                        1. FIRST, check the Local Database Context. If it has data, answer using THAT data.
+                        2. IF the Local Database Context says "NO MATCHES FOUND IN LOCAL DATABASE", you MUST start your response with the phrase "(System not updated)" or "(النظام غير محدث)" if answering in Arabic. 
+                        3. AFTER stating the system is not updated, use your general knowledge of Malaysian Universities to provide the user with helpful realistic information anyway (e.g., which universities typically offer it, general requirements).
+                        4. ALWAYS use Markdown. Use **bold** for university names and important keywords.
+                        5. ALWAYS provide a direct, clickable Google Search link so they can verify, formatted exactly like: [Search Google for X](https://www.google.com/search?q=X).
+                        
+                        Be concise, highly structured, and friendly. Answer in the user's language.`
+                    },
+                    ...chatMessages.slice(-5).map(m => ({ role: m.role, content: m.content })),
+                    newUserMsg
+                ]
+            })
+        });
+        
+        if (!response.ok) {
+            const errText = await response.text();
+            throw new Error(`API Error: ${response.status} - ${errText}`);
+        }
+        
+        setChatMessages(prev => [...prev, { role: "assistant", content: "" }]);
+        
+        const reader = response.body.getReader();
+        const decoder = new TextDecoder("utf-8");
+        let currentResponse = "";
+        let buffer = "";
+
+        while (true) {
+            const { done, value } = await reader.read();
+            if (done) break;
+            
+            buffer += decoder.decode(value, { stream: true });
+            const lines = buffer.split('\n');
+            
+            buffer = lines.pop() || "";
+            
+            let chunkTokens = "";
+            
+            for (const line of lines) {
+                const trimmedLine = line.trim();
+                if (!trimmedLine) continue;
+                if (trimmedLine === 'data: [DONE]') break;
+                
+                if (trimmedLine.startsWith('data: ')) {
+                    try {
+                        const parsed = JSON.parse(trimmedLine.slice(6));
+                        const token = parsed.choices?.[0]?.delta?.content || "";
+                        if (token) {
+                            chunkTokens += token;
+                        }
+                    } catch (err) {
+                        // Ignore parsing errors for incomplete data chunks
+                    }
+                }
+            }
+            
+            if (chunkTokens) {
+                currentResponse += chunkTokens;
+                setChatMessages(prev => {
+                    const updated = [...prev];
+                    updated[updated.length - 1] = { role: "assistant", content: currentResponse };
+                    return updated;
+                });
+            }
+        }
+    } catch (error) {
+        console.error(error);
+        setChatMessages(prev => [...prev, { role: "assistant", content: lang === 'en' ? `Sorry, I encountered an error connecting to the AI server. Details: ${error.message}` : "عذراً، واجهت خطأ في الاتصال بخادم الذكاء الاصطناعي." }]);
+    } finally {
+        setIsTyping(false);
+    }
+  };
+
+  return html`
+    <div className="chat-widget-wrapper">
+        <button className="chat-widget-btn" onClick=${() => setIsChatOpen(!isChatOpen)}>
+          🤖
+        </button>
+        
+        ${isChatOpen && html`
+          <div className="chat-window">
+            <div className="chat-header">
+              <span>${t("AI Assistant", "المساعد الذكي")}</span>
+              <button className="chat-close" onClick=${() => setIsChatOpen(false)}>✕</button>
+            </div>
+            <div className="chat-body">
+              ${chatMessages.map((msg, i) => html`
+                <div key=${i} className=${`chat-msg ${msg.role}`}>
+                  ${msg.role === "user" ? msg.content : html`<span dangerouslySetInnerHTML=${{ __html: window.marked ? marked.parse(msg.content || "") : msg.content }} />`}
+                </div>
+              `)}
+              ${isTyping && html`<div className="chat-msg assistant chat-typing">${t("Typing...", "يكتب...")}</div>`}
+              <div ref=${chatEndRef}></div>
+            </div>
+            <form className="chat-input-area" onSubmit=${handleSendMessage}>
+              <input 
+                type="text" className="chat-input" 
+                placeholder=${t("Type a message...", "اكتب رسالة...")} 
+                value=${chatInput} onChange=${e => setChatInput(e.target.value)} 
+                disabled=${isTyping}
+              />
+              <button type="submit" className="chat-send-btn" disabled=${isTyping}>
+                ${t("Send", "إرسال")}
+              </button>
+            </form>
+          </div>
+        `}
+    </div>
+  `;
+}
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = React.useState(false);
@@ -2068,221 +2517,221 @@ function App() {
     : "https://marine-white-7l1epbg2wn.edgeone.app/cropped-Untitled-design-1_prev_ui-removebg-preview.png";
 
   if (!isAuthenticated) {
-    return (
-      <div className="theme-wrapper" dir={lang === "ar" ? "rtl" : "ltr"} style={{ display: "flex", alignItems: "center", justifyContent: "center", minHeight: "100vh", padding: "20px" }}>
-        <div className="login-box" style={{ maxWidth: "480px" }}>
+    return html`
+      <div className="theme-wrapper" dir=${lang === "ar" ? "rtl" : "ltr"} style=${{ display: "flex", alignItems: "center", justifyContent: "center", minHeight: "100vh", padding: "20px" }}>
+        <div className="login-box" style=${{ maxWidth: "480px" }}>
           
-          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "20px" }}>
-            <button className="lang-btn" style={{ padding: "10px 15px", fontSize: "13px", margin: 0 }} onClick={() => setLang(lang === "en" ? "ar" : "en")}>
-              {t("عربي", "English")}
+          <div style=${{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "20px" }}>
+            <button className="lang-btn" style=${{ padding: "10px 15px", fontSize: "13px", margin: 0 }} onClick=${() => setLang(lang === "en" ? "ar" : "en")}>
+              ${t("عربي", "English")}
             </button>
-            <img className="header-logo" style={{ width: "90px", height: "90px", margin: "0 10px", objectFit: "contain" }} src={logoSrc} alt="Logo" />
-            <button className="mode-btn" style={{ padding: "10px 15px", fontSize: "13px", margin: 0 }} onClick={() => setDarkMode(!darkMode)}>
-              {darkMode ? t("Light Mode", "وضع النهار") : t("Dark Mode", "وضع الليل")}
+            <img className="header-logo" style=${{ width: "90px", height: "90px", margin: "0 10px", objectFit: "contain" }} src=${logoSrc} alt="Logo" />
+            <button className="mode-btn" style=${{ padding: "10px 15px", fontSize: "13px", margin: 0 }} onClick=${() => setDarkMode(!darkMode)}>
+              ${darkMode ? t("Light Mode", "وضع النهار") : t("Dark Mode", "وضع الليل")}
             </button>
           </div>
 
-          <h2 style={{margin: "0 0 10px 0"}}>{t("Premium Language Centre", "مركز بريميوم للغات")}</h2>
-          <p style={{margin: "0 0 20px 0", fontSize: "14px", opacity: 0.8}}>{t("Malaysia University Finder", "نظام البحث عن الجامعات الماليزية")}</p>
-          <form onSubmit={handleLogin}>
+          <h2 style=${{margin: "0 0 10px 0"}}>${t("Premium Language Centre", "مركز بريميوم للغات")}</h2>
+          <p style=${{margin: "0 0 20px 0", fontSize: "14px", opacity: 0.8}}>${t("Malaysia University Finder", "نظام البحث عن الجامعات الماليزية")}</p>
+          <form onSubmit=${handleLogin}>
             <input 
               type="password" className="login-input" 
-              placeholder={t("Enter Pin Code", "أدخل الرمز السري")} 
-              value={passwordInput} onChange={(e) => setPasswordInput(e.target.value)}
+              placeholder=${t("Enter Pin Code", "أدخل الرمز السري")} 
+              value=${passwordInput} onChange=${(e) => setPasswordInput(e.target.value)}
             />
-            {passError && <div className="login-error">{t("Incorrect PIN. Try again.", "الرمز السري خاطئ. حاول مرة أخرى.")}</div>}
-            <button type="submit" className="login-btn">{t("Login", "دخول")}</button>
+            ${passError && html`<div className="login-error">${t("Incorrect PIN. Try again.", "الرمز السري خاطئ. حاول مرة أخرى.")}</div>`}
+            <button type="submit" className="login-btn">${t("Login", "دخول")}</button>
           </form>
         </div>
       </div>
-    );
+    `;
   }
 
-  return (
-    <div className="theme-wrapper" dir={lang === "ar" ? "rtl" : "ltr"}>
+  return html`
+    <div className="theme-wrapper" dir=${lang === "ar" ? "rtl" : "ltr"}>
       <div className="app-container">
         
         <div className="main-content">
           <div className="header-box">
-            <img className="header-logo" src={logoSrc} alt="Logo" />
-            <h1 className="header-title">{t("Malaysia University Programme Finder", "البحث عن البرامج الجامعية في ماليزيا")}</h1>
+            <img className="header-logo" src=${logoSrc} alt="Logo" />
+            <h1 className="header-title">${t("Malaysia University Programme Finder", "البحث عن البرامج الجامعية في ماليزيا")}</h1>
           </div>
 
           <p className="subtitle">
-            {t("Search any program to see all universities offering it side-by-side.", "ابحث عن أي برنامج لرؤية جميع الجامعات التي تقدمه جنبًا إلى جنب.")}
+            ${t("Search any program to see all universities offering it side-by-side.", "ابحث عن أي برنامج لرؤية جميع الجامعات التي تقدمه جنبًا إلى جنب.")}
           </p>
 
           <div className="controls-row">
-            <select className="currency-btn" value={currency} onChange={e => setCurrency(e.target.value)}>
+            <select className="currency-btn" value=${currency} onChange=${e => setCurrency(e.target.value)}>
               <option value="MYR">MYR (RM)</option>
               <option value="USD">USD ($)</option>
             </select>
-            <button className="lang-btn" onClick={() => setLang(lang === "en" ? "ar" : "en")}>{t("عربي", "English")}</button>
-            <button className="mode-btn" onClick={() => setDarkMode(!darkMode)}>{darkMode ? t("Light Mode", "وضع النهار") : t("Dark Mode", "وضع الليل")}</button>
+            <button className="lang-btn" onClick=${() => setLang(lang === "en" ? "ar" : "en")}>${t("عربي", "English")}</button>
+            <button className="mode-btn" onClick=${() => setDarkMode(!darkMode)}>${darkMode ? t("Light Mode", "وضع النهار") : t("Dark Mode", "وضع الليل")}</button>
           </div>
 
           <div className="input-card">
             <div className="filter-grid">
               <div>
-                <label className="input-label">{t("Accreditation", "الاعتماد الأكاديمي")}</label>
-                <select className="select-box" value={selectedAccreditation} onChange={(e) => setSelectedAccreditation(e.target.value)}>
-                  <option value="">{t("Any Country (No Filter)", "جميع الدول (بدون تصفية)")}</option>
-                  {Object.keys(ACCREDITATION_RULES).map(country => (
-                    <option key={country} value={country}>{t(country, country === "Oman" ? "عُمان" : country === "UAE" ? "الإمارات" : country === "Saudi Arabia" ? "السعودية" : "العراق")}</option>
-                  ))}
+                <label className="input-label">${t("Accreditation", "الاعتماد الأكاديمي")}</label>
+                <select className="select-box" value=${selectedAccreditation} onChange=${(e) => setSelectedAccreditation(e.target.value)}>
+                  <option value="">${t("Any Country (No Filter)", "جميع الدول (بدون تصفية)")}</option>
+                  ${Object.keys(ACCREDITATION_RULES).map(country => html`
+                    <option key=${country} value=${country}>${t(country, country === "Oman" ? "عُمان" : country === "UAE" ? "الإمارات" : country === "Saudi Arabia" ? "السعودية" : "العراق")}</option>
+                  `)}
                 </select>
               </div>
 
               <div>
-                <label className="input-label">{t("Field of Study / Specialty", "التخصص الدراسي")}</label>
-                <select className="select-box" value={selectedSpecialty} onChange={(e) => setSelectedSpecialty(e.target.value)}>
-                  <option value="">{t("All Specialties (80+ Options)", "جميع التخصصات (أكثر من 80 تخصص)")}</option>
-                  {Object.keys(SPECIALTIES).sort().map(spec => (
-                    <option key={spec} value={spec}>{t(spec, SPECIALTIES[spec].ar)}</option>
-                  ))}
+                <label className="input-label">${t("Field of Study / Specialty", "التخصص الدراسي")}</label>
+                <select className="select-box" value=${selectedSpecialty} onChange=${(e) => setSelectedSpecialty(e.target.value)}>
+                  <option value="">${t("All Specialties (80+ Options)", "جميع التخصصات (أكثر من 80 تخصص)")}</option>
+                  ${Object.keys(SPECIALTIES).sort().map(spec => html`
+                    <option key=${spec} value=${spec}>${t(spec, SPECIALTIES[spec].ar)}</option>
+                  `)}
                 </select>
               </div>
 
               <div>
-                <label className="input-label">{t("Study Level", "مستوى الدراسة")}</label>
-                <select className="select-box" value={selectedLevel} onChange={(e) => setSelectedLevel(e.target.value)}>
-                  <option value="">{t("All Levels", "جميع المستويات")}</option>
-                  <option value="Foundation">{t("Foundation & Certificate", "السنة التأسيسية والشهادات")}</option>
-                  <option value="Diploma">{t("Diploma", "دبلوم")}</option>
-                  <option value="Bachelor">{t("Bachelor's Degree", "بكالوريوس")}</option>
-                  <option value="Master">{t("Master's Degree", "ماجستير")}</option>
-                  <option value="PhD">{t("PhD & Doctorate", "دكتوراه")}</option>
+                <label className="input-label">${t("Study Level", "مستوى الدراسة")}</label>
+                <select className="select-box" value=${selectedLevel} onChange=${(e) => setSelectedLevel(e.target.value)}>
+                  <option value="">${t("All Levels", "جميع المستويات")}</option>
+                  <option value="Foundation">${t("Foundation & Certificate", "السنة التأسيسية والشهادات")}</option>
+                  <option value="Diploma">${t("Diploma", "دبلوم")}</option>
+                  <option value="Bachelor">${t("Bachelor's Degree", "بكالوريوس")}</option>
+                  <option value="Master">${t("Master's Degree", "ماجستير")}</option>
+                  <option value="PhD">${t("PhD & Doctorate", "دكتوراه")}</option>
                 </select>
               </div>
 
               <div>
-                <label className="input-label">{t("Institution Type", "نوع المؤسسة")}</label>
-                <select className="select-box" value={selectedType} onChange={(e) => setSelectedType(e.target.value)}>
-                  <option value="">{t("All Types", "جميع الأنواع")}</option>
-                  <option value="Public">{t("Public", "حكومي")}</option>
-                  <option value="Private">{t("Private", "خاص")}</option>
+                <label className="input-label">${t("Institution Type", "نوع المؤسسة")}</label>
+                <select className="select-box" value=${selectedType} onChange=${(e) => setSelectedType(e.target.value)}>
+                  <option value="">${t("All Types", "جميع الأنواع")}</option>
+                  <option value="Public">${t("Public", "حكومي")}</option>
+                  <option value="Private">${t("Private", "خاص")}</option>
                 </select>
               </div>
 
               <div>
-                <label className="input-label">{t("Location", "الموقع")}</label>
-                <select className="select-box" value={selectedLocation} onChange={(e) => setSelectedLocation(e.target.value)}>
-                  <option value="">{t("All Locations", "جميع المواقع")}</option>
-                  <option value="Kuala Lumpur">{t("Kuala Lumpur", "كوالالمبور")}</option>
-                  <option value="Selangor">{t("Selangor", "سيلانجور")}</option>
-                  <option value="Penang">{t("Penang", "بينانج")}</option>
-                  <option value="Johor">{t("Johor", "جوهور")}</option>
-                  <option value="Kedah">{t("Kedah", "قدح")}</option>
-                  <option value="Perak">{t("Perak", "بيراك")}</option>
-                  <option value="Negeri Sembilan">{t("Negeri Sembilan", "نجري سمبيلان")}</option>
-                  <option value="Melaka">{t("Melaka", "ملاكا")}</option>
-                  <option value="Pahang">{t("Pahang", "باهانج")}</option>
+                <label className="input-label">${t("Location", "الموقع")}</label>
+                <select className="select-box" value=${selectedLocation} onChange=${(e) => setSelectedLocation(e.target.value)}>
+                  <option value="">${t("All Locations", "جميع المواقع")}</option>
+                  <option value="Kuala Lumpur">${t("Kuala Lumpur", "كوالالمبور")}</option>
+                  <option value="Selangor">${t("Selangor", "سيلانجور")}</option>
+                  <option value="Penang">${t("Penang", "بينانج")}</option>
+                  <option value="Johor">${t("Johor", "جوهور")}</option>
+                  <option value="Kedah">${t("Kedah", "قدح")}</option>
+                  <option value="Perak">${t("Perak", "بيراك")}</option>
+                  <option value="Negeri Sembilan">${t("Negeri Sembilan", "نجري سمبيلان")}</option>
+                  <option value="Melaka">${t("Melaka", "ملاكا")}</option>
+                  <option value="Pahang">${t("Pahang", "باهانج")}</option>
                 </select>
               </div>
 
               <div>
-                <label className="input-label">{t("Intake Month", "شهر القبول")}</label>
-                <select className="select-box" value={selectedIntake} onChange={(e) => setSelectedIntake(e.target.value)}>
-                  <option value="">{t("Any Intake", "أي قبول")}</option>
-                  {["Jan", "Feb", "Mar", "May", "Jul", "Sep", "Oct", "Nov"].map(m => (
-                     <option key={m} value={m}>{t(m, translateIntakes(m, 'ar'))}</option>
-                  ))}
+                <label className="input-label">${t("Intake Month", "شهر القبول")}</label>
+                <select className="select-box" value=${selectedIntake} onChange=${(e) => setSelectedIntake(e.target.value)}>
+                  <option value="">${t("Any Intake", "أي قبول")}</option>
+                  ${["Jan", "Feb", "Mar", "May", "Jul", "Sep", "Oct", "Nov"].map(m => html`
+                     <option key=${m} value=${m}>${t(m, translateIntakes(m, 'ar'))}</option>
+                  `)}
                 </select>
               </div>
 
               <div>
-                <label className="input-label">{t("Duration (Years)", "مدة الدراسة")}</label>
-                <select className="select-box" value={selectedDuration} onChange={(e) => setSelectedDuration(e.target.value)}>
-                  <option value="">{t("Any Duration", "أي مدة")}</option>
-                  <option value="1">{t("1 Year", "سنة واحدة")}</option>
-                  <option value="2">{t("2 Years", "سنتين")}</option>
-                  <option value="3">{t("3 Years", "3 سنوات")}</option>
-                  <option value="4">{t("4 Years", "4 سنوات")}</option>
-                  <option value="5">{t("5 Years", "5 سنوات")}</option>
+                <label className="input-label">${t("Duration (Years)", "مدة الدراسة")}</label>
+                <select className="select-box" value=${selectedDuration} onChange=${(e) => setSelectedDuration(e.target.value)}>
+                  <option value="">${t("Any Duration", "أي مدة")}</option>
+                  <option value="1">${t("1 Year", "سنة واحدة")}</option>
+                  <option value="2">${t("2 Years", "سنتين")}</option>
+                  <option value="3">${t("3 Years", "3 سنوات")}</option>
+                  <option value="4">${t("4 Years", "4 سنوات")}</option>
+                  <option value="5">${t("5 Years", "5 سنوات")}</option>
                 </select>
               </div>
 
               <div>
-                <label className="input-label">{t("Study Mode", "نظام الدراسة")}</label>
-                <select className="select-box" value={selectedMode} onChange={(e) => setSelectedMode(e.target.value)}>
-                  <option value="">{t("All Modes", "جميع الأنظمة")}</option>
-                  <option value="Coursework">{t("Coursework", "مواد دراسية")}</option>
-                  <option value="Research">{t("Research", "بحث علمي")}</option>
-                  <option value="Mixed">{t("Mixed Mode", "نظام مختلط")}</option>
+                <label className="input-label">${t("Study Mode", "نظام الدراسة")}</label>
+                <select className="select-box" value=${selectedMode} onChange=${(e) => setSelectedMode(e.target.value)}>
+                  <option value="">${t("All Modes", "جميع الأنظمة")}</option>
+                  <option value="Coursework">${t("Coursework", "مواد دراسية")}</option>
+                  <option value="Research">${t("Research", "بحث علمي")}</option>
+                  <option value="Mixed">${t("Mixed Mode", "نظام مختلط")}</option>
                 </select>
               </div>
 
-              <div style={{ gridColumn: "1 / -1" }}>
-                <label className="input-label">{t("Keyword Search", "البحث السريع")}</label>
+              <div style=${{ gridColumn: "1 / -1" }}>
+                <label className="input-label">${t("Keyword Search", "البحث السريع")}</label>
                 <input
                   className="input-box"
                   type="text"
-                  placeholder={t("e.g. Medicine, Dentistry, AI...", "مثل: الطب، صيدلة، الذكاء الاصطناعي...")}
-                  value={search}
-                  onChange={(e) => setSearch(e.target.value)}
+                  placeholder=${t("e.g. Medicine, Dentistry, AI...", "مثل: الطب، صيدلة، الذكاء الاصطناعي...")}
+                  value=${search}
+                  onChange=${(e) => setSearch(e.target.value)}
                 />
               </div>
 
             </div>
           </div>
 
-          {selectedAccreditation && ACCREDITATION_RULES[selectedAccreditation] && (
+          ${selectedAccreditation && ACCREDITATION_RULES[selectedAccreditation] && html`
             <div className="accreditation-notice">
-              {t(ACCREDITATION_RULES[selectedAccreditation].notice.en, ACCREDITATION_RULES[selectedAccreditation].notice.ar)}
+              ${t(ACCREDITATION_RULES[selectedAccreditation].notice.en, ACCREDITATION_RULES[selectedAccreditation].notice.ar)}
             </div>
-          )}
+          `}
 
           <div className="filter-bar">
              <h2 className="result-title">
-               {t("Matching Universities:", "الجامعات المطابقة:")} <span className="result-highlight">{matchingUniversities.length}</span>
+               ${t("Matching Universities:", "الجامعات المطابقة:")} <span className="result-highlight">${matchingUniversities.length}</span>
              </h2>
 
-             {matchingUniversities.length > 0 && (
+             ${matchingUniversities.length > 0 && html`
                <div className="sort-wrapper">
-                 <button className="download-btn" onClick={downloadCSV}>
-                   📥 {t("Download CSV", "تحميل CSV")}
+                 <button className="download-btn" onClick=${downloadCSV}>
+                   📥 ${t("Download CSV", "تحميل CSV")}
                  </button>
-                 <span className="input-label" style={{marginBottom:0}}>
-                   {t("Sort By:", "ترتيب حسب:")}
+                 <span className="input-label" style=${{marginBottom:0}}>
+                   ${t("Sort By:", "ترتيب حسب:")}
                  </span>
-                 <select className="sort-select" value={sortOption} onChange={(e) => setSortOption(e.target.value)}>
-                   <option value="default">{t("Default", "افتراضي")}</option>
-                   <option value="priceAsc">{t("Price (Low to High)", "السعر (من الأقل للأعلى)")}</option>
-                   <option value="priceDesc">{t("Price (High to Low)", "السعر (من الأعلى للأقل)")}</option>
-                   <option value="type">{t("Type (Public/Private)", "النوع (حكومي/خاص)")}</option>
+                 <select className="sort-select" value=${sortOption} onChange=${(e) => setSortOption(e.target.value)}>
+                   <option value="default">${t("Default", "افتراضي")}</option>
+                   <option value="priceAsc">${t("Price (Low to High)", "السعر (من الأقل للأعلى)")}</option>
+                   <option value="priceDesc">${t("Price (High to Low)", "السعر (من الأعلى للأقل)")}</option>
+                   <option value="type">${t("Type (Public/Private)", "النوع (حكومي/خاص)")}</option>
                  </select>
                </div>
-             )}
+             `}
           </div>
 
-          {matchingUniversities.length === 0 ? (
+          ${matchingUniversities.length === 0 ? html`
             <p className="no-result">
-              {t("No universities found for this specific search.", "لم يتم العثور على جامعات لهذا البحث المحدد.")}
+              ${t("No universities found for this specific search.", "لم يتم العثور على جامعات لهذا البحث المحدد.")}
             </p>
-          ) : (
-            <>
+          ` : html`
+            <div className="uni-wrapper-inner">
               <div className="uni-grid">
-                {displayedUniversities.map((u) => {
+                ${displayedUniversities.map((u) => {
                   const firstProg = Object.keys(u.programmes)[0] || "";
                   const waText = encodeURIComponent(t(
                       `Hello, I am interested in the ${firstProg} at ${u.university}. Could you provide more details?`,
                       `مرحباً، أنا مهتم ببرنامج ${translateProgramName(firstProg, 'ar')} في ${u.university}. هل يمكنك تقديم المزيد من التفاصيل؟`
                   ));
 
-                  return (
-                    <div key={u.university} className="uni-card">
+                  return html`
+                    <div key=${u.university} className="uni-card">
                       <div className="uni-header">
-                        <img className="uni-logo" src={`https://ui-avatars.com/api/?name=${u.shortName}&background=random&color=fff&font-size=0.4`} alt={u.shortName} />
+                        <img className="uni-logo" src=${`https://ui-avatars.com/api/?name=${u.shortName}&background=random&color=fff&font-size=0.4`} alt=${u.shortName} />
                         <div>
-                          <div className="uni-name">{u.university}</div>
-                          <div className="uni-small"><strong>{t("Type", "النوع")}:</strong> {universityTypes[u.shortName] || u.type}</div>
-                          <div className="uni-small"><strong>{t("Location", "الموقع")}:</strong> {translateLocation(u.location, lang) || t("Malaysia", "ماليزيا")}</div>
-                          <div className="uni-small"><strong>{t("Intakes", "مواعيد القبول")}:</strong> {translateIntakes(u.intakes, lang) || t("Check Website", "راجع الموقع")}</div>
+                          <div className="uni-name">${u.university}</div>
+                          <div className="uni-small"><strong>${t("Type", "النوع")}:</strong> ${universityTypes[u.shortName] || u.type}</div>
+                          <div className="uni-small"><strong>${t("Location", "الموقع")}:</strong> ${translateLocation(u.location, lang) || t("Malaysia", "ماليزيا")}</div>
+                          <div className="uni-small"><strong>${t("Intakes", "مواعيد القبول")}:</strong> ${translateIntakes(u.intakes, lang) || t("Check Website", "راجع الموقع")}</div>
                         </div>
                       </div>
 
                       <div className="prog-list">
-                        {Object.entries(u.programmes).map(([progName, priceStr]) => {
+                        ${Object.entries(u.programmes).map(([progName, priceStr]) => {
                           const specs = getProgramSpecs(progName, lang);
                           const isShortlisted = shortlist.some(item => item.id === `${u.shortName}-${progName}`);
                           const ieltsWa = encodeURIComponent(t(
@@ -2290,123 +2739,122 @@ function App() {
                             `مرحباً، أحتاج مساعدة للوصول لدرجة ${specs.ielts} في الآيلتس لبرنامج ${translateProgramName(progName, 'ar')} في ${u.shortName}.`
                           ));
 
-                          return (
-                          <div key={progName} className="prog-item">
+                          return html`
+                          <div key=${progName} className="prog-item">
                             <div className="prog-item-header">
-                              <div className="prog-item-title">{translateProgramName(progName, lang)}</div>
+                              <div className="prog-item-title">${translateProgramName(progName, lang)}</div>
                               <input 
                                 type="checkbox" 
                                 className="compare-checkbox" 
-                                checked={isShortlisted} 
-                                onChange={() => handleShortlist(u, progName, priceStr, specs)}
-                                title={t("Shortlist to Compare", "إضافة للمقارنة")}
+                                checked=${isShortlisted} 
+                                onChange=${() => handleShortlist(u, progName, priceStr, specs)}
+                                title=${t("Shortlist to Compare", "إضافة للمقارنة")}
                               />
                             </div>
                             
                             <div className="prog-item-price">
-                              {formatPrice(priceStr, u.currency, currency)}
+                              ${formatPrice(priceStr, u.currency, currency)}
                             </div>
 
                             <div className="prog-item-specs">
-                              <span className="spec-badge">⏳ {t("Duration:", "المدة:")} {specs.duration}</span>
-                              <div style={{display:'flex', flexDirection:'column'}}>
-                                <span className="spec-badge">📝 {t("IELTS:", "الآيلتس:")} {specs.ielts}</span>
-                                {specs.ielts && specs.ielts !== "Check Website" && specs.ielts !== "راجع الموقع" && (
-                                  <a href={`https://wa.link/12k9wf?text=${ieltsWa}`} target="_blank" rel="noopener noreferrer" className="ielts-upsell">
-                                    {t("Need help reaching this score?", "هل تحتاج مساعدة للوصول لهذه الدرجة؟")}
+                              <span className="spec-badge">⏳ ${t("Duration:", "المدة:")} ${specs.duration}</span>
+                              <div style=${{display:'flex', flexDirection:'column'}}>
+                                <span className="spec-badge">📝 ${t("IELTS:", "الآيلتس:")} ${specs.ielts}</span>
+                                ${specs.ielts && specs.ielts !== "Check Website" && specs.ielts !== "راجع الموقع" && html`
+                                  <a href=${`https://wa.link/12k9wf?text=${ieltsWa}`} target="_blank" rel="noopener noreferrer" className="ielts-upsell">
+                                    ${t("Need help reaching this score?", "هل تحتاج مساعدة للوصول لهذه الدرجة؟")}
                                   </a>
-                                )}
+                                `}
                               </div>
                             </div>
                           </div>
-                        )})}
+                        `})}
                       </div>
                       
                       <div className="card-actions">
-                        <a href={`https://wa.link/12k9wf?text=${waText}`} target="_blank" rel="noopener noreferrer" className="consult-btn">
-                          {t("Consult an Expert", "استشر خبيراً")}
+                        <a href=${`https://wa.link/12k9wf?text=${waText}`} target="_blank" rel="noopener noreferrer" className="consult-btn">
+                          ${t("Consult an Expert", "استشر خبيراً")}
                         </a>
-                        <a href={u.website} target="_blank" rel="noopener noreferrer" className="website-link">
-                          {t("Visit Website", "زيارة الموقع")}
+                        <a href=${u.website} target="_blank" rel="noopener noreferrer" className="website-link">
+                          ${t("Visit Website", "زيارة الموقع")}
                         </a>
                       </div>
                     </div>
-                  );
+                  `;
                 })}
               </div>
               
-              {visibleCount < matchingUniversities.length && (
-                <div style={{ textAlign: 'center', marginBottom: '40px' }}>
-                  <button className="login-btn" style={{ width: 'auto', padding: '12px 40px' }} onClick={() => setVisibleCount(c => c + 20)}>
-                    {t("Load More Universities", "عرض المزيد من الجامعات")}
+              ${visibleCount < matchingUniversities.length && html`
+                <div style=${{ textAlign: 'center', marginBottom: '40px' }}>
+                  <button className="login-btn" style=${{ width: 'auto', padding: '12px 40px' }} onClick=${() => setVisibleCount(c => c + 20)}>
+                    ${t("Load More Universities", "عرض المزيد من الجامعات")}
                   </button>
                 </div>
-              )}
-            </>
-          )}
+              `}
+            </div>
+          `}
 
         </div> 
         
-        {/* COMPARE BAR */}
-        {shortlist.length > 0 && (
+        ${shortlist.length > 0 && html`
           <div className="compare-bar">
             <span className="compare-count">
-              {shortlist.length} / 4 {t("Programs Shortlisted", "برامج محددة")}
+              ${shortlist.length} / 4 ${t("Programs Shortlisted", "برامج محددة")}
             </span>
-            <button className="compare-btn" onClick={() => setShowCompareModal(true)}>
-              {t("Compare Now", "قارن الآن")}
+            <button className="compare-btn" onClick=${() => setShowCompareModal(true)}>
+              ${t("Compare Now", "قارن الآن")}
             </button>
           </div>
-        )}
+        `}
 
-        {/* COMPARE MODAL */}
-        {showCompareModal && (
+        ${showCompareModal && html`
           <div className="modal-overlay">
             <div className="modal-content">
-              <button className="close-modal" onClick={() => setShowCompareModal(false)}>✕</button>
-              <h2 style={{margin: '0 0 10px 0', color: 'var(--primary)'}}>{t("Program Comparison", "مقارنة البرامج")}</h2>
+              <button className="close-modal" onClick=${() => setShowCompareModal(false)}>✕</button>
+              <h2 style=${{margin: '0 0 10px 0', color: 'var(--primary)'}}>${t("Program Comparison", "مقارنة البرامج")}</h2>
               <div className="compare-table-wrapper">
                 <table className="compare-table">
                   <thead>
                     <tr>
-                      <th>{t("University", "الجامعة")}</th>
-                      <th>{t("Programme", "البرنامج")}</th>
-                      <th>{t("Price", "السعر")}</th>
-                      <th>{t("Duration", "المدة")}</th>
-                      <th>{t("IELTS", "الآيلتس")}</th>
+                      <th>${t("University", "الجامعة")}</th>
+                      <th>${t("Programme", "البرنامج")}</th>
+                      <th>${t("Price", "السعر")}</th>
+                      <th>${t("Duration", "المدة")}</th>
+                      <th>${t("IELTS", "الآيلتس")}</th>
                     </tr>
                   </thead>
                   <tbody>
-                    {shortlist.map((item, idx) => (
-                      <tr key={idx}>
-                        <td><strong>{item.uniShort}</strong></td>
-                        <td>{translateProgramName(item.progName, lang)}</td>
-                        <td style={{color: 'var(--primary)', fontWeight: 'bold'}}>
-                          {formatPrice(item.price, item.baseCurrency, currency)}
+                    ${shortlist.map((item, idx) => html`
+                      <tr key=${idx}>
+                        <td><strong>${item.uniShort}</strong></td>
+                        <td>${translateProgramName(item.progName, lang)}</td>
+                        <td style=${{color: 'var(--primary)', fontWeight: 'bold'}}>
+                          ${formatPrice(item.price, item.baseCurrency, currency)}
                         </td>
-                        <td>{item.duration}</td>
-                        <td>{item.ielts}</td>
+                        <td>${item.duration}</td>
+                        <td>${item.ielts}</td>
                       </tr>
-                    ))}
+                    `)}
                   </tbody>
                 </table>
               </div>
             </div>
           </div>
-        )}
+        `}
 
-        {/* FOOTER */}
+        <${ChatWidget} rawData=${rawData} lang=${lang} t=${t} />
+
         <footer className="app-footer">
           Copyright © 2026 Premium Language Centre. All rights reserved.
         </footer>
 
       </div>
     </div>
-  );
+  `;
 }
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
-root.render(<App />);
+root.render(html`<${App} />`);
 </script>
 
 </body>
